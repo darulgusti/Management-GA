@@ -5,11 +5,11 @@
 :root {
   --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
-  /* === Single Unified Color Palette: Teal/Slate === */
-  --primary:        #0d9488;   /* Teal 600 */
-  --primary-hover:  #0f766e;   /* Teal 700 */
-  --primary-light:  #ccfbf1;   /* Teal 100 */
-  --primary-mid:    #5eead4;   /* Teal 300 (for subtle accents) */
+  /* === Single Unified Color Palette: Navy Blue === */
+  --primary:        #1d4ed8;   /* Blue 700 */
+  --primary-hover:  #1e40af;   /* Blue 800 */
+  --primary-light:  #dbeafe;   /* Blue 100 */
+  --primary-mid:    #93c5fd;   /* Blue 300 */
 
   --secondary:      #64748b;   /* Slate 500 */
   --secondary-hover:#475569;   /* Slate 600 */
@@ -23,9 +23,9 @@
   --info:           #0284c7;   /* Sky 600 */
 
   /* Neutral / Background */
-  --bg-main:        #f8fafc;   /* Slate 50 */
+  --bg-main:        #f1f5f9;   /* Slate 100 */
   --bg-surface:     #ffffff;
-  --bg-sidebar:     #134e4a;   /* Teal 900 - dark teal sidebar */
+  --bg-sidebar:     #0f172a;   /* Slate 900 - deep navy sidebar */
   --text-main:      #0f172a;   /* Slate 900 */
   --text-muted:     #64748b;   /* Slate 500 */
   --text-light:     #94a3b8;   /* Slate 400 */
@@ -410,7 +410,7 @@ html, body {
 
 .form-control:focus, .form-select:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
 }
 
 textarea.form-control {
@@ -443,7 +443,7 @@ textarea.form-control {
 .btn-primary:hover {
   background-color: var(--primary-hover);
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
+  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.25);
 }
 
 .btn-success {
@@ -690,7 +690,7 @@ textarea.form-control {
   background-color: var(--primary);
   color: #ffffff;
   border-color: var(--primary);
-  box-shadow: 0 2px 8px rgba(13, 148, 136, 0.25);
+  box-shadow: 0 2px 8px rgba(29, 78, 216, 0.25);
 }
 
 .page-link.disabled {
