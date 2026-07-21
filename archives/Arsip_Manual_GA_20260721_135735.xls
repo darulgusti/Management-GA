@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Center"/>
+   <Font ss:FontName="Calibri" ss:Size="10" ss:Color="#1E293B"/>
+  </Style>
+  <Style ss:ID="Title">
+   <Font ss:FontName="Calibri" ss:Size="14" ss:Bold="1" ss:Color="#0F172A"/>
+  </Style>
+  <Style ss:ID="Header">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#64748B"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#64748B"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#64748B"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#64748B"/>
+   </Borders>
+   <Font ss:FontName="Calibri" ss:Size="10" ss:Bold="1" ss:Color="#FFFFFF"/>
+   <Interior ss:Color="#1E293B" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="CellData">
+   <Alignment ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/>
+   </Borders>
+   <Font ss:FontName="Calibri" ss:Size="10" ss:Color="#334155"/>
+  </Style>
+  <Style ss:ID="CellCenter">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/>
+   </Borders>
+   <Font ss:FontName="Calibri" ss:Size="10" ss:Color="#334155"/>
+  </Style>
+  <Style ss:ID="BadgeSuccess">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#A7F3D0"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#A7F3D0"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#A7F3D0"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#A7F3D0"/>
+   </Borders>
+   <Font ss:FontName="Calibri" ss:Size="10" ss:Bold="1" ss:Color="#065F46"/>
+   <Interior ss:Color="#D1FAE5" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="BadgeSecondary">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+   </Borders>
+   <Font ss:FontName="Calibri" ss:Size="10" ss:Bold="1" ss:Color="#475569"/>
+   <Interior ss:Color="#F1F5F9" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="BadgeWarning">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#FDE68A"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#FDE68A"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#FDE68A"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#FDE68A"/>
+   </Borders>
+   <Font ss:FontName="Calibri" ss:Size="10" ss:Bold="1" ss:Color="#92400E"/>
+   <Interior ss:Color="#FEF3C7" ss:Pattern="Solid"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Arsip Buku Tamu">
+  <Table>
+   <Column ss:Width="40"/>
+   <Column ss:Width="160"/>
+   <Column ss:Width="150"/>
+   <Column ss:Width="150"/>
+   <Column ss:Width="150"/>
+   <Column ss:Width="110"/>
+   <Column ss:Width="180"/>
+   <Column ss:Width="100"/>
+   <Column ss:Width="90"/>
+   <Column ss:Width="100"/>
+   <Column ss:Width="90"/>
+   <Column ss:Width="110"/>
+   <Row ss:Height="25">
+    <Cell ss:StyleID="Header"><Data ss:Type="String">No</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Nama Tamu</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Kategori Tamu</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Instansi / Perusahaan</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Orang Ditemui</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">No. Kartu Visitor</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Tujuan Kunjungan</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Tanggal Masuk</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Waktu Masuk</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Tanggal Keluar</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Waktu Keluar</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Status</Data></Cell>
+   </Row>
+   <Row ss:Height="20">
+    <Cell ss:StyleID="CellCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="CellData"><Data ss:Type="String">Tim Teknisi</Data></Cell>
+    <Cell ss:StyleID="CellData"><Data ss:Type="String">Vendor_karyawan</Data></Cell>
+    <Cell ss:StyleID="CellData"><Data ss:Type="String">PT Maintenance Solusindo</Data></Cell>
+    <Cell ss:StyleID="CellData"><Data ss:Type="String">Bpk. Joko (Maintenance)</Data></Cell>
+    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">-</Data></Cell>
+    <Cell ss:StyleID="CellData"><Data ss:Type="String">Perbaikan Mesin Boiler</Data></Cell>
+    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">16/07/2026</Data></Cell>
+    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">08:00</Data></Cell>
+    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">16/07/2026</Data></Cell>
+    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">12:30</Data></Cell>
+    <Cell ss:StyleID="BadgeSecondary"><Data ss:Type="String">Sudah Keluar</Data></Cell>
+   </Row>
+  </Table>
+ </Worksheet>
+ <Worksheet ss:Name="Arsip Peminjaman">
+  <Table>
+   <Column ss:Width="40"/>
+   <Column ss:Width="160"/>
+   <Column ss:Width="130"/>
+   <Column ss:Width="160"/>
+   <Column ss:Width="100"/>
+   <Column ss:Width="50"/>
+   <Column ss:Width="100"/>
+   <Column ss:Width="90"/>
+   <Column ss:Width="100"/>
+   <Column ss:Width="90"/>
+   <Column ss:Width="140"/>
+   <Column ss:Width="140"/>
+   <Column ss:Width="110"/>
+   <Row ss:Height="25">
+    <Cell ss:StyleID="Header"><Data ss:Type="String">No</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Nama Peminjam</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Departemen</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Nama Barang</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Kode Barang</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Jumlah (Qty)</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Tanggal Pinjam</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Waktu Pinjam</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Tanggal Kembali</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Waktu Kembali</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Kondisi Awal</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Kondisi Kembali</Data></Cell>
+    <Cell ss:StyleID="Header"><Data ss:Type="String">Status</Data></Cell>
+   </Row>
+   <Row ss:Height="20">
+    <Cell ss:StyleID="CellCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="CellData"><Data ss:Type="String">Lina Marlina</Data></Cell>
+    <Cell ss:StyleID="CellData"><Data ss:Type="String">Safety/HSE</Data></Cell>
+    <Cell ss:StyleID="CellData"><Data ss:Type="String">Helm Safety Kuning (3 Unit)</Data></Cell>
+    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">HELM-YEL-03</Data></Cell>
+    <Cell ss:StyleID="CellCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">16/07/2026</Data></Cell>
+    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">07:45</Data></Cell>
+    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">16/07/2026</Data></Cell>
+    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">10:30</Data></Cell>
+    <Cell ss:StyleID="CellData"><Data ss:Type="String">Baik</Data></Cell>
+    <Cell ss:StyleID="CellData"><Data ss:Type="String">Baik</Data></Cell>
+    <Cell ss:StyleID="BadgeSuccess"><Data ss:Type="String">Dikembalikan</Data></Cell>
+   </Row>
+   <Row ss:Height="20">
+    <Cell ss:StyleID="CellCenter"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="CellData"><Data ss:Type="String">Peminjam Contoh 6</Data></Cell>
+    <Cell ss:StyleID="CellData"><Data ss:Type="String">HSE</Data></Cell>
+    <Cell ss:StyleID="CellData"><Data ss:Type="String">Kunci Ruang Server C</Data></Cell>
+    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">CODE-897</Data></Cell>
+    <Cell ss:StyleID="CellCenter"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">13/07/2026</Data></Cell>
+    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">22:35</Data></Cell>
+    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">16/07/2026</Data></Cell>
+    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">00:35</Data></Cell>
+    <Cell ss:StyleID="CellData"><Data ss:Type="String">Baik</Data></Cell>
+    <Cell ss:StyleID="CellData"><Data ss:Type="String">Lecet</Data></Cell>
+    <Cell ss:StyleID="BadgeSuccess"><Data ss:Type="String">Dikembalikan</Data></Cell>
+   </Row>
+  </Table>
+ </Worksheet>
+</Workbook>
