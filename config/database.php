@@ -4,11 +4,11 @@ date_default_timezone_set('Asia/Jakarta');
 
 // Konfigurasi Database GA Management System
 // Mendukung Environment Variables (untuk Deployment Cloud Vercel/Railway) & Fallback Local Laragon
-$host = getenv('DB_HOST') ?: '127.0.0.1';
-$db   = getenv('DB_NAME') ?: 'ga_management_db';
-$user = getenv('DB_USER') ?: 'root';
-$pass = getenv('DB_PASS') !== false ? getenv('DB_PASS') : '';
-$port = getenv('DB_PORT') ?: '3306';
+$host = getenv('DB_HOST') ?: 'gateway01.ap-southeast-1.prod.aws.tidbcloud.com';
+$db   = getenv('DB_NAME') ?: 'test';
+$user = getenv('DB_USER') ?: '3GC7rm8T43sKr5N.root';
+$pass = getenv('DB_PASS') ?: 'WG7IsDq3w6a4dXPg';
+$port = getenv('DB_PORT') ?: '4000';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=$charset";
