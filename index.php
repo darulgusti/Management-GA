@@ -23,7 +23,7 @@ $flash = get_flash_message();
             </div>
         </div>
         <div>
-            <a href="login.php" class="btn btn-sm btn-outline-light">Login Petugas</a>
+            <a href="login.php" class="btn btn-sm btn-outline-light">Login</a>
         </div>
     </header>
 
