@@ -29,7 +29,10 @@ if (is_logged_in() && !isset($_GET['error'])) {
         $_SESSION['role'] = 'secom';
         $user_role = 'secom';
     }
-    if (in_array($user_role, ['manager', 'secom'])) {
+    if ($user_role === 'manager') {
+        header("Location: dashboard.php");
+        exit();
+    } elseif ($user_role === 'secom') {
         header("Location: guest.php");
         exit();
     } else {
@@ -63,7 +66,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['email']   = $user['email'];
                 $_SESSION['role']    = $role;
 
-                header("Location: guest.php");
+                if ($role === 'manager') {
+                    header("Location: dashboard.php");
+                } else {
+                    header("Location: guest.php");
+                }
                 exit();
             } else {
                 $error = "Email atau password salah!";
