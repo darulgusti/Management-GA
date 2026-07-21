@@ -20,10 +20,13 @@ $options = [
 
 // Jika koneksi Cloud DB (TiDB Cloud / Aiven), aktifkan SSL / Secure Transport
 if (getenv('DB_HOST')) {
-    $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
+    $sslVerifyOpt = defined('Pdo\Mysql::ATTR_SSL_VERIFY_SERVER_CERT') ? \Pdo\Mysql::ATTR_SSL_VERIFY_SERVER_CERT : 1006;
+    $sslCaOpt     = defined('Pdo\Mysql::ATTR_SSL_CA') ? \Pdo\Mysql::ATTR_SSL_CA : 1002;
+
+    $options[$sslVerifyOpt] = false;
     $caPath = file_exists('/etc/ssl/certs/ca-certificates.crt') ? '/etc/ssl/certs/ca-certificates.crt' : (file_exists('/etc/pki/tls/certs/ca-bundle.crt') ? '/etc/pki/tls/certs/ca-bundle.crt' : '');
     if ($caPath) {
-        $options[PDO::MYSQL_ATTR_SSL_CA] = $caPath;
+        $options[$sslCaOpt] = $caPath;
     }
 }
 
