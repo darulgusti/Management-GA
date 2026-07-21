@@ -2,9 +2,25 @@
 date_default_timezone_set('Asia/Jakarta');
 require_once __DIR__ . '/excel_helper.php';
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+function init_safe_session() {
+    if (session_status() === PHP_SESSION_NONE) {
+        $isHttps = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') 
+            || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+
+        session_set_cookie_params([
+            'lifetime' => 604800, // 7 hari
+            'path'     => '/',
+            'secure'   => $isHttps,
+            'httponly' => true,
+            'samesite' => 'Lax'
+        ]);
+
+        ini_set('session.gc_maxlifetime', 604800);
+        session_start();
+    }
 }
+
+init_safe_session();
 
 if (isset($GLOBALS['pdo'])) {
     check_and_run_auto_archive($GLOBALS['pdo']);
