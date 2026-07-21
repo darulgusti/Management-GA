@@ -51,7 +51,7 @@ $flash = get_flash_message();
                     </div>
                     <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Buku Tamu Digital</h2>
                     <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.65; margin-bottom: 1.5rem;">
-                        Formulir pendaftaran untuk pengunjung, kedinasan, vendor, atau tamu pabrik yang memerlukan kartu akses masuk.
+                        Formulir pendaftaran untuk pengunjung atau tamu yang datang ke fasilitas.
                     </p>
                 </div>
                 <a href="guest_form.php" class="btn btn-primary btn-lg btn-block">
