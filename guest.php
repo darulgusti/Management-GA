@@ -66,14 +66,14 @@ include __DIR__ . '/includes/header.php';
 <!-- TABEL 1: TAMU AKTIF (MASIH DI LOKASI) -->
 <div class="card" style="border-top: 4px solid var(--success);">
     <div class="card-header">
-        <div>
-            <h2 class="card-title" style="color: #065f46; display: flex; align-items: center; gap: 0.5rem;">
+        <div class="card-header-left">
+            <h2 class="card-title" style="color: #065f46;">
                 <span class="badge badge-success" style="font-size: 0.85rem;"><?= number_format($total_active_records) ?> Aktif</span>
                 Daftar Tamu Masih di Lokasi
             </h2>
-            <small style="color: var(--text-muted);">Tamu yang saat ini berada di dalam fasilitas pabrik / kantor</small>
+            <small style="color: var(--text-muted); display: block; margin-top: 0.2rem;">Tamu yang saat ini berada di dalam fasilitas pabrik / kantor</small>
         </div>
-        <div>
+        <div class="card-header-right">
             <a href="export_guest.php" class="btn btn-success btn-sm">
                 <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                 Export Excel (.xls)

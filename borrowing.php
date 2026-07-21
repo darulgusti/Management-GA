@@ -68,14 +68,14 @@ include __DIR__ . '/includes/header.php';
 <!-- TABEL 1: BARANG SEDANG DIPINJAM (AKTIF) -->
 <div class="card" style="border-top: 4px solid var(--warning);">
     <div class="card-header">
-        <div>
-            <h2 class="card-title" style="color: #92400e; display: flex; align-items: center; gap: 0.5rem;">
+        <div class="card-header-left">
+            <h2 class="card-title" style="color: #92400e;">
                 <span class="badge badge-warning" style="font-size: 0.85rem;"><?= number_format($total_active_records) ?> Dipinjam</span>
                 Daftar Barang & Kunci Sedang Dipinjam
             </h2>
-            <small style="color: var(--text-muted);">Aset GA yang saat ini sedang dibawa/dipinjam oleh karyawan</small>
+            <small style="color: var(--text-muted); display: block; margin-top: 0.2rem;">Aset GA yang saat ini sedang dibawa/dipinjam oleh karyawan</small>
         </div>
-        <div>
+        <div class="card-header-right">
             <a href="export_borrowing.php" class="btn btn-success btn-sm">
                 <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                 Export Excel (.xls)

@@ -271,6 +271,8 @@ html, body {
   padding: 1.5rem;
   margin-bottom: 1.5rem;
   transition: var(--transition);
+  position: relative;
+  overflow: hidden;
 }
 
 .card:hover {
@@ -281,15 +283,33 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
   margin-bottom: 1.25rem;
   padding-bottom: 0.75rem;
   border-bottom: 1px solid var(--border);
+}
+
+.card-header-left {
+  flex: 1;
+  min-width: 220px;
+}
+
+.card-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .card-title {
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 /* Grid & Layout Helpers */
