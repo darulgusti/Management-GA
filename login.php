@@ -127,11 +127,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </button>
         </form>
 
-        <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--text-muted); text-align: center;">
-            <strong>Demo Credentials:</strong><br>
-            Manager: <code>admin@ga.com</code> / <code>admin123</code><br>
-            Staf Secom: <code>secom@ga.com</code> / <code>secom123</code>
-        </div>
     </div>
 
 </body>
