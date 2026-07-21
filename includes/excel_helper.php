@@ -1,4 +1,3 @@
-
 <?php
 /**
  * GA Management System - Formatted Excel Export & Archiving Helper

@@ -1,4 +1,5 @@
 <?php
+ob_start();
 // Set working directory to project root for relative includes
 chdir(__DIR__ . '/..');
 
