@@ -67,7 +67,7 @@ $flash = get_flash_message();
                     </div>
                     <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Peminjaman Barang &amp; Kunci</h2>
                     <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.65; margin-bottom: 1.5rem;">
-                        Formulir peminjaman kunci ruangan, alat/peralatan inventaris, proyektor, atau fasilitas GA oleh staf/karyawan.
+                        Formulir peminjaman alat atau peralatan inventaris milik General Affairs.
                     </p>
                 </div>
                 <a href="borrowing_form.php" class="btn btn-success btn-lg btn-block">
