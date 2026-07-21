@@ -20,7 +20,6 @@ $flash = get_flash_message();
             <div class="sidebar-logo-icon">GA</div>
             <div class="portal-navbar-brand">
                 <strong>Portal Layanan GA</strong>
-                <small>General Affairs &middot; Reception &amp; Service</small>
             </div>
         </div>
         <div>
