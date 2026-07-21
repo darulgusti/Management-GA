@@ -913,16 +913,45 @@ textarea.form-control {
 /* Public Portal Specific */
 .portal-body {
   background-color: #f1f5f9;
+  min-height: 100vh;
 }
 
 .portal-navbar {
-  background: linear-gradient(135deg, #0f172a, #1e293b);
+  background-color: var(--bg-sidebar);
   color: white;
-  padding: 1rem 2rem;
+  padding: 0.85rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.75rem;
   box-shadow: var(--shadow-md);
+  flex-wrap: wrap;
+}
+
+.portal-navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.portal-navbar-brand {
+  min-width: 0;
+}
+
+.portal-navbar-brand strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.portal-navbar-brand small {
+  display: block;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  white-space: nowrap;
 }
 
 .portal-container {
@@ -933,20 +962,30 @@ textarea.form-control {
 
 .portal-hero {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
+  padding: 0 0.25rem;
 }
 
 .portal-hero h1 {
-  font-size: 2rem;
+  font-size: 1.65rem;
   font-weight: 800;
   color: var(--text-main);
-  letter-spacing: -0.03em;
-  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  margin-bottom: 0.6rem;
 }
 
 .portal-hero p {
   color: var(--text-muted);
-  font-size: 1.05rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.portal-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin-top: 1.5rem;
 }
 
 .portal-tabs {
@@ -1026,38 +1065,34 @@ textarea.form-control {
   visibility: visible;
 }
 
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   ≤992px  = Tablet
+   ≤768px  = Mobile
+   ≤480px  = Small Mobile
+   ============================================ */
+
+/* === TABLET (≤992px) === */
 @media (max-width: 992px) {
-  .sidebar-mobile-close {
-    display: block;
-  }
+
+  /* --- Sidebar: slide off-screen, open as drawer --- */
+  .sidebar-mobile-close { display: block; }
 
   .sidebar {
     transform: translateX(-100%) !important;
     width: 280px !important;
     z-index: 1000 !important;
-    background: rgba(15, 23, 42, 0.96) !important;
-    backdrop-filter: blur(12px) !important;
-    box-shadow: 0 0 35px rgba(0, 0, 0, 0.5) !important;
+    background: var(--bg-sidebar) !important;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.5) !important;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
-  
+
   .app-container.mobile-open .sidebar,
   .app-container.mobile-open.collapsed .sidebar {
     transform: translateX(0) !important;
   }
 
   .sidebar-header {
-    justify-content: space-between !important;
-    padding: 1.25rem 1rem !important;
-  }
-
-  .main-wrapper {
-    margin-left: 0 !important;
-    width: 100% !important;
-    max-width: 100vw !important;
-  }
-
-  .app-container.collapsed .sidebar-header {
     justify-content: space-between !important;
     padding: 1.25rem 1rem !important;
   }
@@ -1074,27 +1109,66 @@ textarea.form-control {
     padding: 0.75rem 1rem !important;
   }
 
-  .top-navbar {
-    padding: 0 1rem;
+  /* --- Main Wrapper: full width --- */
+  .main-wrapper {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100vw !important;
   }
 
-  .content-body {
-    padding: 1rem 0.75rem;
-  }
+  /* --- Top Navbar --- */
+  .top-navbar { padding: 0 1rem; }
 
-  .grid-2, .grid-3, .grid-4 {
-    grid-template-columns: 1fr;
+  /* --- Content Body --- */
+  .content-body { padding: 1rem 0.85rem; }
+
+  /* --- Grids: 2 columns on tablet, 1 on smaller --- */
+  .grid-4 { grid-template-columns: repeat(2, 1fr); gap: 0.85rem; }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); gap: 0.85rem; }
+  .grid-2 { grid-template-columns: 1fr; gap: 0.85rem; }
+
+  /* --- Card Header: wrap on overflow --- */
+  .card-header {
+    flex-wrap: wrap;
     gap: 0.75rem;
   }
 
-  /* Card Header Mobile Stack Fix */
+  /* --- Table: enforce horizontal scroll --- */
+  .table-responsive {
+    -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
+  }
+
+  .table { min-width: 640px; }
+
+  /* --- Report filter: stack form --- */
+  form.grid-3 {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+}
+
+/* === MOBILE (≤768px) === */
+@media (max-width: 768px) {
+
+  /* --- Grids: all single column --- */
+  .grid-4, .grid-3, .grid-2 {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem;
+  }
+
+  /* --- Cards --- */
+  .card { padding: 1rem; }
+
   .card-header {
     flex-direction: column !important;
     align-items: flex-start !important;
-    gap: 0.85rem !important;
+    gap: 0.75rem !important;
   }
 
-  .card-header > div {
+  .card-header > div,
+  .card-header-left,
+  .card-header-right {
     width: 100% !important;
   }
 
@@ -1105,38 +1179,27 @@ textarea.form-control {
   }
 
   .card-title {
-    font-size: 1.05rem !important;
+    font-size: 1rem !important;
     flex-wrap: wrap !important;
-    gap: 0.4rem !important;
+    gap: 0.35rem !important;
     line-height: 1.4 !important;
   }
 
-  /* Table Mobile Scrollable & Padding Fix */
-  .table {
-    min-width: 680px;
-  }
+  /* --- Stat Cards --- */
+  .stat-card { padding: 0.85rem 1rem; gap: 0.85rem; }
+  .stat-icon { width: 44px; height: 44px; font-size: 1.2rem; }
+  .stat-value { font-size: 1.5rem; }
+  .stat-label { font-size: 0.775rem; }
+
+  /* --- Table --- */
+  .table { min-width: 560px; }
 
   .table th, .table td {
     padding: 0.55rem 0.65rem !important;
     font-size: 0.8rem !important;
   }
 
-  .table-responsive {
-    -webkit-overflow-scrolling: touch;
-    border-radius: var(--radius-md);
-    box-shadow: inset -6px 0 6px -6px rgba(0, 0, 0, 0.15);
-  }
-}
-
-.search-form-bar {
-  display: flex;
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-@media (max-width: 576px) {
+  /* --- Search/Filter bar --- */
   .search-form-bar {
     flex-direction: column !important;
     align-items: stretch !important;
@@ -1147,64 +1210,109 @@ textarea.form-control {
   .search-form-bar .btn,
   .search-form-bar > div {
     width: 100% !important;
-    min-width: 100% !important;
+    min-width: 0 !important;
   }
 
+  /* --- Report filter form: single column --- */
+  form.grid-3 {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.65rem !important;
+  }
+
+  form.grid-3 > div {
+    width: 100% !important;
+  }
+
+  /* Inline filter button: full width */
+  form.grid-3 > div[style*="flex"],
+  form.grid-3 > div > button {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  form.grid-3 > div[style*="flex"] {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+
+  /* --- Page Title --- */
   .page-title-heading {
     font-size: 0.95rem;
-    max-width: 180px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 200px;
   }
 
-  .top-nav-actions .btn {
-    padding: 0.35rem 0.6rem;
-    font-size: 0.75rem;
+  /* --- Top Navbar actions --- */
+  .top-navbar { padding: 0 0.75rem; gap: 0.5rem; }
+  .top-nav-actions .btn { padding: 0.35rem 0.6rem; font-size: 0.75rem; }
+
+  /* --- Content body --- */
+  .content-body { padding: 0.85rem 0.65rem; }
+
+  /* --- Pagination: smaller --- */
+  .pagination-container { gap: 0.25rem; }
+  .page-link { min-width: 32px; height: 32px; font-size: 0.8rem; }
+
+  /* --- Modal --- */
+  .modal-dialog { width: 95%; margin: 0.5rem; padding: 1.25rem; }
+
+  /* --- Badge on table: keep nowrap --- */
+  .badge { font-size: 0.72rem; padding: 0.25rem 0.6rem; }
+
+  /* --- Form inside cards --- */
+  .form-control, .form-select { font-size: 0.875rem; }
+
+  /* --- Portal page --- */
+  .portal-container { padding: 0 0.75rem; margin-top: 1rem; }
+  .portal-hero { padding: 0; }
+  .portal-hero h1 { font-size: 1.3rem; letter-spacing: -0.01em; }
+  .portal-hero p { font-size: 0.875rem; }
+  .portal-cards { grid-template-columns: 1fr; gap: 1rem; margin-top: 1rem; }
+  .portal-navbar { padding: 0.75rem 1rem; gap: 0.5rem; }
+  .portal-navbar .btn-sm { padding: 0.35rem 0.65rem; font-size: 0.8rem; white-space: nowrap; }
+
+  /* --- Login page --- */
+  .login-card { padding: 1.5rem 1.25rem; }
+
+  /* --- Settings grid: always single column --- */
+  .grid-2 { grid-template-columns: 1fr !important; }
+
+  /* --- Dashboard recent tables: smaller cells --- */
+  .table td.col-name { min-width: 120px; }
+  .table td.col-date { min-width: 110px; }
+}
+
+/* === SMALL MOBILE (≤480px) === */
+@media (max-width: 480px) {
+
+  .content-body { padding: 0.65rem 0.5rem; }
+  .card { padding: 0.85rem 0.75rem; }
+  .stat-card { padding: 0.75rem 0.85rem; gap: 0.65rem; }
+  .stat-value { font-size: 1.35rem; }
+  .stat-icon { width: 40px; height: 40px; }
+
+  .page-title-heading { font-size: 0.875rem; max-width: 160px; }
+
+  .table th, .table td {
+    padding: 0.45rem 0.5rem !important;
+    font-size: 0.77rem !important;
   }
 
-  .card {
-    padding: 0.85rem;
-  }
+  .portal-hero h1 { font-size: 1.15rem; }
+  .portal-navbar-brand strong { font-size: 0.9rem; }
+  .portal-navbar-brand small { font-size: 0.67rem; }
 
-  .stat-card {
-    padding: 0.85rem 1rem;
-    gap: 0.85rem;
-  }
+  .btn-lg { padding: 0.7rem 1rem; font-size: 0.9rem; }
+  .btn-sm { padding: 0.3rem 0.55rem; font-size: 0.775rem; }
 
-  .stat-icon {
-    width: 44px;
-    height: 44px;
-    font-size: 1.25rem;
-  }
+  .modal-dialog { padding: 1rem; }
+  .card-title { font-size: 0.95rem !important; }
 
-  .stat-value {
-    font-size: 1.4rem;
-  }
-
-  .stat-label {
-    font-size: 0.775rem;
-  }
-
-  .portal-container {
-    padding: 0 0.75rem;
-    margin-top: 1rem;
-  }
-
-  .portal-hero h1 {
-    font-size: 1.35rem;
-  }
-
-  .portal-hero p {
-    font-size: 0.875rem;
-  }
-
-  .login-card {
-    padding: 1.5rem 1.25rem;
-  }
-
-  .modal-dialog {
-    width: 95%;
-    margin: 0.5rem;
+  /* Table horizontal scroll hint shadow */
+  .table-responsive {
+    box-shadow: inset -6px 0 6px -6px rgba(0, 0, 0, 0.12);
   }
 }
