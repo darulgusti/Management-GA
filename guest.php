@@ -86,15 +86,15 @@ include __DIR__ . '/includes/header.php';
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Nama Tamu</th>
-                    <th>Instansi</th>
-                    <th>Kategori</th>
-                    <th>Tujuan & Orang Ditemui</th>
-                    <th>No. Kartu</th>
-                    <th>Waktu Masuk</th>
-                    <th>Status</th>
+                    <th class="col-nowrap">Nama Tamu</th>
+                    <th class="col-nowrap">Instansi</th>
+                    <th class="col-nowrap">Kategori</th>
+                    <th class="col-nowrap">Tujuan & Orang Ditemui</th>
+                    <th class="col-nowrap">No. Kartu</th>
+                    <th class="col-nowrap">Waktu Masuk</th>
+                    <th class="col-nowrap">Status</th>
                     <?php if ($logged_user['role'] === 'secom'): ?>
-                        <th style="text-align: center;">Aksi</th>
+                        <th class="col-nowrap" style="text-align: center;">Aksi</th>
                     <?php endif; ?>
                 </tr>
             </thead>
@@ -115,7 +115,7 @@ include __DIR__ . '/includes/header.php';
                             </td>
                             <td class="col-nowrap"><?= htmlspecialchars($g['institution'] ?: '-') ?></td>
                             <td class="col-nowrap"><span class="badge badge-info"><?= htmlspecialchars(ucfirst($g['guest_category'])) ?></span></td>
-                            <td>
+                            <td class="col-nowrap">
                                 <div><strong>Tujuan:</strong> <?= htmlspecialchars($g['purpose'] ?: '-') ?></div>
                                 <div style="font-size: 0.775rem; color: var(--text-muted);">Bertemu: <?= htmlspecialchars($g['person_to_meet']) ?></div>
                             </td>
@@ -167,14 +167,14 @@ include __DIR__ . '/includes/header.php';
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Nama Tamu</th>
-                    <th>Instansi</th>
-                    <th>Kategori</th>
-                    <th>Tujuan & Orang Ditemui</th>
-                    <th>No. Kartu</th>
-                    <th>Waktu Masuk</th>
-                    <th>Waktu Keluar</th>
-                    <th>Status</th>
+                    <th class="col-nowrap">Nama Tamu</th>
+                    <th class="col-nowrap">Instansi</th>
+                    <th class="col-nowrap">Kategori</th>
+                    <th class="col-nowrap">Tujuan & Orang Ditemui</th>
+                    <th class="col-nowrap">No. Kartu</th>
+                    <th class="col-nowrap">Waktu Masuk</th>
+                    <th class="col-nowrap">Waktu Keluar</th>
+                    <th class="col-nowrap">Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -189,7 +189,7 @@ include __DIR__ . '/includes/header.php';
                             <td class="col-name"><strong><?= htmlspecialchars($g['name']) ?></strong></td>
                             <td class="col-nowrap"><?= htmlspecialchars($g['institution'] ?: '-') ?></td>
                             <td class="col-nowrap"><span class="badge badge-info"><?= htmlspecialchars(ucfirst($g['guest_category'])) ?></span></td>
-                            <td>
+                            <td class="col-nowrap">
                                 <div><strong>Tujuan:</strong> <?= htmlspecialchars($g['purpose'] ?: '-') ?></div>
                                 <div style="font-size: 0.775rem; color: var(--text-muted);">Bertemu: <?= htmlspecialchars($g['person_to_meet']) ?></div>
                             </td>
