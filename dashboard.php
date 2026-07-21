@@ -28,12 +28,12 @@ $stmt = $pdo->query("SELECT COUNT(*) FROM item_borrowings WHERE status = 'borrow
 $count_borrow_pending = $stmt->fetchColumn();
 
 // Recent Guests Today (Limit 5)
-$stmt = $pdo->prepare("SELECT * FROM guests ORDER BY time_in DESC LIMIT 5");
+$stmt = $pdo->prepare("SELECT name, institution, time_in, time_out FROM guests ORDER BY time_in DESC LIMIT 5");
 $stmt->execute();
 $recent_guests = $stmt->fetchAll();
 
 // Recent Item Borrowings (Limit 5)
-$stmt = $pdo->prepare("SELECT * FROM item_borrowings ORDER BY borrow_time DESC LIMIT 5");
+$stmt = $pdo->prepare("SELECT borrower_name, department, item_name, borrow_time, status FROM item_borrowings ORDER BY borrow_time DESC LIMIT 5");
 $stmt->execute();
 $recent_borrowings = $stmt->fetchAll();
 

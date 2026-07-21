@@ -41,6 +41,12 @@ CREATE TABLE IF NOT EXISTS `item_borrowings` (
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Indexing untuk optimasi query (Performance Boost)
+ALTER TABLE `guests` ADD INDEX `idx_time_in` (`time_in`);
+ALTER TABLE `guests` ADD INDEX `idx_time_out` (`time_out`);
+ALTER TABLE `item_borrowings` ADD INDEX `idx_borrow_time` (`borrow_time`);
+ALTER TABLE `item_borrowings` ADD INDEX `idx_status` (`status`);
+
 -- 4. Tabel Archives (Riwayat Pengarsipan Data)
 CREATE TABLE IF NOT EXISTS `archives` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,

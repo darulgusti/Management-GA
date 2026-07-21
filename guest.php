@@ -32,7 +32,7 @@ $total_active_records = $stmt->fetchColumn();
 $total_active_pages = ceil($total_active_records / $per_page);
 $active_offset = ($active_page - 1) * $per_page;
 
-$stmt = $pdo->prepare("SELECT * FROM guests WHERE time_out IS NULL ORDER BY time_in DESC LIMIT $per_page OFFSET $active_offset");
+$stmt = $pdo->prepare("SELECT id, name, institution, guest_category, purpose, person_to_meet, visitor_card_number, time_in, time_out FROM guests WHERE time_out IS NULL ORDER BY time_in DESC LIMIT $per_page OFFSET $active_offset");
 $stmt->execute();
 $active_guests = $stmt->fetchAll();
 
@@ -55,7 +55,7 @@ $total_history_records = $stmt->fetchColumn();
 $total_history_pages = ceil($total_history_records / $per_page);
 $history_offset = ($history_page - 1) * $per_page;
 
-$data_query = str_replace("SELECT COUNT(*)", "SELECT *", $count_query) . " ORDER BY time_out DESC LIMIT $per_page OFFSET $history_offset";
+$data_query = str_replace("SELECT COUNT(*)", "SELECT id, name, institution, guest_category, purpose, person_to_meet, visitor_card_number, time_in, time_out", $count_query) . " ORDER BY time_out DESC LIMIT $per_page OFFSET $history_offset";
 $stmt = $pdo->prepare($data_query);
 $stmt->execute($params);
 $history_guests = $stmt->fetchAll();

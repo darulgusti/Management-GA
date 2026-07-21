@@ -34,7 +34,7 @@ $total_active_records = $stmt->fetchColumn();
 $total_active_pages = ceil($total_active_records / $per_page);
 $active_offset = ($active_page - 1) * $per_page;
 
-$stmt = $pdo->prepare("SELECT * FROM item_borrowings WHERE status = 'borrowed' ORDER BY borrow_time DESC LIMIT $per_page OFFSET $active_offset");
+$stmt = $pdo->prepare("SELECT id, borrower_name, department, item_name, item_code, quantity, borrow_time, return_time, initial_condition, return_condition, status FROM item_borrowings WHERE status = 'borrowed' ORDER BY borrow_time DESC LIMIT $per_page OFFSET $active_offset");
 $stmt->execute();
 $active_borrowings = $stmt->fetchAll();
 
@@ -57,7 +57,7 @@ $total_history_records = $stmt->fetchColumn();
 $total_history_pages = ceil($total_history_records / $per_page);
 $history_offset = ($history_page - 1) * $per_page;
 
-$data_query = str_replace("SELECT COUNT(*)", "SELECT *", $count_query) . " ORDER BY return_time DESC LIMIT $per_page OFFSET $history_offset";
+$data_query = str_replace("SELECT COUNT(*)", "SELECT id, borrower_name, department, item_name, item_code, quantity, borrow_time, return_time, initial_condition, return_condition, status", $count_query) . " ORDER BY return_time DESC LIMIT $per_page OFFSET $history_offset";
 $stmt = $pdo->prepare($data_query);
 $stmt->execute($params);
 $history_borrowings = $stmt->fetchAll();
