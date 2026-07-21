@@ -109,25 +109,25 @@ include __DIR__ . '/includes/header.php';
                     <?php $no = $active_offset + 1; foreach ($active_borrowings as $item): ?>
                         <tr>
                             <td><?= $no++ ?></td>
-                            <td>
+                            <td class="col-name">
                                 <strong><?= htmlspecialchars($item['borrower_name']) ?></strong>
                                 <?php if ($item['signature']): ?>
                                     <div style="font-size: 0.725rem; color: var(--primary); font-weight: 500;">✓ Ada Ttd Digital</div>
                                 <?php endif; ?>
                             </td>
-                            <td><span class="badge badge-secondary"><?= htmlspecialchars($item['department']) ?></span></td>
-                            <td>
+                            <td class="col-nowrap"><span class="badge badge-secondary"><?= htmlspecialchars($item['department']) ?></span></td>
+                            <td class="col-nowrap">
                                 <strong><?= htmlspecialchars($item['item_name']) ?></strong>
                                 <?php if ($item['item_code']): ?>
                                     <div><code><?= htmlspecialchars($item['item_code']) ?></code></div>
                                 <?php endif; ?>
                             </td>
-                            <td><strong><?= $item['quantity'] ?></strong></td>
-                            <td><?= date('d/m/Y H:i', strtotime($item['borrow_time'])) ?></td>
-                            <td><?= htmlspecialchars($item['initial_condition']) ?></td>
-                            <td><span class="badge badge-warning">Sedang Dipinjam</span></td>
+                            <td class="col-nowrap"><strong><?= $item['quantity'] ?></strong></td>
+                            <td class="col-date"><?= date('d/m/Y H:i', strtotime($item['borrow_time'])) ?></td>
+                            <td class="col-nowrap"><?= htmlspecialchars($item['initial_condition']) ?></td>
+                            <td class="col-nowrap"><span class="badge badge-warning">Sedang Dipinjam</span></td>
                             <?php if ($logged_user['role'] === 'secom'): ?>
-                                <td style="text-align: center;">
+                                <td class="col-nowrap" style="text-align: center;">
                                     <button type="button" class="btn btn-sm btn-success" onclick="openReturnModal(<?= $item['id'] ?>, '<?= htmlspecialchars($item['item_name'], ENT_QUOTES) ?>', '<?= htmlspecialchars($item['borrower_name'], ENT_QUOTES) ?>')">
                                         Kembalikan
                                     </button>
@@ -188,22 +188,22 @@ include __DIR__ . '/includes/header.php';
                     <?php $no = $history_offset + 1; foreach ($history_borrowings as $b): ?>
                         <tr>
                             <td><?= $no++ ?></td>
-                            <td><strong><?= htmlspecialchars($b['borrower_name']) ?></strong></td>
-                            <td><span class="badge badge-secondary"><?= htmlspecialchars($b['department']) ?></span></td>
-                            <td>
+                            <td class="col-name"><strong><?= htmlspecialchars($b['borrower_name']) ?></strong></td>
+                            <td class="col-nowrap"><span class="badge badge-secondary"><?= htmlspecialchars($b['department']) ?></span></td>
+                            <td class="col-nowrap">
                                 <strong><?= htmlspecialchars($b['item_name']) ?></strong>
                                 <?php if ($b['item_code']): ?>
                                     <div><code><?= htmlspecialchars($b['item_code']) ?></code></div>
                                 <?php endif; ?>
                             </td>
-                            <td><?= $b['quantity'] ?></td>
-                            <td><?= date('d/m/Y H:i', strtotime($b['borrow_time'])) ?></td>
-                            <td><?= date('d/m/Y H:i', strtotime($b['return_time'])) ?></td>
-                            <td>
+                            <td class="col-nowrap"><?= $b['quantity'] ?></td>
+                            <td class="col-date"><?= date('d/m/Y H:i', strtotime($b['borrow_time'])) ?></td>
+                            <td class="col-date"><?= date('d/m/Y H:i', strtotime($b['return_time'])) ?></td>
+                            <td class="col-nowrap">
                                 <div style="font-size: 0.8rem;"><strong>Awal:</strong> <?= htmlspecialchars($b['initial_condition']) ?></div>
                                 <div style="font-size: 0.75rem; color: var(--text-muted);"><strong>Kembali:</strong> <?= htmlspecialchars($b['return_condition'] ?: '-') ?></div>
                             </td>
-                            <td><span class="badge badge-success">Dikembalikan</span></td>
+                            <td class="col-nowrap"><span class="badge badge-success">Dikembalikan</span></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>

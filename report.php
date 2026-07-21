@@ -144,12 +144,12 @@ include __DIR__ . '/includes/header.php';
                     <?php $no = $guest_offset + 1; foreach ($guests as $g): ?>
                         <tr>
                             <td><?= $no++ ?></td>
-                            <td><strong><?= htmlspecialchars($g['name']) ?></strong></td>
-                            <td><?= htmlspecialchars($g['institution'] ?: '-') ?></td>
-                            <td><span class="badge badge-info"><?= htmlspecialchars(ucfirst($g['guest_category'])) ?></span></td>
-                            <td><?= htmlspecialchars($g['person_to_meet']) ?></td>
-                            <td><?= date('d/m/Y H:i', strtotime($g['time_in'])) ?></td>
-                            <td><?= $g['time_out'] ? date('d/m/Y H:i', strtotime($g['time_out'])) : 'Masih Masuk' ?></td>
+                            <td class="col-name"><strong><?= htmlspecialchars($g['name']) ?></strong></td>
+                            <td class="col-nowrap"><?= htmlspecialchars($g['institution'] ?: '-') ?></td>
+                            <td class="col-nowrap"><span class="badge badge-info"><?= htmlspecialchars(ucfirst($g['guest_category'])) ?></span></td>
+                            <td class="col-nowrap"><?= htmlspecialchars($g['person_to_meet']) ?></td>
+                            <td class="col-date"><?= date('d/m/Y H:i', strtotime($g['time_in'])) ?></td>
+                            <td class="col-date"><?= $g['time_out'] ? date('d/m/Y H:i', strtotime($g['time_out'])) : '<span class="badge badge-success">Masih Masuk</span>' ?></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -186,12 +186,12 @@ include __DIR__ . '/includes/header.php';
                     <?php $no = $borrow_offset + 1; foreach ($borrowings as $b): ?>
                         <tr>
                             <td><?= $no++ ?></td>
-                            <td><strong><?= htmlspecialchars($b['borrower_name']) ?></strong></td>
-                            <td><?= htmlspecialchars($b['department']) ?></td>
-                            <td><?= htmlspecialchars($b['item_name']) ?> <?= $b['item_code'] ? "({$b['item_code']})" : '' ?></td>
-                            <td><?= $b['quantity'] ?></td>
-                            <td><?= date('d/m/Y H:i', strtotime($b['borrow_time'])) ?></td>
-                            <td><?= $b['return_time'] ? date('d/m/Y H:i', strtotime($b['return_time'])) : '-' ?></td>
+                            <td class="col-name"><strong><?= htmlspecialchars($b['borrower_name']) ?></strong></td>
+                            <td class="col-nowrap"><?= htmlspecialchars($b['department']) ?></td>
+                            <td class="col-nowrap"><?= htmlspecialchars($b['item_name']) ?> <?= $b['item_code'] ? "({$b['item_code']})" : '' ?></td>
+                            <td class="col-nowrap"><?= $b['quantity'] ?></td>
+                            <td class="col-date"><?= date('d/m/Y H:i', strtotime($b['borrow_time'])) ?></td>
+                            <td class="col-date"><?= $b['return_time'] ? date('d/m/Y H:i', strtotime($b['return_time'])) : '-' ?></td>
                             <td>
                                 <?php if ($b['status'] === 'borrowed'): ?>
                                     <span class="badge badge-warning">Dipinjam</span>

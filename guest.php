@@ -107,23 +107,23 @@ include __DIR__ . '/includes/header.php';
                     <?php $no = $active_offset + 1; foreach ($active_guests as $g): ?>
                         <tr>
                             <td><?= $no++ ?></td>
-                            <td>
+                            <td class="col-name">
                                 <strong><?= htmlspecialchars($g['name']) ?></strong>
                                 <?php if ($g['signature']): ?>
                                     <div style="font-size: 0.725rem; color: var(--primary); font-weight: 500;">✓ Ada Ttd Digital</div>
                                 <?php endif; ?>
                             </td>
-                            <td><?= htmlspecialchars($g['institution'] ?: '-') ?></td>
-                            <td><span class="badge badge-info"><?= htmlspecialchars(ucfirst($g['guest_category'])) ?></span></td>
+                            <td class="col-nowrap"><?= htmlspecialchars($g['institution'] ?: '-') ?></td>
+                            <td class="col-nowrap"><span class="badge badge-info"><?= htmlspecialchars(ucfirst($g['guest_category'])) ?></span></td>
                             <td>
                                 <div><strong>Tujuan:</strong> <?= htmlspecialchars($g['purpose'] ?: '-') ?></div>
                                 <div style="font-size: 0.775rem; color: var(--text-muted);">Bertemu: <?= htmlspecialchars($g['person_to_meet']) ?></div>
                             </td>
-                            <td><code><?= htmlspecialchars($g['visitor_card_number'] ?: '-') ?></code></td>
-                            <td><?= date('d/m/Y H:i', strtotime($g['time_in'])) ?></td>
-                            <td><span class="badge badge-success">Masih di Lokasi</span></td>
+                            <td class="col-nowrap"><code><?= htmlspecialchars($g['visitor_card_number'] ?: '-') ?></code></td>
+                            <td class="col-date"><?= date('d/m/Y H:i', strtotime($g['time_in'])) ?></td>
+                            <td class="col-nowrap"><span class="badge badge-success">Masih di Lokasi</span></td>
                             <?php if ($logged_user['role'] === 'secom'): ?>
-                                <td style="text-align: center;">
+                                <td class="col-nowrap" style="text-align: center;">
                                     <form action="guest.php" method="POST" style="display: inline;" onsubmit="return confirm('Proses check-out untuk tamu <?= htmlspecialchars($g['name']) ?>?');">
                                         <input type="hidden" name="action" value="checkout">
                                         <input type="hidden" name="guest_id" value="<?= $g['id'] ?>">
@@ -186,17 +186,17 @@ include __DIR__ . '/includes/header.php';
                     <?php $no = $history_offset + 1; foreach ($history_guests as $g): ?>
                         <tr>
                             <td><?= $no++ ?></td>
-                            <td><strong><?= htmlspecialchars($g['name']) ?></strong></td>
-                            <td><?= htmlspecialchars($g['institution'] ?: '-') ?></td>
-                            <td><span class="badge badge-info"><?= htmlspecialchars(ucfirst($g['guest_category'])) ?></span></td>
+                            <td class="col-name"><strong><?= htmlspecialchars($g['name']) ?></strong></td>
+                            <td class="col-nowrap"><?= htmlspecialchars($g['institution'] ?: '-') ?></td>
+                            <td class="col-nowrap"><span class="badge badge-info"><?= htmlspecialchars(ucfirst($g['guest_category'])) ?></span></td>
                             <td>
                                 <div><strong>Tujuan:</strong> <?= htmlspecialchars($g['purpose'] ?: '-') ?></div>
                                 <div style="font-size: 0.775rem; color: var(--text-muted);">Bertemu: <?= htmlspecialchars($g['person_to_meet']) ?></div>
                             </td>
-                            <td><code><?= htmlspecialchars($g['visitor_card_number'] ?: '-') ?></code></td>
-                            <td><?= date('d/m/Y H:i', strtotime($g['time_in'])) ?></td>
-                            <td><?= date('d/m/Y H:i', strtotime($g['time_out'])) ?></td>
-                            <td><span class="badge badge-secondary">Sudah Keluar</span></td>
+                            <td class="col-nowrap"><code><?= htmlspecialchars($g['visitor_card_number'] ?: '-') ?></code></td>
+                            <td class="col-date"><?= date('d/m/Y H:i', strtotime($g['time_in'])) ?></td>
+                            <td class="col-date"><?= date('d/m/Y H:i', strtotime($g['time_out'])) ?></td>
+                            <td class="col-nowrap"><span class="badge badge-secondary">Sudah Keluar</span></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>

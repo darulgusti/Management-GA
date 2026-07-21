@@ -585,18 +585,35 @@ textarea.form-control {
   color: var(--text-muted);
   font-weight: 600;
   text-transform: uppercase;
-  font-size: 0.7rem;
-  letter-spacing: 0.05em;
-  padding: 0.6rem 0.75rem;
+  font-size: 0.725rem;
+  letter-spacing: 0.04em;
+  padding: 0.75rem 0.85rem;
   border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  vertical-align: middle;
 }
 
 .table td {
-  padding: 0.6rem 0.75rem;
+  padding: 0.75rem 0.85rem;
   border-bottom: 1px solid var(--border);
   color: var(--text-main);
   vertical-align: middle;
-  font-size: 0.8125rem;
+  font-size: 0.825rem;
+}
+
+.table td.col-nowrap,
+.table th.col-nowrap {
+  white-space: nowrap;
+}
+
+.table td.col-name {
+  white-space: nowrap;
+  min-width: 160px;
+}
+
+.table td.col-date {
+  white-space: nowrap;
+  min-width: 130px;
 }
 
 .table tbody tr:last-child td {
@@ -668,11 +685,13 @@ textarea.form-control {
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.25rem 0.65rem;
-  font-size: 0.75rem;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.775rem;
   font-weight: 600;
   border-radius: 9999px;
   text-transform: capitalize;
+  white-space: nowrap;
+  line-height: 1.2;
 }
 
 .badge-success { background-color: #d1fae5; color: #065f46; }
