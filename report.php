@@ -15,16 +15,20 @@ $per_page   = 5;
 $guest_page   = max(1, intval($_GET['g_page'] ?? 1));
 $borrow_page  = max(1, intval($_GET['b_page'] ?? 1));
 
+// Filter Datetime Ranges (Index Optimized)
+$start_datetime = $start_date . ' 00:00:00';
+$end_datetime   = $end_date . ' 23:59:59';
+
 // Totals for Summary Cards
-$stmt = $pdo->prepare("SELECT COUNT(*) FROM guests WHERE DATE(time_in) BETWEEN ? AND ?");
-$stmt->execute([$start_date, $end_date]);
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM guests WHERE time_in >= ? AND time_in <= ?");
+$stmt->execute([$start_datetime, $end_datetime]);
 $total_guest_records = $stmt->fetchColumn();
 
-$stmt = $pdo->prepare("SELECT COUNT(*) FROM item_borrowings WHERE DATE(borrow_time) BETWEEN ? AND ?");
-$stmt->execute([$start_date, $end_date]);
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM item_borrowings WHERE borrow_time >= ? AND borrow_time <= ?");
+$stmt->execute([$start_datetime, $end_datetime]);
 $total_borrow_records = $stmt->fetchColumn();
 
-// Fetch Guests (Paginated 7 items per page)
+// Fetch Guests
 $guests = [];
 $guest_total_pages = 0;
 $guest_offset = 0;
@@ -32,12 +36,12 @@ if ($type === 'all' || $type === 'guest') {
     $guest_total_pages = ceil($total_guest_records / $per_page);
     $guest_offset = ($guest_page - 1) * $per_page;
 
-    $stmt = $pdo->prepare("SELECT * FROM guests WHERE DATE(time_in) BETWEEN ? AND ? ORDER BY time_in DESC LIMIT $per_page OFFSET $guest_offset");
-    $stmt->execute([$start_date, $end_date]);
+    $stmt = $pdo->prepare("SELECT * FROM guests WHERE time_in >= ? AND time_in <= ? ORDER BY time_in DESC LIMIT $per_page OFFSET $guest_offset");
+    $stmt->execute([$start_datetime, $end_datetime]);
     $guests = $stmt->fetchAll();
 }
 
-// Fetch Item Borrowings (Paginated 7 items per page)
+// Fetch Item Borrowings
 $borrowings = [];
 $borrow_total_pages = 0;
 $borrow_offset = 0;
@@ -45,8 +49,8 @@ if ($type === 'all' || $type === 'borrowing') {
     $borrow_total_pages = ceil($total_borrow_records / $per_page);
     $borrow_offset = ($borrow_page - 1) * $per_page;
 
-    $stmt = $pdo->prepare("SELECT * FROM item_borrowings WHERE DATE(borrow_time) BETWEEN ? AND ? ORDER BY borrow_time DESC LIMIT $per_page OFFSET $borrow_offset");
-    $stmt->execute([$start_date, $end_date]);
+    $stmt = $pdo->prepare("SELECT * FROM item_borrowings WHERE borrow_time >= ? AND borrow_time <= ? ORDER BY borrow_time DESC LIMIT $per_page OFFSET $borrow_offset");
+    $stmt->execute([$start_datetime, $end_datetime]);
     $borrowings = $stmt->fetchAll();
 }
 

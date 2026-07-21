@@ -1,7 +1,6 @@
 <?php
-session_start();
-require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/includes/auth_check.php';
+require_once __DIR__ . '/config/database.php';
 
 check_role(['manager', 'secom']);
 

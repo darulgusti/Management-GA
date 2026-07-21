@@ -20,7 +20,7 @@ function toggleSidebarToggle() {
     }
 }
 
-// Instant Navigation Prefetch & Loading Bar
+// Instant Navigation Progress Bar
 document.addEventListener('DOMContentLoaded', function() {
     const navItems = document.querySelectorAll('.sidebar-nav .nav-item');
     navItems.forEach(function(item) {
@@ -32,21 +32,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Top progress bar on link click & link prefetching on hover
+    // Top progress bar on link click
     const loader = document.getElementById('instant-loader');
     document.querySelectorAll('a[href]:not([target="_blank"]):not([href^="#"])').forEach(link => {
-        ['pointerover', 'touchstart'].forEach(evt => {
-            link.addEventListener(evt, function() {
-                const href = this.getAttribute('href');
-                if (href && !href.startsWith('javascript:') && !document.querySelector(`link[rel="prefetch"][href="${href}"]`)) {
-                    const pref = document.createElement('link');
-                    pref.rel = 'prefetch';
-                    pref.href = href;
-                    document.head.appendChild(pref);
-                }
-            }, { passive: true, once: true });
-        });
-
         link.addEventListener('click', function(e) {
             if (e.metaKey || e.ctrlKey) return;
             if (loader) {
