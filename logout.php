@@ -1,6 +1,8 @@
 <?php
-session_start();
+require_once __DIR__ . '/includes/auth_check.php';
+
 $_SESSION = array();
+destroy_encrypted_session_cookie();
 
 if (ini_get("session.use_cookies")) {
     $params = session_get_cookie_params();

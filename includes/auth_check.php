@@ -2,6 +2,74 @@
 date_default_timezone_set('Asia/Jakarta');
 require_once __DIR__ . '/excel_helper.php';
 
+// Encrypted Cookie Session Secret Key
+if (!defined('SESSION_SECRET_KEY')) {
+    define('SESSION_SECRET_KEY', getenv('SESSION_SECRET') ?: 'GA_MANAGEMENT_SECURE_TOKEN_2026_SECRET');
+}
+
+function encrypt_session_payload($data) {
+    $cipher = "aes-256-cbc";
+    $key = hash('sha256', SESSION_SECRET_KEY, true);
+    $ivlen = openssl_cipher_iv_length($cipher);
+    $iv = openssl_random_pseudo_bytes($ivlen);
+    $ciphertext_raw = openssl_encrypt(json_encode($data), $cipher, $key, OPENSSL_RAW_DATA, $iv);
+    $hmac = hash_hmac('sha256', $ciphertext_raw, $key, true);
+    return base64_encode($iv . $hmac . $ciphertext_raw);
+}
+
+function decrypt_session_payload($session_str) {
+    if (empty($session_str)) return null;
+    $c = base64_decode($session_str);
+    $cipher = "aes-256-cbc";
+    $key = hash('sha256', SESSION_SECRET_KEY, true);
+    $ivlen = openssl_cipher_iv_length($cipher);
+    if (strlen($c) < $ivlen + 32) return null;
+    $iv = substr($c, 0, $ivlen);
+    $hmac = substr($c, $ivlen, 32);
+    $ciphertext_raw = substr($c, $ivlen + 32);
+    $calcmac = hash_hmac('sha256', $ciphertext_raw, $key, true);
+    if (hash_equals($hmac, $calcmac)) {
+        $original_plaintext = openssl_decrypt($ciphertext_raw, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+        return json_decode($original_plaintext, true);
+    }
+    return null;
+}
+
+function save_encrypted_session_cookie($userData) {
+    $isHttps = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') 
+        || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+    
+    $payload = [
+        'id'    => $userData['id'] ?? null,
+        'name'  => $userData['name'] ?? '',
+        'email' => $userData['email'] ?? '',
+        'role'  => $userData['role'] ?? 'secom',
+        'exp'   => time() + 604800 // 7 Hari
+    ];
+    $token = encrypt_session_payload($payload);
+
+    setcookie('ga_sess', $token, [
+        'expires'  => time() + 604800,
+        'path'     => '/',
+        'secure'   => $isHttps,
+        'httponly' => true,
+        'samesite' => 'Lax'
+    ]);
+}
+
+function destroy_encrypted_session_cookie() {
+    $isHttps = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') 
+        || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+
+    setcookie('ga_sess', '', [
+        'expires'  => time() - 3600,
+        'path'     => '/',
+        'secure'   => $isHttps,
+        'httponly' => true,
+        'samesite' => 'Lax'
+    ]);
+}
+
 function init_safe_session() {
     if (session_status() === PHP_SESSION_NONE) {
         $isHttps = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') 
@@ -17,6 +85,27 @@ function init_safe_session() {
 
         ini_set('session.gc_maxlifetime', 604800);
         session_start();
+    }
+
+    // Auto-restore session from encrypted cookie if container PHP session file was lost/recycled
+    if (empty($_SESSION['user_id']) && isset($_COOKIE['ga_sess'])) {
+        $payload = decrypt_session_payload($_COOKIE['ga_sess']);
+        if ($payload && !empty($payload['id']) && isset($payload['exp']) && $payload['exp'] > time()) {
+            $_SESSION['user_id'] = $payload['id'];
+            $_SESSION['name']    = $payload['name'];
+            $_SESSION['email']   = $payload['email'];
+            $_SESSION['role']    = $payload['role'];
+        }
+    }
+
+    // Auto-sync/refresh encrypted session cookie if user is logged in
+    if (!empty($_SESSION['user_id'])) {
+        save_encrypted_session_cookie([
+            'id'    => $_SESSION['user_id'],
+            'name'  => $_SESSION['name'] ?? '',
+            'email' => $_SESSION['email'] ?? '',
+            'role'  => $_SESSION['role'] ?? 'secom'
+        ]);
     }
 }
 

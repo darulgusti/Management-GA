@@ -10,6 +10,7 @@ header("Pragma: no-cache");
 // Hapus sesi HANYA jika pengguna menekan tombol logout secara eksplisit
 if (isset($_GET['logout'])) {
     $_SESSION = [];
+    destroy_encrypted_session_cookie();
     if (ini_get("session.use_cookies")) {
         $params = session_get_cookie_params();
         setcookie(session_name(), '', time() - 42000,
