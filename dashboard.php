@@ -5,12 +5,13 @@ require_once __DIR__ . '/includes/auth_check.php';
 
 check_role(['manager', 'secom']);
 
-// Statistics Query Today
-$today = date('Y-m-d');
+// Statistics Query Today (Index Optimized)
+$today_start = date('Y-m-d 00:00:00');
+$today_end   = date('Y-m-d 23:59:59');
 
 // 1. Total Tamu Hari Ini
-$stmt = $pdo->prepare("SELECT COUNT(*) FROM guests WHERE DATE(time_in) = ?");
-$stmt->execute([$today]);
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM guests WHERE time_in >= ? AND time_in <= ?");
+$stmt->execute([$today_start, $today_end]);
 $count_guests_today = $stmt->fetchColumn();
 
 // 2. Tamu Aktif Masih di Lokasi
@@ -18,8 +19,8 @@ $stmt = $pdo->query("SELECT COUNT(*) FROM guests WHERE time_out IS NULL");
 $count_guests_active = $stmt->fetchColumn();
 
 // 3. Total Peminjaman Hari Ini
-$stmt = $pdo->prepare("SELECT COUNT(*) FROM item_borrowings WHERE DATE(borrow_time) = ?");
-$stmt->execute([$today]);
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM item_borrowings WHERE borrow_time >= ? AND borrow_time <= ?");
+$stmt->execute([$today_start, $today_end]);
 $count_borrow_today = $stmt->fetchColumn();
 
 // 4. Barang Belum Dikembalikan

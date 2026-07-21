@@ -1,3 +1,4 @@
+
 <?php
 /**
  * GA Management System - Formatted Excel Export & Archiving Helper
@@ -302,11 +303,16 @@ function run_archive_process($pdo, $is_manual = false) {
     ];
 }
 
-// Cek Pengarsipan Otomatis Harian (Otomatis memproses data >= 3 bulan)
+// Cek Pengarsipan Otomatis Harian (Otomatis memproses data >= 3 bulan, di-cache 24 jam per session)
 function check_and_run_auto_archive($pdo) {
-    static $already_checked = false;
-    if ($already_checked) return;
-    $already_checked = true;
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    // Performance optimization: Cek maksimal 1x 24 jam per user session
+    if (isset($_SESSION['last_auto_archive_check']) && (time() - $_SESSION['last_auto_archive_check']) < 86400) {
+        return;
+    }
+    $_SESSION['last_auto_archive_check'] = time();
 
     try {
         $cutoff_date = date('Y-m-d H:i:s', strtotime('-3 months'));

@@ -16,6 +16,7 @@ $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     PDO::ATTR_EMULATE_PREPARES   => false,
+    PDO::ATTR_PERSISTENT         => true, // Reuse database connection sockets (0ms latency for warm requests)
 ];
 
 // Jika koneksi Cloud DB (TiDB Cloud / Aiven), aktifkan SSL / Secure Transport
