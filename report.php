@@ -61,7 +61,7 @@ include __DIR__ . '/includes/header.php';
     <div class="card-header">
         <div>
             <h2 class="card-title">Filter Rekapitulasi Laporan GA</h2>
-            <small style="color: var(--text-muted);">Pilih rentang tanggal dan modul laporan yang ingin diekspor</small>
+            <small class="no-print" style="color: var(--text-muted);">Pilih rentang tanggal dan modul laporan yang ingin diekspor</small>
         </div>
         <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
             <button type="button" onclick="window.print()" class="btn btn-outline" style="height: 38px;">

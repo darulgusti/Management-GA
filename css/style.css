@@ -1350,7 +1350,9 @@ textarea.form-control {
   .modal-backdrop,
   .sidebar-backdrop,
   form.grid-3,
-  header {
+  header,
+  .card-header small,
+  .no-print {
     display: none !important;
   }
 
