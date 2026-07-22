@@ -36,7 +36,7 @@ $flash = get_flash_message();
         <?php endif; ?>
 
         <div class="portal-hero">
-            <h1>Selamat Datang di<br>Portal Layanan GA</h1>
+            <h1>Selamat Datang di Portal Layanan GA</h1>
             <p>Pilih jenis layanan di bawah ini untuk mengakses formulir yang Anda butuhkan.</p>
         </div>
 
