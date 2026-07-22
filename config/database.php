@@ -6,8 +6,8 @@ date_default_timezone_set('Asia/Jakarta');
 // Mendukung Environment Variables (untuk Deployment Cloud Vercel/Railway) & Fallback Local Laragon
 $host = getenv('DB_HOST') ?: 'gateway01.ap-southeast-1.prod.aws.tidbcloud.com';
 $db   = getenv('DB_NAME') ?: 'test';
-$user = getenv('DB_USER') ?: '3GC7rm8T43sKr5N.root';
-$pass = getenv('DB_PASS') ?: 'WG7IsDq3w6a4dXPg';
+$user = getenv('DB_USER') ?: 'iD6MKQvLzepHBRX.root';
+$pass = getenv('DB_PASS') ?: 'pd8vzYeUOpfWDK0E';
 $port = getenv('DB_PORT') ?: '4000';
 $charset = 'utf8mb4';
 
