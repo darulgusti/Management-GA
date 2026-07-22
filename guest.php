@@ -64,11 +64,11 @@ include __DIR__ . '/includes/header.php';
 ?>
 
 <!-- TABEL 1: TAMU AKTIF (MASIH DI LOKASI) -->
-<div class="card" style="border-top: 4px solid var(--success);">
+<div class="card" style="border-top: 4px solid var(--primary);">
     <div class="card-header">
         <div>
-            <h2 class="card-title" style="color: #065f46;">
-                <span class="badge badge-success" style="font-size: 0.85rem;"><?= number_format($total_active_records) ?> Aktif</span>
+            <h2 class="card-title" style="color: var(--primary);">
+                <span class="badge badge-primary" style="font-size: 0.85rem;"><?= number_format($total_active_records) ?> Aktif</span>
                 Daftar Tamu Masih di Lokasi
             </h2>
             <small style="color: var(--text-muted); display: block; margin-top: 0.2rem;">Tamu yang saat ini berada di dalam fasilitas pabrik / kantor</small>
