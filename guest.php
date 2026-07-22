@@ -73,6 +73,12 @@ include __DIR__ . '/includes/header.php';
             </h2>
             <small style="color: var(--text-muted); display: block; margin-top: 0.2rem;">Tamu yang saat ini berada di dalam fasilitas pabrik / kantor</small>
         </div>
+        <div>
+            <button type="button" onclick="window.print()" class="btn btn-outline btn-sm">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                Cetak / Print
+            </button>
+        </div>
     </div>
 
     <div class="table-responsive">
