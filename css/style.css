@@ -28,7 +28,7 @@
   --bg-sidebar:     #7f1d1d;   /* Merah Deep Maroon Sidebar */
   --text-main:      #0f172a;   /* Dark Slate */
   --text-muted:     #64748b;   /* Slate 500 */
-  --text-light:     #fecdd3;   /* Light Red Accent Text */
+  --text-light:     #94a3b8;   /* Slate 400 */
   --border:         #fee2e2;   /* Soft Red Tint Border */
 
   /* Shadows & Radius */
@@ -137,11 +137,11 @@ html, body {
 }
 
 .nav-section-title {
-  font-size: 0.7rem;
-  font-weight: 600;
+  font-size: 0.725rem;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #64748b;
+  color: #fca5a5;
   padding: 0.75rem 0.75rem 0.35rem 0.75rem;
 }
 
@@ -150,23 +150,27 @@ html, body {
   align-items: center;
   gap: 0.85rem;
   padding: 0.75rem 1rem;
-  color: #94a3b8;
+  color: #ffffff;
   border-radius: var(--radius-md);
   font-size: 0.925rem;
   font-weight: 500;
   margin-bottom: 0.25rem;
   transition: var(--transition);
+  opacity: 0.9;
 }
 
 .nav-item:hover {
-  background-color: rgba(255, 255, 255, 0.06);
+  background-color: rgba(255, 255, 255, 0.18);
   color: #ffffff;
+  opacity: 1;
 }
 
 .nav-item.active {
-  background-color: var(--primary);
+  background-color: #ce1126;
   color: #ffffff;
-  font-weight: 600;
+  font-weight: 700;
+  opacity: 1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .nav-item svg {
@@ -666,14 +670,14 @@ textarea.form-control {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 34px;
-  height: 34px;
-  padding: 0 0.65rem;
-  font-size: 0.8125rem;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 0.85rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: var(--text-main);
+  color: #0f172a;
   background-color: #ffffff;
-  border: 1px solid var(--border);
+  border: 1px solid #cbd5e1;
   border-radius: var(--radius-md);
   text-decoration: none;
   transition: var(--transition);
@@ -681,24 +685,24 @@ textarea.form-control {
 }
 
 .page-link:hover:not(.disabled):not(.active):not(.ellipsis) {
-  background-color: var(--primary-light);
-  color: var(--primary);
-  border-color: #c7d2fe;
+  background-color: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
 }
 
 .page-link.active {
   background-color: var(--primary);
   color: #ffffff;
   border-color: var(--primary);
-  box-shadow: 0 2px 8px rgba(29, 78, 216, 0.25);
+  box-shadow: 0 2px 8px rgba(206, 17, 38, 0.3);
 }
 
 .page-link.disabled {
-  color: var(--text-light);
-  background-color: #f8fafc;
-  border-color: var(--border);
+  color: #94a3b8;
+  background-color: #f1f5f9;
+  border-color: #e2e8f0;
   cursor: not-allowed;
-  opacity: 0.6;
+  opacity: 0.65;
 }
 
 .page-link.ellipsis {
