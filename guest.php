@@ -109,7 +109,7 @@ include __DIR__ . '/includes/header.php';
                             <td><?= $no++ ?></td>
                             <td class="col-name">
                                 <strong><?= htmlspecialchars($g['name']) ?></strong>
-                                <?php if ($g['signature']): ?>
+                                <?php if (!empty($g['signature'])): ?>
                                     <div style="font-size: 0.725rem; color: var(--primary); font-weight: 500;">✓ Ada Ttd Digital</div>
                                 <?php endif; ?>
                             </td>
