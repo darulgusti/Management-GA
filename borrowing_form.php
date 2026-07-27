@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="card" style="border-top: 4px solid var(--primary);">
             
             <!-- TAB SWITCHER GA / SECOM -->
-            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); background-color: var(--bg-body);">
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
                 <a href="borrowing_form.php?category=GA" class="btn btn-sm <?= $category === 'GA' ? 'btn-primary' : 'btn-outline' ?>" style="font-weight: 600;">
                     🏢 Peminjaman GA (General Affairs)
                 </a>
