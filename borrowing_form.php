@@ -5,13 +5,17 @@ require_once __DIR__ . '/includes/auth_check.php';
 
 $error_msg = '';
 
+$category = trim($_GET['category'] ?? ($_POST['category'] ?? 'GA'));
+if (!in_array($category, ['GA', 'SECOM'])) {
+    $category = 'GA';
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $borrower_name = trim($_POST['borrower_name'] ?? '');
     $department = trim($_POST['department'] ?? '');
     $item_name = trim($_POST['item_name'] ?? '');
     $item_code = trim($_POST['item_code'] ?? '');
     $quantity = intval($_POST['quantity'] ?? 1);
-    $category = trim($_POST['category'] ?? 'GA');
     $initial_condition = trim($_POST['initial_condition'] ?? 'Baik');
     $signature = $_POST['signature'] ?? '';
 
@@ -70,32 +74,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         <?php endif; ?>
 
-        <div class="card">
+        <div class="card" style="border-top: 4px solid var(--primary);">
+            
+            <!-- TAB SWITCHER GA / SECOM -->
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); background-color: var(--bg-body);">
+                <a href="borrowing_form.php?category=GA" class="btn btn-sm <?= $category === 'GA' ? 'btn-primary' : 'btn-outline' ?>" style="font-weight: 600;">
+                    🏢 Peminjaman GA (General Affairs)
+                </a>
+                <a href="borrowing_form.php?category=SECOM" class="btn btn-sm <?= $category === 'SECOM' ? 'btn-primary' : 'btn-outline' ?>" style="font-weight: 600;">
+                    🛡️ Peminjaman SECOM (Security)
+                </a>
+            </div>
+
             <div class="card-header">
                 <div>
-                    <h2 class="card-title">Form Peminjaman Barang / Kunci</h2>
-                    <small style="color: var(--text-muted);">Lengkapi data peminjaman peralatan inventaris GA</small>
+                    <h2 class="card-title">Form Peminjaman Barang / Kunci (<?= $category === 'SECOM' ? 'Inventaris SECOM' : 'Inventaris GA' ?>)</h2>
+                    <small style="color: var(--text-muted);">Lengkapi data peminjaman peralatan inventaris <?= $category === 'SECOM' ? 'Security / SECOM' : 'General Affairs / GA' ?></small>
                 </div>
             </div>
 
             <form action="borrowing_form.php" method="POST">
+                <input type="hidden" name="category" value="<?= htmlspecialchars($category) ?>">
                 <input type="hidden" name="signature" id="borrow_signature_input">
 
                 <div class="grid-2">
-                    <div class="form-group">
-                        <label class="form-label">Tujuan Peminjaman *</label>
-                        <select name="category" class="form-select" required>
-                            <option value="GA" <?= (isset($_POST['category']) && $_POST['category'] === 'GA') ? 'selected' : '' ?>>Inventaris General Affairs (GA)</option>
-                            <option value="SECOM" <?= (isset($_POST['category']) && $_POST['category'] === 'SECOM') ? 'selected' : '' ?>>Inventaris Security (SECOM)</option>
-                        </select>
-                    </div>
-
                     <div class="form-group">
                         <label class="form-label">Nama Peminjam (Karyawan / Staf) *</label>
                         <input type="text" name="borrower_name" required class="form-control" placeholder="Nama Lengkap" value="<?= htmlspecialchars($_POST['borrower_name'] ?? '') ?>">
                     </div>
 
-                    <div class="form-group" style="grid-column: span 2;">
+                    <div class="form-group">
                         <label class="form-label">Departemen / Bagian *</label>
                         <input type="text" name="department" required class="form-control" placeholder="Contoh: IT / Production / HR" value="<?= htmlspecialchars($_POST['department'] ?? '') ?>">
                     </div>
