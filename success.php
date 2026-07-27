@@ -87,5 +87,12 @@ $msg   = trim($_GET['msg'] ?? 'Data Anda telah berhasil dicatat ke dalam sistem 
             </div>
         </div>
     </div>
+    <script>
+        // Prevent user from pressing Back button to return to the form page
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.go(1);
+        };
+    </script>
 </body>
 </html>
