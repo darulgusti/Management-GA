@@ -102,17 +102,26 @@ $msg   = trim($_GET['msg'] ?? 'Data Anda telah berhasil dicatat ke dalam sistem 
     <script>
         let seconds = 3;
         const countdownEl = document.getElementById('countdown');
+        const countdownBadge = document.querySelector('.countdown-badge');
 
         function closePage() {
-            // Attempt to close tab
-            window.opener = null;
-            window.open('', '_self', '');
-            window.close();
+            // Attempt various JS tab close methods for mobile & desktop
+            try { window.close(); } catch (e) {}
+            try { self.close(); } catch (e) {}
+            try {
+                window.opener = null;
+                window.open('', '_self', '');
+                window.close();
+            } catch (e) {}
 
-            // Fallback for mobile browsers that block window.close()
+            // Update badge text if tab remains open on mobile
             setTimeout(() => {
-                window.location.href = "about:blank";
-            }, 300);
+                if (countdownBadge) {
+                    countdownBadge.innerHTML = "✔ Data Berhasil Disimpan. Silakan tutup tab browser Anda.";
+                    countdownBadge.style.backgroundColor = "#dcfce7";
+                    countdownBadge.style.color = "#16a34a";
+                }
+            }, 400);
         }
 
         const timer = setInterval(() => {
