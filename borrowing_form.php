@@ -2,8 +2,14 @@
 session_start();
 require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/includes/auth_check.php';
-
 $error_msg = '';
+
+$logged_user = get_logged_user();
+if ($logged_user && $logged_user['role'] === 'secom') {
+    set_flash_message('danger', 'Petugas SECOM tidak memiliki wewenang untuk mengisi Form Peminjaman.');
+    header("Location: guest.php");
+    exit();
+}
 
 $category = trim($_GET['category'] ?? ($_POST['category'] ?? 'GA'));
 if (!in_array($category, ['GA', 'SECOM'])) {
