@@ -96,16 +96,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body class="portal-body">
 
-    <header class="portal-navbar" style="background: linear-gradient(135deg, #ce1126 0%, #a50e1e 100%); padding: 0.9rem 1.5rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(206,17,38,0.18);">
+    <header class="portal-navbar" style="background: #ffffff; padding: 0.9rem 1.5rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
         <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <div class="sidebar-logo-icon">GA</div>
+            <div class="sidebar-logo-icon" style="background: var(--primary); color: #ffffff;">GA</div>
             <div>
-                <strong style="font-size: 1.1rem; color: #fff;">Form Pos 4 - Gate Pass System</strong>
-                <div style="font-size: 0.75rem; color: #fca5a5;">General Affairs Fleet &amp; Container Logistics Registration</div>
+                <strong style="font-size: 1.1rem; color: var(--primary);">Form Pos 4 - Gate Pass System</strong>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">General Affairs Fleet &amp; Container Logistics Registration</div>
             </div>
         </div>
         <div>
-            <a href="login.php" class="btn btn-sm btn-outline-light">Login Petugas / Manager</a>
+            <a href="login.php" class="btn btn-sm" style="color: var(--primary); border: 1px solid var(--primary); background: transparent;">Login Petugas / Manager</a>
         </div>
     </header>
 
