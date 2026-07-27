@@ -1165,15 +1165,17 @@ textarea.form-control {
 /* === MOBILE (≤768px) === */
 @media (max-width: 768px) {
 
-  /* --- Grids: 2 columns on mobile for stat cards --- */
-  .grid-4, .grid-3 {
+  /* --- Stat Cards Grid: 2 columns on mobile --- */
+  .grid-stat {
+    display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 0.65rem !important;
   }
 
-  .grid-2 {
+  /* --- Table Cards Grid: 1 column on mobile --- */
+  .grid-4, .grid-3, .grid-2 {
     grid-template-columns: 1fr !important;
-    gap: 0.75rem;
+    gap: 1rem !important;
   }
 
   .stat-card {
