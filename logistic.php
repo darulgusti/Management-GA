@@ -264,15 +264,15 @@ include __DIR__ . '/includes/header.php';
     </div>
 
     <!-- Search Bar Gate In -->
-    <form method="GET" action="logistic.php" class="search-form-bar">
+    <form method="GET" action="logistic.php" style="margin: 1rem 0;">
         <input type="hidden" name="tab" value="<?= htmlspecialchars($active_tab) ?>">
-        <div style="flex: 1; min-width: 220px;">
-            <input type="text" name="search_in" class="form-control" placeholder="Cari Nopol, Sopir, Transportir, Tujuan..." value="<?= htmlspecialchars($search_in) ?>">
+        <div style="display: flex; gap: 0.5rem; max-width: 540px; width: 100%; align-items: center;">
+            <input type="text" name="search_in" class="form-control" placeholder="Cari Nopol, Sopir, Transportir, Tujuan..." value="<?= htmlspecialchars($search_in) ?>" style="flex: 1;">
+            <button type="submit" class="btn btn-secondary" style="white-space: nowrap; padding: 0.6rem 1.1rem;">Cari</button>
+            <?php if (!empty($search_in)): ?>
+                <a href="logistic.php?tab=<?= urlencode($active_tab) ?>" class="btn btn-outline" style="white-space: nowrap; padding: 0.6rem 0.9rem;">Reset</a>
+            <?php endif; ?>
         </div>
-        <button type="submit" class="btn btn-secondary">Cari Gate In</button>
-        <?php if (!empty($search_in)): ?>
-            <a href="logistic.php?tab=<?= urlencode($active_tab) ?>" class="btn btn-outline">Reset</a>
-        <?php endif; ?>
     </form>
 
     <div class="table-responsive">
@@ -352,15 +352,15 @@ include __DIR__ . '/includes/header.php';
     </div>
 
     <!-- Search Bar Gate Out -->
-    <form method="GET" action="logistic.php" class="search-form-bar">
+    <form method="GET" action="logistic.php" style="margin: 1rem 0;">
         <input type="hidden" name="tab" value="<?= htmlspecialchars($active_tab) ?>">
-        <div style="flex: 1; min-width: 220px;">
-            <input type="text" name="search_out" class="form-control" placeholder="Cari Nopol, Sopir, No. DO, Tujuan, Transportir..." value="<?= htmlspecialchars($search_out) ?>">
+        <div style="display: flex; gap: 0.5rem; max-width: 540px; width: 100%; align-items: center;">
+            <input type="text" name="search_out" class="form-control" placeholder="Cari Nopol, Sopir, No. DO, Tujuan, Transportir..." value="<?= htmlspecialchars($search_out) ?>" style="flex: 1;">
+            <button type="submit" class="btn btn-secondary" style="white-space: nowrap; padding: 0.6rem 1.1rem;">Cari</button>
+            <?php if (!empty($search_out)): ?>
+                <a href="logistic.php?tab=<?= urlencode($active_tab) ?>" class="btn btn-outline" style="white-space: nowrap; padding: 0.6rem 0.9rem;">Reset</a>
+            <?php endif; ?>
         </div>
-        <button type="submit" class="btn btn-secondary">Cari Gate Out</button>
-        <?php if (!empty($search_out)): ?>
-            <a href="logistic.php?tab=<?= urlencode($active_tab) ?>" class="btn btn-outline">Reset</a>
-        <?php endif; ?>
     </form>
 
     <div class="table-responsive">
@@ -432,15 +432,15 @@ include __DIR__ . '/includes/header.php';
     </div>
 
     <!-- Search Bar Export -->
-    <form method="GET" action="logistic.php" class="search-form-bar">
+    <form method="GET" action="logistic.php" style="margin: 1rem 0;">
         <input type="hidden" name="tab" value="<?= htmlspecialchars($active_tab) ?>">
-        <div style="flex: 1; min-width: 220px;">
-            <input type="text" name="search_exp" class="form-control" placeholder="Cari No. MOPOR, Sopir, No. Kontainer, No. Segel, No. DO..." value="<?= htmlspecialchars($search_exp) ?>">
+        <div style="display: flex; gap: 0.5rem; max-width: 540px; width: 100%; align-items: center;">
+            <input type="text" name="search_exp" class="form-control" placeholder="Cari No. MOPOR, Sopir, No. Kontainer, No. Segel, No. DO..." value="<?= htmlspecialchars($search_exp) ?>" style="flex: 1;">
+            <button type="submit" class="btn btn-secondary" style="white-space: nowrap; padding: 0.6rem 1.1rem;">Cari</button>
+            <?php if (!empty($search_exp)): ?>
+                <a href="logistic.php?tab=<?= urlencode($active_tab) ?>" class="btn btn-outline" style="white-space: nowrap; padding: 0.6rem 0.9rem;">Reset</a>
+            <?php endif; ?>
         </div>
-        <button type="submit" class="btn btn-secondary">Cari Export</button>
-        <?php if (!empty($search_exp)): ?>
-            <a href="logistic.php?tab=<?= urlencode($active_tab) ?>" class="btn btn-outline">Reset</a>
-        <?php endif; ?>
     </form>
 
     <div class="table-responsive">
