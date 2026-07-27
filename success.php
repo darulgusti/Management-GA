@@ -105,7 +105,7 @@ $msg   = trim($_GET['msg'] ?? 'Data Anda telah berhasil dicatat ke dalam sistem 
         const countdownBadge = document.querySelector('.countdown-badge');
 
         function closePage() {
-            // Attempt various JS tab close methods for mobile & desktop
+            // 1. Attempt window close methods
             try { window.close(); } catch (e) {}
             try { self.close(); } catch (e) {}
             try {
@@ -114,10 +114,24 @@ $msg   = trim($_GET['msg'] ?? 'Data Anda telah berhasil dicatat ke dalam sistem 
                 window.close();
             } catch (e) {}
 
-            // Update badge text if tab remains open on mobile
+            // 2. Attempt In-App scanner close APIs
+            try {
+                if (typeof WeixinJSBridge !== 'undefined') {
+                    WeixinJSBridge.call('closeWindow');
+                }
+            } catch (e) {}
+
+            // 3. Attempt history back (returns to Camera / Scanner app)
+            try {
+                if (window.history.length > 1) {
+                    window.history.go(-2); // Skip form post back to scanner
+                }
+            } catch (e) {}
+
+            // 4. Update status badge text on mobile screen
             setTimeout(() => {
                 if (countdownBadge) {
-                    countdownBadge.innerHTML = "✔ Data Berhasil Disimpan. Silakan tutup tab browser Anda.";
+                    countdownBadge.innerHTML = "✔ Data Berhasil Disimpan. Silakan tutup tab ini.";
                     countdownBadge.style.backgroundColor = "#dcfce7";
                     countdownBadge.style.color = "#16a34a";
                 }
