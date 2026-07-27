@@ -5,7 +5,7 @@ require_once __DIR__ . '/includes/auth_check.php';
 
 check_role(['manager', 'secom']);
 $logged_user = get_logged_user();
-$can_input = ($logged_user['role'] === 'manager');
+$can_input = false;
 
 $active_tab = $_GET['tab'] ?? 'all';
 

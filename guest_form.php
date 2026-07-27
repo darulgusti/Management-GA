@@ -2,8 +2,14 @@
 session_start();
 require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/includes/auth_check.php';
-
 $error_msg = '';
+
+$logged_user = get_logged_user();
+if ($logged_user) {
+    set_flash_message('danger', 'Akun terautentikasi (Manager / SECOM) hanya untuk monitoring data. Pengisian form dilakukan melalui portal publik.');
+    header("Location: guest.php");
+    exit();
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');

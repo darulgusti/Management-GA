@@ -3,9 +3,9 @@ session_start();
 require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/includes/auth_check.php';
 $logged_user = get_logged_user();
-if ($logged_user && $logged_user['role'] === 'secom') {
-    set_flash_message('danger', 'Petugas SECOM tidak memiliki wewenang untuk mengisi Form Pos 4.');
-    header("Location: guest.php");
+if ($logged_user) {
+    set_flash_message('danger', 'Akun terautentikasi (Manager / SECOM) hanya untuk monitoring data. Pengisian form dilakukan melalui portal publik.');
+    header("Location: logistic.php");
     exit();
 }
 
