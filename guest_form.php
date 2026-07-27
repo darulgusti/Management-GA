@@ -14,6 +14,10 @@ if ($logged_user) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
     $category = trim($_POST['guest_category'] ?? '');
+    if ($category === 'Lainnya') {
+        $other = trim($_POST['other_guest_category'] ?? '');
+        $category = !empty($other) ? "Lainnya: " . $other : 'Lainnya';
+    }
     $institution = trim($_POST['institution'] ?? '');
     $purpose = trim($_POST['purpose'] ?? '');
     $person_to_meet = trim($_POST['person_to_meet'] ?? '');
@@ -94,14 +98,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="form-group">
                         <label class="form-label">Kategori Tamu *</label>
-                        <select name="guest_category" class="form-select" required>
+                        <select name="guest_category" id="guest_category_select" class="form-select" required onchange="toggleOtherCategory(this)">
                             <option value="" disabled <?= empty($_POST['guest_category']) ? 'selected' : '' ?>>-- Pilih Kategori --</option>
                             <option value="Tamu Kedinasan / Instansi" <?= ($_POST['guest_category'] ?? '') === 'Tamu Kedinasan / Instansi' ? 'selected' : '' ?>>Tamu Kedinasan / Instansi</option>
                             <option value="Tamu Kunjungan Industri" <?= ($_POST['guest_category'] ?? '') === 'Tamu Kunjungan Industri' ? 'selected' : '' ?>>Tamu Kunjungan Industri</option>
                             <option value="Tamu Vendor / Menemui Karyawan" <?= ($_POST['guest_category'] ?? '') === 'Tamu Vendor / Menemui Karyawan' ? 'selected' : '' ?>>Tamu Vendor / Menemui Karyawan</option>
                             <option value="Tamu Kontraktor" <?= ($_POST['guest_category'] ?? '') === 'Tamu Kontraktor' ? 'selected' : '' ?>>Tamu Kontraktor</option>
                             <option value="Tamu PKL (No Card)" <?= ($_POST['guest_category'] ?? '') === 'Tamu PKL (No Card)' ? 'selected' : '' ?>>Tamu PKL (No Card)</option>
+                            <option value="Lainnya" <?= ($_POST['guest_category'] ?? '') === 'Lainnya' ? 'selected' : '' ?>>Lainnya...</option>
                         </select>
+
+                        <div id="other_category_container" style="display: none; margin-top: 0.5rem;">
+                            <input type="text" name="other_guest_category" id="other_guest_category" class="form-control" placeholder="Tuliskan kategori tamu lainnya...">
+                        </div>
                     </div>
                 </div>
 
@@ -159,5 +168,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script src="js/signature_pad.js"></script>
+    <script>
+    function toggleOtherCategory(selectEl) {
+        const container = document.getElementById('other_category_container');
+        const input = document.getElementById('other_guest_category');
+        if (selectEl.value === 'Lainnya') {
+            container.style.display = 'block';
+            input.setAttribute('required', 'required');
+            input.focus();
+        } else {
+            container.style.display = 'none';
+            input.removeAttribute('required');
+        }
+    }
+    </script>
 </body>
 </html>
