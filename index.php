@@ -94,8 +94,8 @@ $flash = get_flash_message();
                         Pencatatan &amp; pemantauan lalu lintas armada (Buku Masuk, Buku Keluar &amp; Export NEX/NOPOR).
                     </p>
                 </div>
-                <a href="gate_in.php" class="btn btn-primary btn-block" style="font-size: 0.85rem; padding: 0.55rem;">
-                    Buka Logistik →
+                <a href="logistic_form.php" class="btn btn-primary btn-block" style="font-size: 0.85rem; padding: 0.55rem;">
+                    Form Input Logistik →
                 </a>
             </div>
 

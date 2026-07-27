@@ -36,19 +36,9 @@ $user = get_logged_user();
             <span class="nav-text">Peminjaman Barang & Kunci</span>
         </a>
 
-        <a href="gate_in.php" class="nav-item <?= $current_page === 'gate_in.php' ? 'active' : '' ?>" title="Buku Masuk (Gate In)">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
-            <span class="nav-text">Buku Masuk (Gate In)</span>
-        </a>
-
-        <a href="gate_out.php" class="nav-item <?= $current_page === 'gate_out.php' ? 'active' : '' ?>" title="Buku Keluar (Gate Out)">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-            <span class="nav-text">Buku Keluar (Gate Out)</span>
-        </a>
-
-        <a href="export_nex.php" class="nav-item <?= $current_page === 'export_nex.php' ? 'active' : '' ?>" title="Export NEX / NOPOR">
+        <a href="logistic.php" class="nav-item <?= $current_page === 'logistic.php' ? 'active' : '' ?>" title="Logistik (Masuk, Keluar & Export)">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"></path></svg>
-            <span class="nav-text">Export NEX / NOPOR</span>
+            <span class="nav-text">Logistik</span>
         </a>
 
         <div class="nav-section-title">Laporan & Pengaturan</div>
