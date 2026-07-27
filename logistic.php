@@ -217,36 +217,9 @@ include __DIR__ . '/includes/header.php';
     </div>
 <?php endif; ?>
 
-<!-- HEADER CARDS WITH TAB NAVIGATION -->
-<div class="card" style="border-top: 4px solid var(--primary);">
-    <div class="card-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
-        <div>
-            <h2 class="card-title" style="color: var(--primary);">
-                🚚 Logistic Gate Pass System
-            </h2>
-            <small style="color: var(--text-muted); display: block; margin-top: 0.2rem;">Pencatatan &amp; Pemantauan Lalu Lintas Kendaraan Logistik Pos Gerbang</small>
-        </div>
-        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
-            <button type="button" onclick="window.print()" class="btn btn-outline btn-sm">
-                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-                Cetak / Print
-            </button>
-            <?php if ($can_input): ?>
-                <?php if ($active_tab === 'all' || $active_tab === 'gate_in'): ?>
-                    <button type="button" onclick="openModal('modalGateIn')" class="btn btn-primary btn-sm">+ Gate In (Masuk)</button>
-                <?php endif; ?>
-                <?php if ($active_tab === 'all' || $active_tab === 'gate_out'): ?>
-                    <button type="button" onclick="openModal('modalGateOut')" class="btn btn-primary btn-sm">+ Gate Out (Keluar)</button>
-                <?php endif; ?>
-                <?php if ($active_tab === 'all' || $active_tab === 'export_nex'): ?>
-                    <button type="button" onclick="openModal('modalExport')" class="btn btn-primary btn-sm">+ Export NEX/MOPOR</button>
-                <?php endif; ?>
-            <?php endif; ?>
-        </div>
-    </div>
-
-    <!-- TAB FILTER SWITCHER -->
-    <div style="display: flex; gap: 0.5rem; margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 0.75rem; flex-wrap: wrap;">
+<!-- TAB FILTER SWITCHER -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
         <a href="logistic.php?tab=all" class="btn btn-sm <?= $active_tab === 'all' ? 'btn-primary' : 'btn-outline' ?>">
             📋 Semua Logistik
         </a>
@@ -260,12 +233,18 @@ include __DIR__ . '/includes/header.php';
             🚢 Export NEX / MOPOR
         </a>
     </div>
+    <div>
+        <button type="button" onclick="window.print()" class="btn btn-outline btn-sm">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+            Cetak / Print
+        </button>
+    </div>
 </div>
 
 <?php if ($active_tab === 'all' || $active_tab === 'gate_in'): ?>
 <!-- SECTION 1: BUKU MASUK (GATE IN) -->
 <div id="sec-gate-in" class="card" style="margin-top: 1.5rem;">
-    <div class="card-header">
+    <div class="card-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
         <div>
             <h3 class="card-title">
                 <span class="badge badge-primary" style="font-size: 0.85rem;"><?= number_format($total_in_records) ?> Armada</span>
@@ -273,6 +252,9 @@ include __DIR__ . '/includes/header.php';
             </h3>
             <small style="color: var(--text-muted);">Pencatatan kendaraan armada yang tiba di pos gerbang</small>
         </div>
+        <?php if ($can_input): ?>
+            <button type="button" onclick="openModal('modalGateIn')" class="btn btn-primary btn-sm">+ Input Gate In (Masuk)</button>
+        <?php endif; ?>
     </div>
 
     <!-- Search Bar Gate In -->
@@ -346,7 +328,7 @@ include __DIR__ . '/includes/header.php';
 <?php if ($active_tab === 'all' || $active_tab === 'gate_out'): ?>
 <!-- SECTION 2: BUKU KELUAR (GATE OUT) -->
 <div id="sec-gate-out" class="card" style="margin-top: 2rem;">
-    <div class="card-header">
+    <div class="card-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
         <div>
             <h3 class="card-title">
                 <span class="badge badge-primary" style="font-size: 0.85rem;"><?= number_format($total_out_records) ?> Armada</span>
@@ -354,6 +336,9 @@ include __DIR__ . '/includes/header.php';
             </h3>
             <small style="color: var(--text-muted);">Pencatatan keberangkatan armada pengiriman barang non-ekspor</small>
         </div>
+        <?php if ($can_input): ?>
+            <button type="button" onclick="openModal('modalGateOut')" class="btn btn-primary btn-sm">+ Input Gate Out (Keluar)</button>
+        <?php endif; ?>
     </div>
 
     <!-- Search Bar Gate Out -->
@@ -423,7 +408,7 @@ include __DIR__ . '/includes/header.php';
 <?php if ($active_tab === 'all' || $active_tab === 'export_nex'): ?>
 <!-- SECTION 3: EXPORT NEX / MOPOR -->
 <div id="sec-export" class="card" style="margin-top: 2rem;">
-    <div class="card-header">
+    <div class="card-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
         <div>
             <h3 class="card-title">
                 <span class="badge badge-primary" style="font-size: 0.85rem;"><?= number_format($total_exp_records) ?> Kontainer</span>
@@ -431,6 +416,9 @@ include __DIR__ . '/includes/header.php';
             </h3>
             <small style="color: var(--text-muted);">Pencatatan khusus armada kontainer logistik ekspor &amp; MOPOR</small>
         </div>
+        <?php if ($can_input): ?>
+            <button type="button" onclick="openModal('modalExport')" class="btn btn-primary btn-sm">+ Input Export NEX/MOPOR</button>
+        <?php endif; ?>
     </div>
 
     <!-- Search Bar Export -->

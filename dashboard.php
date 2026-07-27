@@ -252,11 +252,10 @@ include __DIR__ . '/includes/header.php';
 </div>
 
 <!-- SECTION 2: MONITORING LOGISTIK (3 TABEL DITAMPILKAN TERPISAH) -->
-<div style="margin-bottom: 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+<div style="margin-bottom: 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem;">
     <h2 style="font-size: 1.2rem; font-weight: 700; color: var(--primary); margin: 0;">
-        🚛 Monitoring Lalu Lintas Logistik (3 Fitur Dihadirkan Semua)
+        🚛 Monitoring Lalu Lintas Logistik
     </h2>
-    <a href="logistic.php" class="btn btn-sm btn-primary">Buka Logistik →</a>
 </div>
 
 <div class="grid-3">
