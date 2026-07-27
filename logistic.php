@@ -13,6 +13,8 @@ try {
       `id` INT AUTO_INCREMENT PRIMARY KEY,
       `nopol` VARCHAR(50) NOT NULL,
       `driver_name` VARCHAR(255) NOT NULL,
+      `visitor_number` VARCHAR(100) NULL,
+      `antree_number` VARCHAR(100) NULL,
       `transportir` VARCHAR(255) NOT NULL,
       `destination` VARCHAR(100) NOT NULL DEFAULT 'Kirim',
       `checklist_sim` TINYINT(1) DEFAULT 0,
@@ -22,6 +24,8 @@ try {
       `status` VARCHAR(50) NOT NULL DEFAULT 'Done',
       `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
     )");
+    try { $pdo->exec("ALTER TABLE `logistic_gate_ins` ADD COLUMN `visitor_number` VARCHAR(100) NULL AFTER `driver_name`"); } catch (Exception $e) {}
+    try { $pdo->exec("ALTER TABLE `logistic_gate_ins` ADD COLUMN `antree_number` VARCHAR(100) NULL AFTER `visitor_number`"); } catch (Exception $e) {}
     $pdo->exec("CREATE TABLE IF NOT EXISTS `logistic_gate_outs` (
       `id` INT AUTO_INCREMENT PRIMARY KEY,
       `nopol` VARCHAR(50) NOT NULL,
@@ -63,6 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'add_gate_in') {
         $nopol = trim($_POST['nopol'] ?? '');
         $driver_name = trim($_POST['driver_name'] ?? '');
+        $visitor_number = trim($_POST['visitor_number'] ?? '');
+        $antree_number = trim($_POST['antree_number'] ?? '');
         $transportir = trim($_POST['transportir'] ?? '');
         $destination = trim($_POST['destination'] ?? 'Kirim');
         $sim = isset($_POST['checklist_sim']) ? 1 : 0;
@@ -70,12 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $kir = isset($_POST['checklist_kir']) ? 1 : 0;
         $entry_time = date('Y-m-d H:i:s');
 
-        if (!empty($nopol) && !empty($driver_name) && !empty($transportir)) {
-            $stmt = $pdo->prepare("INSERT INTO logistic_gate_ins (nopol, driver_name, transportir, destination, checklist_sim, checklist_stnk, checklist_kir, entry_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$nopol, $driver_name, $transportir, $destination, $sim, $stnk, $kir, $entry_time]);
+        if (!empty($nopol) && !empty($driver_name)) {
+            $stmt = $pdo->prepare("INSERT INTO logistic_gate_ins (nopol, driver_name, visitor_number, antree_number, transportir, destination, checklist_sim, checklist_stnk, checklist_kir, entry_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$nopol, $driver_name, $visitor_number, $antree_number, $transportir, $destination, $sim, $stnk, $kir, $entry_time]);
             set_flash_message('success', 'Data Kendaraan Masuk (Gate In) berhasil disimpan.');
         } else {
-            set_flash_message('danger', 'Mohon lengkapi seluruh field Nopol, Driver, dan Transportir!');
+            set_flash_message('danger', 'Mohon lengkapi field Nopol dan Nama Sopir!');
         }
     } elseif ($action === 'delete_gate_in') {
         $id = intval($_POST['id'] ?? 0);
@@ -146,9 +152,9 @@ $page_in = max(1, intval($_GET['page_in'] ?? 1));
 $count_query_in = "SELECT COUNT(*) FROM logistic_gate_ins WHERE 1=1";
 $params_in = [];
 if (!empty($search_in)) {
-    $count_query_in .= " AND (nopol LIKE ? OR driver_name LIKE ? OR transportir LIKE ? OR destination LIKE ?)";
+    $count_query_in .= " AND (nopol LIKE ? OR driver_name LIKE ? OR visitor_number LIKE ? OR antree_number LIKE ? OR transportir LIKE ? OR destination LIKE ?)";
     $term = "%$search_in%";
-    $params_in = [$term, $term, $term, $term];
+    $params_in = [$term, $term, $term, $term, $term, $term];
 }
 $stmt = $pdo->prepare($count_query_in);
 $stmt->execute($params_in);
@@ -276,6 +282,8 @@ include __DIR__ . '/includes/header.php';
                     <th>No</th>
                     <th>Nopol</th>
                     <th>Nama Sopir</th>
+                    <th>Visitor No</th>
+                    <th>Antree No</th>
                     <th>Transportir</th>
                     <th>Tujuan</th>
                     <th>Checklist Berkas</th>
@@ -287,7 +295,7 @@ include __DIR__ . '/includes/header.php';
             <tbody>
                 <?php if (count($gate_ins) === 0): ?>
                     <tr>
-                        <td colspan="<?= $can_input ? '9' : '8' ?>" style="text-align: center; color: var(--text-muted); padding: 1.75rem;">Belum ada data transaksi kendaraan masuk.</td>
+                        <td colspan="<?= $can_input ? '11' : '10' ?>" style="text-align: center; color: var(--text-muted); padding: 1.75rem;">Belum ada data transaksi kendaraan masuk.</td>
                     </tr>
                 <?php else: ?>
                     <?php $no = $offset_in + 1; foreach ($gate_ins as $gi): ?>
@@ -295,6 +303,8 @@ include __DIR__ . '/includes/header.php';
                             <td><?= $no++ ?></td>
                             <td><code><strong><?= htmlspecialchars($gi['nopol']) ?></strong></code></td>
                             <td><?= htmlspecialchars($gi['driver_name']) ?></td>
+                            <td><code><?= htmlspecialchars($gi['visitor_number'] ?: '-') ?></code></td>
+                            <td><code><?= htmlspecialchars($gi['antree_number'] ?: '-') ?></code></td>
                             <td><?= htmlspecialchars($gi['transportir']) ?></td>
                             <td><span class="badge badge-info"><?= htmlspecialchars($gi['destination']) ?></span></td>
                             <td>
@@ -493,7 +503,7 @@ include __DIR__ . '/includes/header.php';
 <?php if ($can_input): ?>
 <!-- MODAL GATE IN -->
 <div id="modalGateIn" class="modal-backdrop">
-    <div class="modal-dialog">
+    <div class="modal-dialog" style="max-width: 760px; width: 95%;">
         <div class="modal-header">
             <h3 class="modal-title">Form Input Kendaraan Masuk (Gate In)</h3>
             <button type="button" class="modal-close" onclick="closeModal('modalGateIn')">&times;</button>
@@ -501,34 +511,64 @@ include __DIR__ . '/includes/header.php';
         <form method="POST" action="logistic.php">
             <input type="hidden" name="action" value="add_gate_in">
             <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Nomor Polisi (Nopol) *</label>
-                    <input type="text" name="nopol" required class="form-control" placeholder="Contoh: B 9123 UAA">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Nama Sopir / Driver *</label>
-                    <input type="text" name="driver_name" required class="form-control" placeholder="Nama lengkap sopir">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Transportir / Perusahaan *</label>
-                    <input type="text" name="transportir" required class="form-control" placeholder="Nama PT / Ekspedisi">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Tujuan Kunjungan *</label>
-                    <select name="destination" class="form-select" required>
-                        <option value="Kirim">Kirim</option>
-                        <option value="Export Ajinex">Export Ajinex</option>
-                        <option value="Umbal-umbal">Umbal-umbal</option>
-                        <option value="Muat">Muat</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Checklist Verifikasi Dokumen Sopir</label>
-                    <div style="display: flex; gap: 1rem; margin-top: 0.35rem;">
-                        <label style="cursor: pointer;"><input type="checkbox" name="checklist_sim" value="1" checked> SIM</label>
-                        <label style="cursor: pointer;"><input type="checkbox" name="checklist_stnk" value="1" checked> STNK</label>
-                        <label style="cursor: pointer;"><input type="checkbox" name="checklist_kir" value="1" checked> Surat KIR</label>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+                    
+                    <!-- LEFT COLUMN -->
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Nomor Polisi (Nopol) *</label>
+                            <input type="text" name="nopol" required class="form-control" placeholder="Masukkan Nopol (e.g. B 1234 XYZ)...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Visitor Number</label>
+                            <input type="text" name="visitor_number" class="form-control" placeholder="Visitor Card Number...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Antree Number</label>
+                            <input type="text" name="antree_number" class="form-control" placeholder="Nomor Antrian...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Masuk</label>
+                            <input type="text" class="form-control" value="<?= date('Y-m-d H:i:s') ?>" readonly style="background-color: var(--bg-surface-alt); font-weight: 600;">
+                        </div>
                     </div>
+
+                    <!-- RIGHT COLUMN -->
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Nama Sopir *</label>
+                            <input type="text" name="driver_name" required class="form-control" placeholder="Nama sopir / driver...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Tujuan *</label>
+                            <select name="destination" class="form-select" required>
+                                <option value="">-- Pilih Tujuan --</option>
+                                <option value="Kirim">Kirim</option>
+                                <option value="Export Ajinex">Export Ajinex</option>
+                                <option value="Umbal-umbal">Umbal-umbal</option>
+                                <option value="Muat">Muat</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">SIM &amp; Kelengkapan Dokumen</label>
+                            <div style="display: flex; gap: 1rem; padding: 0.55rem 0.75rem; background: var(--bg-surface-alt); border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                                <label style="cursor: pointer; display: flex; align-items: center; gap: 0.35rem;"><input type="checkbox" name="checklist_sim" value="1" checked> SIM</label>
+                                <label style="cursor: pointer; display: flex; align-items: center; gap: 0.35rem;"><input type="checkbox" name="checklist_stnk" value="1" checked> STNK</label>
+                                <label style="cursor: pointer; display: flex; align-items: center; gap: 0.35rem;"><input type="checkbox" name="checklist_kir" value="1" checked> KIR</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Transportir / Perusahaan *</label>
+                            <input type="text" name="transportir" required class="form-control" placeholder="Nama Perusahaan / Transportir...">
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <div class="modal-footer">

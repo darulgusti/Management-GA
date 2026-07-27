@@ -61,6 +61,8 @@ CREATE TABLE IF NOT EXISTS `logistic_gate_ins` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `nopol` VARCHAR(50) NOT NULL,
   `driver_name` VARCHAR(255) NOT NULL,
+  `visitor_number` VARCHAR(100) NULL,
+  `antree_number` VARCHAR(100) NULL,
   `transportir` VARCHAR(255) NOT NULL,
   `destination` VARCHAR(100) NOT NULL DEFAULT 'Kirim',
   `checklist_sim` TINYINT(1) DEFAULT 0,
