@@ -37,8 +37,8 @@ $msg   = trim($_GET['msg'] ?? 'Data Anda telah berhasil dicatat ke dalam sistem 
             to { opacity: 1; transform: translateY(0); }
         }
         .success-icon {
-            width: 80px;
-            height: 80px;
+            width: 84px;
+            height: 84px;
             background: #dcfce7;
             color: #16a34a;
             border-radius: 50%;
@@ -52,21 +52,16 @@ $msg   = trim($_GET['msg'] ?? 'Data Anda telah berhasil dicatat ke dalam sistem 
             0% { transform: scale(0); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
-        .countdown-badge {
+        .info-badge {
             display: inline-block;
-            background: #f1f5f9;
-            color: #475569;
+            background: #dcfce7;
+            color: #15803d;
             font-weight: 600;
-            padding: 0.6rem 1.2rem;
-            border-radius: 20px;
+            padding: 0.65rem 1.25rem;
+            border-radius: 30px;
             font-size: 0.9rem;
             margin-top: 1.5rem;
-            border: 1px solid var(--border);
-        }
-        .countdown-num {
-            color: var(--primary);
-            font-size: 1.15rem;
-            font-weight: 700;
+            border: 1px solid #bbf7d0;
         }
     </style>
 </head>
@@ -74,12 +69,12 @@ $msg   = trim($_GET['msg'] ?? 'Data Anda telah berhasil dicatat ke dalam sistem 
     <div class="success-wrapper">
         <div class="success-card">
             <div class="success-icon">
-                <svg width="44" height="44" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
                 </svg>
             </div>
             
-            <h2 style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 0.75rem; font-weight: 700;">
+            <h2 style="font-size: 1.5rem; color: var(--text-main); margin-bottom: 0.75rem; font-weight: 700;">
                 <?= htmlspecialchars($title) ?>
             </h2>
             
@@ -87,65 +82,10 @@ $msg   = trim($_GET['msg'] ?? 'Data Anda telah berhasil dicatat ke dalam sistem 
                 <?= htmlspecialchars($msg) ?>
             </p>
 
-            <div class="countdown-badge">
-                Halaman ini akan ditutup dalam <span id="countdown" class="countdown-num">3</span> detik...
-            </div>
-
-            <div style="margin-top: 2rem; display: flex; flex-direction: column; gap: 0.75rem;">
-                <button type="button" onclick="closePage()" class="btn btn-primary btn-block" style="padding: 0.75rem; font-size: 0.95rem;">
-                    Tutup Halaman Sekarang
-                </button>
+            <div class="info-badge">
+                ✓ Data Terkonfirmasi &amp; Tersimpan
             </div>
         </div>
     </div>
-
-    <script>
-        let seconds = 3;
-        const countdownEl = document.getElementById('countdown');
-        const countdownBadge = document.querySelector('.countdown-badge');
-
-        function closePage() {
-            // 1. Attempt window close methods
-            try { window.close(); } catch (e) {}
-            try { self.close(); } catch (e) {}
-            try {
-                window.opener = null;
-                window.open('', '_self', '');
-                window.close();
-            } catch (e) {}
-
-            // 2. Attempt In-App scanner close APIs
-            try {
-                if (typeof WeixinJSBridge !== 'undefined') {
-                    WeixinJSBridge.call('closeWindow');
-                }
-            } catch (e) {}
-
-            // 3. Attempt history back (returns to Camera / Scanner app)
-            try {
-                if (window.history.length > 1) {
-                    window.history.go(-2); // Skip form post back to scanner
-                }
-            } catch (e) {}
-
-            // 4. Update status badge text on mobile screen
-            setTimeout(() => {
-                if (countdownBadge) {
-                    countdownBadge.innerHTML = "✔ Data Berhasil Disimpan. Silakan tutup tab ini.";
-                    countdownBadge.style.backgroundColor = "#dcfce7";
-                    countdownBadge.style.color = "#16a34a";
-                }
-            }, 400);
-        }
-
-        const timer = setInterval(() => {
-            seconds--;
-            if (countdownEl) countdownEl.innerText = seconds;
-            if (seconds <= 0) {
-                clearInterval(timer);
-                closePage();
-            }
-        }, 1000);
-    </script>
 </body>
 </html>
