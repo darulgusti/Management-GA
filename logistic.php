@@ -529,11 +529,6 @@ include __DIR__ . '/includes/header.php';
                             <label class="form-label" style="font-weight: 600;">Antree Number</label>
                             <input type="text" name="antree_number" class="form-control" placeholder="Nomor Antrian...">
                         </div>
-
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Masuk</label>
-                            <input type="text" class="form-control" value="<?= date('Y-m-d H:i:s') ?>" readonly style="background-color: var(--bg-surface-alt); font-weight: 600;">
-                        </div>
                     </div>
 
                     <!-- RIGHT COLUMN -->
