@@ -36,8 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 $stmt = $pdo->prepare("INSERT INTO logistic_gate_ins (nopol, driver_name, visitor_number, antree_number, transportir, destination, sim_type, checklist_sim, checklist_stnk, checklist_kir, entry_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 $stmt->execute([$nopol, $driver_name, $visitor_number, $antree_number, $transportir, $destination, $sim_type, $sim, $stnk, $kir, $entry_time]);
-                set_flash_message('success', 'Data Kendaraan Masuk (Gate In) berhasil disimpan.');
-                header("Location: logistic_form.php?type=gate_in");
+                header("Location: success.php?title=" . urlencode("Gate In Berhasil!") . "&msg=" . urlencode("Data kendaraan masuk (Gate In) telah berhasil disimpan ke sistem Pos 4. Terima kasih!"));
                 exit();
             } catch (Exception $e) {
                 $error_msg = "Gagal menyimpan data Gate In: " . $e->getMessage();
@@ -58,8 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 $stmt = $pdo->prepare("INSERT INTO logistic_gate_outs (nopol, driver_name, do_number, destination, tonnage, transportir, exit_time) VALUES (?, ?, ?, ?, ?, ?, ?)");
                 $stmt->execute([$nopol, $driver_name, $do_number, $destination, $tonnage, $transportir, $exit_time]);
-                set_flash_message('success', 'Data Kendaraan Keluar (Gate Out) berhasil disimpan.');
-                header("Location: logistic_form.php?type=gate_out");
+                header("Location: success.php?title=" . urlencode("Gate Out Berhasil!") . "&msg=" . urlencode("Data kendaraan keluar (Gate Out) telah berhasil disimpan ke sistem Pos 4. Terima kasih!"));
                 exit();
             } catch (Exception $e) {
                 $error_msg = "Gagal menyimpan data Gate Out: " . $e->getMessage();
@@ -82,8 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 $stmt = $pdo->prepare("INSERT INTO logistic_export_nex_mopors (mopor_number, driver_name, do_number, container_number, seal_number, destination, tonnage, transportir, exit_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 $stmt->execute([$mopor_number, $driver_name, $do_number, $container_number, $seal_number, $destination, $tonnage, $transportir, $exit_time]);
-                set_flash_message('success', 'Data Export NEX / NOPOR berhasil disimpan.');
-                header("Location: logistic_form.php?type=export_nex");
+                header("Location: success.php?title=" . urlencode("Export Berhasil!") . "&msg=" . urlencode("Data Export NEX / NOPOR telah berhasil disimpan ke sistem Pos 4. Terima kasih!"));
                 exit();
             } catch (Exception $e) {
                 $error_msg = "Gagal menyimpan data Export NEX: " . $e->getMessage();

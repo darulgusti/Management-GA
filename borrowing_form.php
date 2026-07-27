@@ -33,8 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare("INSERT INTO item_borrowings (borrower_name, category, department, item_name, item_code, quantity, borrow_time, initial_condition, signature, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'borrowed')");
             $stmt->execute([$borrower_name, $category, $department, $item_name, $item_code, $quantity, $now, $initial_condition, $signature]);
             
-            set_flash_message('success', 'Peminjaman barang/kunci berhasil dicatat!');
-            header("Location: index.php");
+            header("Location: success.php?title=" . urlencode("Peminjaman Berhasil!") . "&msg=" . urlencode("Data peminjaman barang / kunci Anda telah berhasil dicatat. Terima kasih!"));
             exit();
         } catch (Exception $e) {
             $error_msg = "Gagal menyimpan data peminjaman: " . $e->getMessage();

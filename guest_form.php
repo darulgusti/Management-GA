@@ -29,8 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare("INSERT INTO guests (name, guest_category, institution, purpose, person_to_meet, id_type, visitor_card_number, time_in, signature) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             $stmt->execute([$name, $category, $institution, $purpose, $person_to_meet, $id_type, $visitor_card, $now, $signature]);
             
-            set_flash_message('success', 'Check-in Tamu berhasil dicatat. Selamat datang!');
-            header("Location: index.php");
+            header("Location: success.php?title=" . urlencode("Check-in Tamu Berhasil!") . "&msg=" . urlencode("Data pendaftaran tamu Anda telah berhasil dicatat ke dalam sistem. Selamat datang!"));
             exit();
         } catch (Exception $e) {
             $error_msg = "Gagal menyimpan data tamu: " . $e->getMessage();
