@@ -576,7 +576,7 @@ include __DIR__ . '/includes/header.php';
 
 <!-- MODAL GATE OUT -->
 <div id="modalGateOut" class="modal-backdrop">
-    <div class="modal-dialog">
+    <div class="modal-dialog" style="max-width: 760px; width: 95%;">
         <div class="modal-header">
             <h3 class="modal-title">Form Input Kendaraan Keluar (Gate Out)</h3>
             <button type="button" class="modal-close" onclick="closeModal('modalGateOut')">&times;</button>
@@ -584,29 +584,44 @@ include __DIR__ . '/includes/header.php';
         <form method="POST" action="logistic.php">
             <input type="hidden" name="action" value="add_gate_out">
             <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Nomor Polisi (Nopol) *</label>
-                    <input type="text" name="nopol" required class="form-control" placeholder="Contoh: L 8821 X">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Nama Sopir / Driver *</label>
-                    <input type="text" name="driver_name" required class="form-control" placeholder="Nama sopir">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Nomor Delivery Order (DO) *</label>
-                    <input type="text" name="do_number" required class="form-control" placeholder="Contoh: DO-2026-0091">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Tujuan Pengiriman *</label>
-                    <input type="text" name="destination" required class="form-control" placeholder="Lokasi / Kota Tujuan">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Total Tonase (Ton)</label>
-                    <input type="number" step="0.01" name="tonnage" class="form-control" value="0.00" placeholder="0.00">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Nama Transportir</label>
-                    <input type="text" name="transportir" class="form-control" placeholder="PT / Perusahaan Transportir">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+                    
+                    <!-- LEFT COLUMN -->
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Nomor Polisi (Nopol) *</label>
+                            <input type="text" name="nopol" required class="form-control" placeholder="Masukkan Nopol (e.g. B 1234 XYZ)...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Nomor Delivery Order (DO) *</label>
+                            <input type="text" name="do_number" required class="form-control" placeholder="Nomor Delivery Order...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Tonase / Jumlah Muatan (Ton)</label>
+                            <input type="number" step="0.01" name="tonnage" class="form-control" placeholder="Jumlah Tonase (Ton)...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Transportir / Perusahaan *</label>
+                            <input type="text" name="transportir" required class="form-control" placeholder="Nama Transportir...">
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN -->
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Nama Sopir *</label>
+                            <input type="text" name="driver_name" required class="form-control" placeholder="Nama sopir...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Tujuan Pengiriman *</label>
+                            <input type="text" name="destination" required class="form-control" placeholder="Tujuan Pengiriman / Alamat...">
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <div class="modal-footer">
@@ -619,7 +634,7 @@ include __DIR__ . '/includes/header.php';
 
 <!-- MODAL EXPORT NEX / MOPOR -->
 <div id="modalExport" class="modal-backdrop">
-    <div class="modal-dialog">
+    <div class="modal-dialog" style="max-width: 760px; width: 95%;">
         <div class="modal-header">
             <h3 class="modal-title">Form Input Export NEX / MOPOR</h3>
             <button type="button" class="modal-close" onclick="closeModal('modalExport')">&times;</button>
@@ -627,37 +642,54 @@ include __DIR__ . '/includes/header.php';
         <form method="POST" action="logistic.php">
             <input type="hidden" name="action" value="add_export">
             <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Nomor MOPOR *</label>
-                    <input type="text" name="mopor_number" required class="form-control" placeholder="Contoh: MOPOR-88192">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Nama Sopir *</label>
-                    <input type="text" name="driver_name" required class="form-control" placeholder="Nama sopir">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Nomor DO</label>
-                    <input type="text" name="do_number" class="form-control" placeholder="No. DO">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Nomor Kontainer *</label>
-                    <input type="text" name="container_number" required class="form-control" placeholder="Contoh: TCKU-918231-0">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Nomor Segel (Seal) *</label>
-                    <input type="text" name="seal_number" required class="form-control" placeholder="Contoh: SEAL-77281">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Pelabuhan / Negara Tujuan</label>
-                    <input type="text" name="destination" class="form-control" placeholder="Tujuan Ekspor">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Tonase (Ton)</label>
-                    <input type="number" step="0.01" name="tonnage" class="form-control" value="0.00">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Nama Transportir</label>
-                    <input type="text" name="transportir" class="form-control" placeholder="Nama Transportir">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+                    
+                    <!-- LEFT COLUMN -->
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Nomor MOPOR *</label>
+                            <input type="text" name="mopor_number" required class="form-control" placeholder="Masukkan Nomor MOPOR...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Nomor Delivery Order (DO)</label>
+                            <input type="text" name="do_number" class="form-control" placeholder="Nomor DO...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Nomor Kontainer *</label>
+                            <input type="text" name="container_number" required class="form-control" placeholder="Nomor Kontainer...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Nomor Segel (Seal) *</label>
+                            <input type="text" name="seal_number" required class="form-control" placeholder="Nomor Segel...">
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN -->
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Nama Sopir *</label>
+                            <input type="text" name="driver_name" required class="form-control" placeholder="Nama sopir...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Pelabuhan / Negara Tujuan</label>
+                            <input type="text" name="destination" class="form-control" placeholder="Tujuan Ekspor...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Total Tonase (Ton)</label>
+                            <input type="number" step="0.01" name="tonnage" class="form-control" placeholder="Jumlah Tonase...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Transportir / Ekspedisi</label>
+                            <input type="text" name="transportir" class="form-control" placeholder="Nama Transportir...">
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <div class="modal-footer">
