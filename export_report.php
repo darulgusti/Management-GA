@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/includes/auth_check.php';
 require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/includes/excel_helper.php';
 
 check_role(['manager', 'secom']);
 
@@ -29,6 +30,33 @@ if ($type === 'all' || $type === 'borrowing') {
     $stmt->execute([$start_date, $end_date]);
     $borrowings = $stmt->fetchAll();
     echo generate_borrowings_xml_worksheet($borrowings, "Rekap Peminjaman");
+}
+
+if ($type === 'all' || $type === 'gate_in') {
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM logistic_gate_ins WHERE DATE(entry_time) BETWEEN ? AND ? ORDER BY entry_time DESC");
+        $stmt->execute([$start_date, $end_date]);
+        $gate_ins = $stmt->fetchAll();
+        echo generate_gate_ins_xml_worksheet($gate_ins, "Logistik Gate In");
+    } catch (Exception $e) {}
+}
+
+if ($type === 'all' || $type === 'gate_out') {
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM logistic_gate_outs WHERE DATE(exit_time) BETWEEN ? AND ? ORDER BY exit_time DESC");
+        $stmt->execute([$start_date, $end_date]);
+        $gate_outs = $stmt->fetchAll();
+        echo generate_gate_outs_xml_worksheet($gate_outs, "Logistik Gate Out");
+    } catch (Exception $e) {}
+}
+
+if ($type === 'all' || $type === 'export_nex') {
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM logistic_export_nex_mopors WHERE DATE(exit_time) BETWEEN ? AND ? ORDER BY exit_time DESC");
+        $stmt->execute([$start_date, $end_date]);
+        $exports = $stmt->fetchAll();
+        echo generate_export_nex_xml_worksheet($exports, "Logistik Export NEX");
+    } catch (Exception $e) {}
 }
 
 echo '</Workbook>' . "\n";

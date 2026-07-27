@@ -14,8 +14,11 @@ $per_page   = 5;
 // Current Pages for pagination
 $guest_page   = max(1, intval($_GET['g_page'] ?? 1));
 $borrow_page  = max(1, intval($_GET['b_page'] ?? 1));
+$gin_page     = max(1, intval($_GET['gin_page'] ?? 1));
+$gout_page    = max(1, intval($_GET['gout_page'] ?? 1));
+$exp_page     = max(1, intval($_GET['exp_page'] ?? 1));
 
-// Filter Datetime Ranges (Index Optimized)
+// Filter Datetime Ranges
 $start_datetime = $start_date . ' 00:00:00';
 $end_datetime   = $end_date . ' 23:59:59';
 
@@ -28,6 +31,24 @@ $stmt = $pdo->prepare("SELECT COUNT(*) FROM item_borrowings WHERE borrow_time >=
 $stmt->execute([$start_datetime, $end_datetime]);
 $total_borrow_records = $stmt->fetchColumn();
 
+$total_gin_records = 0;
+$total_gout_records = 0;
+$total_exp_records = 0;
+
+try {
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM logistic_gate_ins WHERE entry_time >= ? AND entry_time <= ?");
+    $stmt->execute([$start_datetime, $end_datetime]);
+    $total_gin_records = $stmt->fetchColumn();
+
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM logistic_gate_outs WHERE exit_time >= ? AND exit_time <= ?");
+    $stmt->execute([$start_datetime, $end_datetime]);
+    $total_gout_records = $stmt->fetchColumn();
+
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM logistic_export_nex_mopors WHERE exit_time >= ? AND exit_time <= ?");
+    $stmt->execute([$start_datetime, $end_datetime]);
+    $total_exp_records = $stmt->fetchColumn();
+} catch (Exception $e) {}
+
 // Fetch Guests
 $guests = [];
 $guest_total_pages = 0;
@@ -35,7 +56,6 @@ $guest_offset = 0;
 if ($type === 'all' || $type === 'guest') {
     $guest_total_pages = ceil($total_guest_records / $per_page);
     $guest_offset = ($guest_page - 1) * $per_page;
-
     $stmt = $pdo->prepare("SELECT * FROM guests WHERE time_in >= ? AND time_in <= ? ORDER BY time_in DESC LIMIT $per_page OFFSET $guest_offset");
     $stmt->execute([$start_datetime, $end_datetime]);
     $guests = $stmt->fetchAll();
@@ -48,10 +68,51 @@ $borrow_offset = 0;
 if ($type === 'all' || $type === 'borrowing') {
     $borrow_total_pages = ceil($total_borrow_records / $per_page);
     $borrow_offset = ($borrow_page - 1) * $per_page;
-
     $stmt = $pdo->prepare("SELECT * FROM item_borrowings WHERE borrow_time >= ? AND borrow_time <= ? ORDER BY borrow_time DESC LIMIT $per_page OFFSET $borrow_offset");
     $stmt->execute([$start_datetime, $end_datetime]);
     $borrowings = $stmt->fetchAll();
+}
+
+// Fetch Gate Ins
+$gate_ins = [];
+$gin_total_pages = 0;
+$gin_offset = 0;
+if ($type === 'all' || $type === 'gate_in') {
+    try {
+        $gin_total_pages = ceil($total_gin_records / $per_page);
+        $gin_offset = ($gin_page - 1) * $per_page;
+        $stmt = $pdo->prepare("SELECT * FROM logistic_gate_ins WHERE entry_time >= ? AND entry_time <= ? ORDER BY entry_time DESC LIMIT $per_page OFFSET $gin_offset");
+        $stmt->execute([$start_datetime, $end_datetime]);
+        $gate_ins = $stmt->fetchAll();
+    } catch (Exception $e) {}
+}
+
+// Fetch Gate Outs
+$gate_outs = [];
+$gout_total_pages = 0;
+$gout_offset = 0;
+if ($type === 'all' || $type === 'gate_out') {
+    try {
+        $gout_total_pages = ceil($total_gout_records / $per_page);
+        $gout_offset = ($gout_page - 1) * $per_page;
+        $stmt = $pdo->prepare("SELECT * FROM logistic_gate_outs WHERE exit_time >= ? AND exit_time <= ? ORDER BY exit_time DESC LIMIT $per_page OFFSET $gout_offset");
+        $stmt->execute([$start_datetime, $end_datetime]);
+        $gate_outs = $stmt->fetchAll();
+    } catch (Exception $e) {}
+}
+
+// Fetch Export NEX/MOPOR
+$exports = [];
+$exp_total_pages = 0;
+$exp_offset = 0;
+if ($type === 'all' || $type === 'export_nex') {
+    try {
+        $exp_total_pages = ceil($total_exp_records / $per_page);
+        $exp_offset = ($exp_page - 1) * $per_page;
+        $stmt = $pdo->prepare("SELECT * FROM logistic_export_nex_mopors WHERE exit_time >= ? AND exit_time <= ? ORDER BY exit_time DESC LIMIT $per_page OFFSET $exp_offset");
+        $stmt->execute([$start_datetime, $end_datetime]);
+        $exports = $stmt->fetchAll();
+    } catch (Exception $e) {}
 }
 
 include __DIR__ . '/includes/header.php';
@@ -90,9 +151,12 @@ include __DIR__ . '/includes/header.php';
             <div style="flex: 1;">
                 <label class="form-label">Kategori Laporan</label>
                 <select name="type" class="form-select">
-                    <option value="all" <?= $type === 'all' ? 'selected' : '' ?>>Semua Modul (Tamu & Pinjam)</option>
+                    <option value="all" <?= $type === 'all' ? 'selected' : '' ?>>Semua Modul (Tamu, Pinjam & Logistik)</option>
                     <option value="guest" <?= $type === 'guest' ? 'selected' : '' ?>>Buku Tamu Digital</option>
                     <option value="borrowing" <?= $type === 'borrowing' ? 'selected' : '' ?>>Peminjaman Barang & Kunci</option>
+                    <option value="gate_in" <?= $type === 'gate_in' ? 'selected' : '' ?>>Logistik - Buku Masuk (Gate In)</option>
+                    <option value="gate_out" <?= $type === 'gate_out' ? 'selected' : '' ?>>Logistik - Buku Keluar (Gate Out)</option>
+                    <option value="export_nex" <?= $type === 'export_nex' ? 'selected' : '' ?>>Logistik - Export NEX / MOPOR</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary" style="height: 38px;">Filter</button>
@@ -108,7 +172,7 @@ include __DIR__ . '/includes/header.php';
         </div>
         <div class="stat-content">
             <div class="stat-value"><?= number_format($total_guest_records) ?></div>
-            <div class="stat-label">Total Tamu Periode Ini</div>
+            <div class="stat-label">Total Tamu</div>
         </div>
     </div>
 
@@ -118,7 +182,27 @@ include __DIR__ . '/includes/header.php';
         </div>
         <div class="stat-content">
             <div class="stat-value"><?= number_format($total_borrow_records) ?></div>
-            <div class="stat-label">Total Peminjaman Periode Ini</div>
+            <div class="stat-label">Total Peminjaman</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon success">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+        </div>
+        <div class="stat-content">
+            <div class="stat-value"><?= number_format($total_gin_records + $total_gout_records) ?></div>
+            <div class="stat-label">Logistik Gate In/Out</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon warning">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+        </div>
+        <div class="stat-content">
+            <div class="stat-value"><?= number_format($total_exp_records) ?></div>
+            <div class="stat-label">Export NEX / MOPOR</div>
         </div>
     </div>
 </div>
@@ -210,6 +294,135 @@ include __DIR__ . '/includes/header.php';
         </table>
     </div>
     <?= render_pagination($borrow_page, $borrow_total_pages, ['start_date' => $start_date, 'end_date' => $end_date, 'type' => $type], 'b_page') ?>
+</div>
+<?php endif; ?>
+
+<?php if ($type === 'all' || $type === 'gate_in'): ?>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Rekap Logistik - Buku Masuk Gate In (<?= number_format($total_gin_records) ?> Records)</h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nopol</th>
+                    <th>Sopir</th>
+                    <th>Transportir</th>
+                    <th>Tujuan</th>
+                    <th>Waktu Masuk</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (count($gate_ins) === 0): ?>
+                    <tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">Tidak ada data Gate In di rentang tanggal ini.</td></tr>
+                <?php else: ?>
+                    <?php $no = $gin_offset + 1; foreach ($gate_ins as $gi): ?>
+                        <tr>
+                            <td><?= $no++ ?></td>
+                            <td><code><strong><?= htmlspecialchars($gi['nopol']) ?></strong></code></td>
+                            <td><?= htmlspecialchars($gi['driver_name']) ?></td>
+                            <td><?= htmlspecialchars($gi['transportir']) ?></td>
+                            <td><span class="badge badge-info"><?= htmlspecialchars($gi['destination']) ?></span></td>
+                            <td><?= date('d/m/Y H:i', strtotime($gi['entry_time'])) ?></td>
+                            <td><span class="badge badge-success"><?= htmlspecialchars($gi['status']) ?></span></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+    <?= render_pagination($gin_page, $gin_total_pages, ['start_date' => $start_date, 'end_date' => $end_date, 'type' => $type], 'gin_page') ?>
+</div>
+<?php endif; ?>
+
+<?php if ($type === 'all' || $type === 'gate_out'): ?>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Rekap Logistik - Buku Keluar Gate Out (<?= number_format($total_gout_records) ?> Records)</h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nopol</th>
+                    <th>Sopir</th>
+                    <th>No. DO</th>
+                    <th>Tujuan</th>
+                    <th>Tonase</th>
+                    <th>Transportir</th>
+                    <th>Waktu Keluar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (count($gate_outs) === 0): ?>
+                    <tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2rem;">Tidak ada data Gate Out di rentang tanggal ini.</td></tr>
+                <?php else: ?>
+                    <?php $no = $gout_offset + 1; foreach ($gate_outs as $go): ?>
+                        <tr>
+                            <td><?= $no++ ?></td>
+                            <td><code><strong><?= htmlspecialchars($go['nopol']) ?></strong></code></td>
+                            <td><?= htmlspecialchars($go['driver_name']) ?></td>
+                            <td><code><?= htmlspecialchars($go['do_number']) ?></code></td>
+                            <td><?= htmlspecialchars($go['destination']) ?></td>
+                            <td><?= number_format($go['tonnage'], 2) ?> Ton</td>
+                            <td><?= htmlspecialchars($go['transportir']) ?></td>
+                            <td><?= date('d/m/Y H:i', strtotime($go['exit_time'])) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+    <?= render_pagination($gout_page, $gout_total_pages, ['start_date' => $start_date, 'end_date' => $end_date, 'type' => $type], 'gout_page') ?>
+</div>
+<?php endif; ?>
+
+<?php if ($type === 'all' || $type === 'export_nex'): ?>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Rekap Logistik - Export NEX / MOPOR (<?= number_format($total_exp_records) ?> Records)</h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>No. MOPOR</th>
+                    <th>Sopir</th>
+                    <th>No. DO</th>
+                    <th>No. Kontainer</th>
+                    <th>No. Segel</th>
+                    <th>Tujuan</th>
+                    <th>Tonase</th>
+                    <th>Waktu Keluar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (count($exports) === 0): ?>
+                    <tr><td colspan="9" style="text-align: center; color: var(--text-muted); padding: 2rem;">Tidak ada data Export NEX di rentang tanggal ini.</td></tr>
+                <?php else: ?>
+                    <?php $no = $exp_offset + 1; foreach ($exports as $ex): ?>
+                        <tr>
+                            <td><?= $no++ ?></td>
+                            <td><code><strong><?= htmlspecialchars($ex['mopor_number']) ?></strong></code></td>
+                            <td><?= htmlspecialchars($ex['driver_name']) ?></td>
+                            <td><code><?= htmlspecialchars($ex['do_number']) ?></code></td>
+                            <td><code><?= htmlspecialchars($ex['container_number']) ?></code></td>
+                            <td><code><?= htmlspecialchars($ex['seal_number']) ?></code></td>
+                            <td><?= htmlspecialchars($ex['destination']) ?></td>
+                            <td><?= number_format($ex['tonnage'], 2) ?> Ton</td>
+                            <td><?= date('d/m/Y H:i', strtotime($ex['exit_time'])) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+    <?= render_pagination($exp_page, $exp_total_pages, ['start_date' => $start_date, 'end_date' => $end_date, 'type' => $type], 'exp_page') ?>
 </div>
 <?php endif; ?>
 

@@ -56,6 +56,56 @@ CREATE TABLE IF NOT EXISTS `archives` (
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+-- 5. Tabel Logistic Gate In (Buku Masuk Logistik)
+CREATE TABLE IF NOT EXISTS `logistic_gate_ins` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `nopol` VARCHAR(50) NOT NULL,
+  `driver_name` VARCHAR(255) NOT NULL,
+  `transportir` VARCHAR(255) NOT NULL,
+  `destination` VARCHAR(100) NOT NULL DEFAULT 'Kirim',
+  `checklist_sim` TINYINT(1) DEFAULT 0,
+  `checklist_stnk` TINYINT(1) DEFAULT 0,
+  `checklist_kir` TINYINT(1) DEFAULT 0,
+  `entry_time` DATETIME NOT NULL,
+  `status` VARCHAR(50) NOT NULL DEFAULT 'Done',
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 6. Tabel Logistic Gate Out (Buku Keluar Logistik)
+CREATE TABLE IF NOT EXISTS `logistic_gate_outs` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `nopol` VARCHAR(50) NOT NULL,
+  `driver_name` VARCHAR(255) NOT NULL,
+  `do_number` VARCHAR(100) NOT NULL,
+  `destination` VARCHAR(255) NOT NULL,
+  `tonnage` DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+  `transportir` VARCHAR(255) NOT NULL,
+  `exit_time` DATETIME NOT NULL,
+  `status` VARCHAR(50) NOT NULL DEFAULT 'Done',
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 7. Tabel Logistic Export NEX / MOPOR (Export Kontainer Logistik)
+CREATE TABLE IF NOT EXISTS `logistic_export_nex_mopors` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `mopor_number` VARCHAR(100) NOT NULL,
+  `driver_name` VARCHAR(255) NOT NULL,
+  `do_number` VARCHAR(100) NOT NULL,
+  `container_number` VARCHAR(100) NOT NULL,
+  `seal_number` VARCHAR(100) NOT NULL,
+  `destination` VARCHAR(255) NOT NULL,
+  `tonnage` DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+  `transportir` VARCHAR(255) NOT NULL,
+  `exit_time` DATETIME NOT NULL,
+  `status` VARCHAR(50) NOT NULL DEFAULT 'Done',
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Indexing untuk optimasi query Logistik
+ALTER TABLE `logistic_gate_ins` ADD INDEX `idx_entry_time` (`entry_time`);
+ALTER TABLE `logistic_gate_outs` ADD INDEX `idx_exit_time` (`exit_time`);
+ALTER TABLE `logistic_export_nex_mopors` ADD INDEX `idx_export_exit_time` (`exit_time`);
+
 -- Data Seeder Awal
 -- Admin / Manager: admin@ga.com / admin123
 -- Secom / Staf: secom@ga.com / secom123

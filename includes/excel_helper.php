@@ -224,12 +224,169 @@ function generate_borrowings_xml_worksheet($borrowings, $sheet_title = "Data Pem
     return $xml;
 }
 
+// Generate Worksheet Gate In Logistik
+function generate_gate_ins_xml_worksheet($gate_ins, $sheet_title = "Logistik Gate In") {
+    $xml = ' <Worksheet ss:Name="' . htmlspecialchars($sheet_title) . '">' . "\n";
+    $xml .= '  <Table>' . "\n";
+    $xml .= '   <Column ss:Width="40"/>' . "\n";  // No
+    $xml .= '   <Column ss:Width="110"/>' . "\n"; // Nopol
+    $xml .= '   <Column ss:Width="160"/>' . "\n"; // Nama Sopir
+    $xml .= '   <Column ss:Width="160"/>' . "\n"; // Transportir
+    $xml .= '   <Column ss:Width="140"/>' . "\n"; // Tujuan
+    $xml .= '   <Column ss:Width="60"/>' . "\n";  // SIM
+    $xml .= '   <Column ss:Width="60"/>' . "\n";  // STNK
+    $xml .= '   <Column ss:Width="60"/>' . "\n";  // KIR
+    $xml .= '   <Column ss:Width="100"/>' . "\n"; // Tanggal Masuk
+    $xml .= '   <Column ss:Width="90"/>' . "\n";  // Waktu Masuk
+    $xml .= '   <Column ss:Width="90"/>' . "\n";  // Status
+
+    // Header Row
+    $xml .= '   <Row ss:Height="25">' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">No</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">Nopol</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">Nama Sopir</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">Transportir</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">Tujuan</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">SIM</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">STNK</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">KIR</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">Tanggal Masuk</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">Waktu Masuk</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">Status</Data></Cell>' . "\n";
+    $xml .= '   </Row>' . "\n";
+
+    $no = 1;
+    foreach ($gate_ins as $gi) {
+        $xml .= '   <Row ss:Height="20">' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="Number">' . $no++ . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . htmlspecialchars($gi['nopol']) . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellData"><Data ss:Type="String">' . htmlspecialchars($gi['driver_name']) . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellData"><Data ss:Type="String">' . htmlspecialchars($gi['transportir']) . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellData"><Data ss:Type="String">' . htmlspecialchars($gi['destination']) . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . ($gi['checklist_sim'] ? 'Ada' : 'Tidak') . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . ($gi['checklist_stnk'] ? 'Ada' : 'Tidak') . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . ($gi['checklist_kir'] ? 'Ada' : 'Tidak') . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . format_excel_date($gi['entry_time']) . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . format_excel_time($gi['entry_time']) . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="BadgeSuccess"><Data ss:Type="String">' . htmlspecialchars($gi['status']) . '</Data></Cell>' . "\n";
+        $xml .= '   </Row>' . "\n";
+    }
+
+    $xml .= '  </Table>' . "\n";
+    $xml .= ' </Worksheet>' . "\n";
+    return $xml;
+}
+
+// Generate Worksheet Gate Out Logistik
+function generate_gate_outs_xml_worksheet($gate_outs, $sheet_title = "Logistik Gate Out") {
+    $xml = ' <Worksheet ss:Name="' . htmlspecialchars($sheet_title) . '">' . "\n";
+    $xml .= '  <Table>' . "\n";
+    $xml .= '   <Column ss:Width="40"/>' . "\n";  // No
+    $xml .= '   <Column ss:Width="110"/>' . "\n"; // Nopol
+    $xml .= '   <Column ss:Width="160"/>' . "\n"; // Nama Sopir
+    $xml .= '   <Column ss:Width="130"/>' . "\n"; // No. DO
+    $xml .= '   <Column ss:Width="160"/>' . "\n"; // Tujuan
+    $xml .= '   <Column ss:Width="90"/>' . "\n";  // Tonase
+    $xml .= '   <Column ss:Width="150"/>' . "\n"; // Transportir
+    $xml .= '   <Column ss:Width="100"/>' . "\n"; // Tanggal Keluar
+    $xml .= '   <Column ss:Width="90"/>' . "\n";  // Waktu Keluar
+
+    // Header Row
+    $xml .= '   <Row ss:Height="25">' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">No</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">Nopol</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">Nama Sopir</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">No. DO</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">Tujuan Pengiriman</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">Tonase (Ton)</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">Transportir</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">Tanggal Keluar</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">Waktu Keluar</Data></Cell>' . "\n";
+    $xml .= '   </Row>' . "\n";
+
+    $no = 1;
+    foreach ($gate_outs as $go) {
+        $xml .= '   <Row ss:Height="20">' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="Number">' . $no++ . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . htmlspecialchars($go['nopol']) . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellData"><Data ss:Type="String">' . htmlspecialchars($go['driver_name']) . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . htmlspecialchars($go['do_number']) . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellData"><Data ss:Type="String">' . htmlspecialchars($go['destination']) . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="Number">' . $go['tonnage'] . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellData"><Data ss:Type="String">' . htmlspecialchars($go['transportir']) . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . format_excel_date($go['exit_time']) . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . format_excel_time($go['exit_time']) . '</Data></Cell>' . "\n";
+        $xml .= '   </Row>' . "\n";
+    }
+
+    $xml .= '  </Table>' . "\n";
+    $xml .= ' </Worksheet>' . "\n";
+    return $xml;
+}
+
+// Generate Worksheet Export NEX / MOPOR
+function generate_export_nex_xml_worksheet($exports, $sheet_title = "Logistik Export NEX MOPOR") {
+    $xml = ' <Worksheet ss:Name="' . htmlspecialchars($sheet_title) . '">' . "\n";
+    $xml .= '  <Table>' . "\n";
+    $xml .= '   <Column ss:Width="40"/>' . "\n";  // No
+    $xml .= '   <Column ss:Width="130"/>' . "\n"; // No MOPOR
+    $xml .= '   <Column ss:Width="160"/>' . "\n"; // Nama Sopir
+    $xml .= '   <Column ss:Width="120"/>' . "\n"; // No DO
+    $xml .= '   <Column ss:Width="140"/>' . "\n"; // No Kontainer
+    $xml .= '   <Column ss:Width="130"/>' . "\n"; // No Segel
+    $xml .= '   <Column ss:Width="150"/>' . "\n"; // Tujuan
+    $xml .= '   <Column ss:Width="90"/>' . "\n";  // Tonase
+    $xml .= '   <Column ss:Width="140"/>' . "\n"; // Transportir
+    $xml .= '   <Column ss:Width="100"/>' . "\n"; // Tanggal Keluar
+    $xml .= '   <Column ss:Width="90"/>' . "\n";  // Waktu Keluar
+
+    // Header Row
+    $xml .= '   <Row ss:Height="25">' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">No</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">No. MOPOR</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">Nama Sopir</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">No. DO</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">No. Kontainer</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">No. Segel</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">Tujuan Ekspor</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">Tonase (Ton)</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">Transportir</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">Tanggal Keluar</Data></Cell>' . "\n";
+    $xml .= '    <Cell ss:StyleID="Header"><Data ss:Type="String">Waktu Keluar</Data></Cell>' . "\n";
+    $xml .= '   </Row>' . "\n";
+
+    $no = 1;
+    foreach ($exports as $ex) {
+        $xml .= '   <Row ss:Height="20">' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="Number">' . $no++ . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . htmlspecialchars($ex['mopor_number']) . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellData"><Data ss:Type="String">' . htmlspecialchars($ex['driver_name']) . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . htmlspecialchars($ex['do_number']) . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . htmlspecialchars($ex['container_number']) . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . htmlspecialchars($ex['seal_number']) . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellData"><Data ss:Type="String">' . htmlspecialchars($ex['destination']) . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="Number">' . $ex['tonnage'] . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellData"><Data ss:Type="String">' . htmlspecialchars($ex['transportir']) . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . format_excel_date($ex['exit_time']) . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . format_excel_time($ex['exit_time']) . '</Data></Cell>' . "\n";
+        $xml .= '   </Row>' . "\n";
+    }
+
+    $xml .= '  </Table>' . "\n";
+    $xml .= ' </Worksheet>' . "\n";
+    return $xml;
+}
+
 // Fungsi Pengarsipan Data (Manual / Otomatis)
 function run_archive_process($pdo, $is_manual = false) {
     $archives_dir = __DIR__ . '/../archives';
     if (!is_dir($archives_dir)) {
         mkdir($archives_dir, 0777, true);
     }
+
+    $old_gate_ins = [];
+    $old_gate_outs = [];
+    $old_exports = [];
 
     if ($is_manual) {
         // Manual Archiving: Arsip SEMUA data selesai (meski belum 3 bulan)
@@ -239,6 +396,15 @@ function run_archive_process($pdo, $is_manual = false) {
         // Select returned borrowings
         $stmt = $pdo->query("SELECT * FROM item_borrowings WHERE status = 'returned' ORDER BY borrow_time DESC");
         $old_borrowings = $stmt->fetchAll();
+
+        try {
+            $stmt = $pdo->query("SELECT * FROM logistic_gate_ins ORDER BY entry_time DESC");
+            $old_gate_ins = $stmt->fetchAll();
+            $stmt = $pdo->query("SELECT * FROM logistic_gate_outs ORDER BY exit_time DESC");
+            $old_gate_outs = $stmt->fetchAll();
+            $stmt = $pdo->query("SELECT * FROM logistic_export_nex_mopors ORDER BY exit_time DESC");
+            $old_exports = $stmt->fetchAll();
+        } catch (Exception $e) {}
 
         $archive_type_label = 'Manual';
         $file_prefix = 'Arsip_Manual_GA_';
@@ -254,11 +420,25 @@ function run_archive_process($pdo, $is_manual = false) {
         $stmt->execute([$cutoff_date]);
         $old_borrowings = $stmt->fetchAll();
 
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM logistic_gate_ins WHERE entry_time <= ? ORDER BY entry_time DESC");
+            $stmt->execute([$cutoff_date]);
+            $old_gate_ins = $stmt->fetchAll();
+
+            $stmt = $pdo->prepare("SELECT * FROM logistic_gate_outs WHERE exit_time <= ? ORDER BY exit_time DESC");
+            $stmt->execute([$cutoff_date]);
+            $old_gate_outs = $stmt->fetchAll();
+
+            $stmt = $pdo->prepare("SELECT * FROM logistic_export_nex_mopors WHERE exit_time <= ? ORDER BY exit_time DESC");
+            $stmt->execute([$cutoff_date]);
+            $old_exports = $stmt->fetchAll();
+        } catch (Exception $e) {}
+
         $archive_type_label = 'Otomatis (> 3 Bulan)';
         $file_prefix = 'Arsip_Otomatis_GA_';
     }
 
-    $total_records = count($old_guests) + count($old_borrowings);
+    $total_records = count($old_guests) + count($old_borrowings) + count($old_gate_ins) + count($old_gate_outs) + count($old_exports);
     if ($total_records === 0) {
         return [
             'success' => false,
@@ -274,6 +454,15 @@ function run_archive_process($pdo, $is_manual = false) {
     $excel_content = get_excel_xml_header();
     $excel_content .= generate_guests_xml_worksheet($old_guests, "Arsip Buku Tamu");
     $excel_content .= generate_borrowings_xml_worksheet($old_borrowings, "Arsip Peminjaman");
+    if (!empty($old_gate_ins)) {
+        $excel_content .= generate_gate_ins_xml_worksheet($old_gate_ins, "Arsip Logistik Gate In");
+    }
+    if (!empty($old_gate_outs)) {
+        $excel_content .= generate_gate_outs_xml_worksheet($old_gate_outs, "Arsip Logistik Gate Out");
+    }
+    if (!empty($old_exports)) {
+        $excel_content .= generate_export_nex_xml_worksheet($old_exports, "Arsip Export NEX");
+    }
     $excel_content .= '</Workbook>';
 
     file_put_contents($filepath, $excel_content);
@@ -286,12 +475,25 @@ function run_archive_process($pdo, $is_manual = false) {
     if ($is_manual) {
         $pdo->exec("DELETE FROM guests WHERE time_out IS NOT NULL");
         $pdo->exec("DELETE FROM item_borrowings WHERE status = 'returned'");
+        try {
+            $pdo->exec("DELETE FROM logistic_gate_ins");
+            $pdo->exec("DELETE FROM logistic_gate_outs");
+            $pdo->exec("DELETE FROM logistic_export_nex_mopors");
+        } catch (Exception $e) {}
     } else {
         $cutoff_date = date('Y-m-d H:i:s', strtotime('-3 months'));
         $stmt = $pdo->prepare("DELETE FROM guests WHERE time_out IS NOT NULL AND time_out <= ?");
         $stmt->execute([$cutoff_date]);
         $stmt = $pdo->prepare("DELETE FROM item_borrowings WHERE status = 'returned' AND return_time <= ?");
         $stmt->execute([$cutoff_date]);
+        try {
+            $stmt = $pdo->prepare("DELETE FROM logistic_gate_ins WHERE entry_time <= ?");
+            $stmt->execute([$cutoff_date]);
+            $stmt = $pdo->prepare("DELETE FROM logistic_gate_outs WHERE exit_time <= ?");
+            $stmt->execute([$cutoff_date]);
+            $stmt = $pdo->prepare("DELETE FROM logistic_export_nex_mopors WHERE exit_time <= ?");
+            $stmt->execute([$cutoff_date]);
+        } catch (Exception $e) {}
     }
 
     return [
