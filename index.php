@@ -94,7 +94,7 @@ $flash = get_flash_message();
                         Pencatatan &amp; verifikasi berkas kendaraan armada yang masuk pos gerbang.
                     </p>
                 </div>
-                <a href="logistic.php?tab=gate_in" class="btn btn-primary btn-block" style="font-size: 0.85rem; padding: 0.55rem;">
+                <a href="gate_in.php" class="btn btn-primary btn-block" style="font-size: 0.85rem; padding: 0.55rem;">
                     Akses Gate In →
                 </a>
             </div>
@@ -110,7 +110,7 @@ $flash = get_flash_message();
                         Pencatatan armada pengiriman barang &amp; No. DO yang keluar dari pos gerbang.
                     </p>
                 </div>
-                <a href="logistic.php?tab=gate_out" class="btn btn-primary btn-block" style="font-size: 0.85rem; padding: 0.55rem;">
+                <a href="gate_out.php" class="btn btn-primary btn-block" style="font-size: 0.85rem; padding: 0.55rem;">
                     Akses Gate Out →
                 </a>
             </div>
@@ -126,7 +126,7 @@ $flash = get_flash_message();
                         Pencatatan khusus armada kontainer logistik ekspor &amp; MOPOR.
                     </p>
                 </div>
-                <a href="logistic.php?tab=export_nex" class="btn btn-primary btn-block" style="font-size: 0.85rem; padding: 0.55rem;">
+                <a href="export_nex.php" class="btn btn-primary btn-block" style="font-size: 0.85rem; padding: 0.55rem;">
                     Akses Export NEX →
                 </a>
             </div>

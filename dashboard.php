@@ -263,7 +263,7 @@ include __DIR__ . '/includes/header.php';
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">1. Buku Masuk (Gate In)</h3>
-            <a href="logistic.php?tab=gate_in" class="btn btn-sm btn-outline">Lihat →</a>
+            <a href="gate_in.php" class="btn btn-sm btn-outline">Lihat →</a>
         </div>
         <div class="table-responsive">
             <table class="table">
@@ -297,7 +297,7 @@ include __DIR__ . '/includes/header.php';
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">2. Buku Keluar (Gate Out)</h3>
-            <a href="logistic.php?tab=gate_out" class="btn btn-sm btn-outline">Lihat →</a>
+            <a href="gate_out.php" class="btn btn-sm btn-outline">Lihat →</a>
         </div>
         <div class="table-responsive">
             <table class="table">
@@ -331,7 +331,7 @@ include __DIR__ . '/includes/header.php';
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">3. Export NEX / MOPOR</h3>
-            <a href="logistic.php?tab=export_nex" class="btn btn-sm btn-outline">Lihat →</a>
+            <a href="export_nex.php" class="btn btn-sm btn-outline">Lihat →</a>
         </div>
         <div class="table-responsive">
             <table class="table">
