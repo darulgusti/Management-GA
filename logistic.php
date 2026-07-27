@@ -648,45 +648,45 @@ include __DIR__ . '/includes/header.php';
                     <div>
                         <div class="form-group">
                             <label class="form-label" style="font-weight: 600;">Nomor MOPOR *</label>
-                            <input type="text" name="mopor_number" required class="form-control" placeholder="Masukkan Nomor MOPOR...">
+                            <input type="text" name="mopor_number" required class="form-control" placeholder="Masukkan MOPOR...">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Nomor Delivery Order (DO)</label>
+                            <label class="form-label" style="font-weight: 600;">Nomor DO</label>
                             <input type="text" name="do_number" class="form-control" placeholder="Nomor DO...">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Nomor Kontainer *</label>
-                            <input type="text" name="container_number" required class="form-control" placeholder="Nomor Kontainer...">
+                            <label class="form-label" style="font-weight: 600;">Segel *</label>
+                            <input type="text" name="seal_number" required class="form-control" placeholder="Nomor Segel (Seal)...">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Nomor Segel (Seal) *</label>
-                            <input type="text" name="seal_number" required class="form-control" placeholder="Nomor Segel...">
+                            <label class="form-label" style="font-weight: 600;">Tonase (Ton)</label>
+                            <input type="number" step="0.01" name="tonnage" class="form-control" placeholder="Jumlah Tonase (Ton)...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Transportir</label>
+                            <input type="text" name="transportir" class="form-control" placeholder="Transportir / Ekspedisi...">
                         </div>
                     </div>
 
                     <!-- RIGHT COLUMN -->
                     <div>
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Nama Sopir *</label>
+                            <label class="form-label" style="font-weight: 600;">Sopir *</label>
                             <input type="text" name="driver_name" required class="form-control" placeholder="Nama sopir...">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Pelabuhan / Negara Tujuan</label>
-                            <input type="text" name="destination" class="form-control" placeholder="Tujuan Ekspor...">
+                            <label class="form-label" style="font-weight: 600;">Kontainer *</label>
+                            <input type="text" name="container_number" required class="form-control" placeholder="Nomor Kontainer...">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Total Tonase (Ton)</label>
-                            <input type="number" step="0.01" name="tonnage" class="form-control" placeholder="Jumlah Tonase...">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Transportir / Ekspedisi</label>
-                            <input type="text" name="transportir" class="form-control" placeholder="Nama Transportir...">
+                            <label class="form-label" style="font-weight: 600;">Tujuan</label>
+                            <input type="text" name="destination" class="form-control" placeholder="Pelabuhan / Negara Tujuan...">
                         </div>
                     </div>
 
