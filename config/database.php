@@ -47,3 +47,10 @@ try {
         die("Koneksi Cloud Database Gagal: " . $e->getMessage() . "<br><br><i>Periksa kembali Environment Variables DB_HOST, DB_NAME, DB_USER, DB_PASS di Dashboard Vercel.</i>");
     }
 }
+
+// Auto-migration: Pastikan kolom 'category' ada di tabel item_borrowings (untuk Cloud DB / Vercel)
+try {
+    $pdo->exec("ALTER TABLE item_borrowings ADD COLUMN category VARCHAR(50) NOT NULL DEFAULT 'GA' AFTER borrower_name");
+} catch (\Throwable $t) {
+    // Abaikan jika kolom sudah ada
+}
