@@ -251,11 +251,12 @@ include __DIR__ . '/includes/header.php';
     </div>
 </div>
 
-<!-- SECTION 2: MONITORING LOGISTIK (3 TABEL DITAMPILKAN TERPISAH) -->
-<div style="margin-bottom: 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem;">
+<!-- SECTION 2: MONITORING POS 4 -->
+<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
     <h2 style="font-size: 1.2rem; font-weight: 700; color: var(--primary); margin: 0;">
-        🚛 Monitoring Lalu Lintas Pos 4
+        Monitoring Pos 4
     </h2>
+    <a href="logistic.php" class="btn btn-sm btn-outline">Lihat Semua →</a>
 </div>
 
 <div class="grid-3">
@@ -263,7 +264,6 @@ include __DIR__ . '/includes/header.php';
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">1. Buku Masuk (Gate In)</h3>
-            <a href="gate_in.php" class="btn btn-sm btn-outline">Lihat →</a>
         </div>
         <div class="table-responsive">
             <table class="table">
@@ -297,7 +297,6 @@ include __DIR__ . '/includes/header.php';
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">2. Buku Keluar (Gate Out)</h3>
-            <a href="gate_out.php" class="btn btn-sm btn-outline">Lihat →</a>
         </div>
         <div class="table-responsive">
             <table class="table">
@@ -331,7 +330,6 @@ include __DIR__ . '/includes/header.php';
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">3. Export NEX / NOPOR</h3>
-            <a href="export_nex.php" class="btn btn-sm btn-outline">Lihat →</a>
         </div>
         <div class="table-responsive">
             <table class="table">
