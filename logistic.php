@@ -219,14 +219,7 @@ $exports = $stmt->fetchAll();
 include __DIR__ . '/includes/header.php';
 ?>
 
-<?php if (!$can_input): ?>
-    <div class="alert alert-info" style="margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between;">
-        <div>
-            <strong>👁️ Mode Manager (View-Only / Hanya Lihat Data):</strong> Anda sedang melihat data pemantauan logistik. Penginputan data hanya dapat dilakukan oleh akun Staf Secom.
-        </div>
-        <span class="badge badge-secondary">Read Only</span>
-    </div>
-<?php endif; ?>
+
 
 <!-- TAB FILTER SWITCHER -->
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
