@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
         <div>
-            <a href="login.php" class="btn btn-sm btn-primary">Login Petugas / Manager</a>
+            <a href="login.php" class="btn btn-sm btn-primary">Login</a>
         </div>
     </header>
 
