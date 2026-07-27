@@ -61,19 +61,28 @@ $stmt = $pdo->prepare("SELECT borrower_name, department, item_name, borrow_time,
 $stmt->execute();
 $recent_borrowings = $stmt->fetchAll();
 
-// Combined Recent Logistics (Limit 6 - Consolidating Gate In, Gate Out, and Export NEX into 1 Unified Table)
-$recent_logistics = [];
+// Recent Logistic Gate Ins (Limit 5)
+$recent_gate_ins = [];
 try {
-    $sql = "
-        SELECT 'Gate In' AS category, nopol AS identifier, driver_name, entry_time AS log_time FROM logistic_gate_ins
-        UNION ALL
-        SELECT 'Gate Out' AS category, nopol AS identifier, driver_name, exit_time AS log_time FROM logistic_gate_outs
-        UNION ALL
-        SELECT 'Export NEX' AS category, mopor_number AS identifier, driver_name, exit_time AS log_time FROM logistic_export_nex_mopors
-        ORDER BY log_time DESC LIMIT 6
-    ";
-    $stmt = $pdo->query($sql);
-    $recent_logistics = $stmt->fetchAll();
+    $stmt = $pdo->prepare("SELECT nopol, driver_name, transportir, destination, entry_time FROM logistic_gate_ins ORDER BY entry_time DESC LIMIT 5");
+    $stmt->execute();
+    $recent_gate_ins = $stmt->fetchAll();
+} catch (Exception $e) {}
+
+// Recent Logistic Gate Outs (Limit 5)
+$recent_gate_outs = [];
+try {
+    $stmt = $pdo->prepare("SELECT nopol, driver_name, do_number, destination, exit_time FROM logistic_gate_outs ORDER BY exit_time DESC LIMIT 5");
+    $stmt->execute();
+    $recent_gate_outs = $stmt->fetchAll();
+} catch (Exception $e) {}
+
+// Recent Logistic Export NEX/MOPOR (Limit 5)
+$recent_exports = [];
+try {
+    $stmt = $pdo->prepare("SELECT mopor_number, driver_name, container_number, exit_time FROM logistic_export_nex_mopors ORDER BY exit_time DESC LIMIT 5");
+    $stmt->execute();
+    $recent_exports = $stmt->fetchAll();
 } catch (Exception $e) {}
 
 include __DIR__ . '/includes/header.php';
@@ -122,7 +131,7 @@ include __DIR__ . '/includes/header.php';
     </div>
 </div>
 
-<!-- Stat Cards Row 2: Monitoring Logistik Pos -->
+<!-- Stat Cards Row 2: Monitoring Logistik Pos (Gate In, Gate Out, Export NEX) -->
 <div class="grid-3" style="margin-bottom: 2rem;">
     <div class="stat-card">
         <div class="stat-icon primary">
@@ -146,7 +155,7 @@ include __DIR__ . '/includes/header.php';
 
     <div class="stat-card">
         <div class="stat-icon success">
-            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"></path></svg>
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 104 0m-4 0a2 2 0 114 0"></path></svg>
         </div>
         <div class="stat-content">
             <div class="stat-value"><?= number_format($count_export_today) ?></div>
@@ -155,33 +164,35 @@ include __DIR__ . '/includes/header.php';
     </div>
 </div>
 
-<!-- Grid 3 Activity Tables (Consolidated Layout) -->
-<div class="grid-3">
+<!-- SECTION 1: OPERASIONAL UMUM (GUEST & BORROWING) -->
+<div class="grid-2" style="margin-bottom: 2rem;">
     <!-- Tabel 1: Recent Guests -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Tamu Terbaru</h3>
-            <a href="guest.php" class="btn btn-sm btn-outline">Lihat →</a>
+            <h3 class="card-title">Buku Tamu (Terbaru)</h3>
+            <a href="guest.php" class="btn btn-sm btn-outline">Lihat Lengkap →</a>
         </div>
         <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
                         <th>Nama</th>
-                        <th>Waktu</th>
+                        <th>Instansi</th>
+                        <th>Waktu Masuk</th>
                         <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (count($recent_guests) === 0): ?>
                         <tr>
-                            <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">Belum ada kunjungan tamu.</td>
+                            <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">Belum ada kunjungan tamu.</td>
                         </tr>
                     <?php else: ?>
                         <?php foreach ($recent_guests as $g): ?>
                             <tr>
                                 <td><strong><?= htmlspecialchars($g['name']) ?></strong></td>
-                                <td><?= date('H:i', strtotime($g['time_in'])) ?></td>
+                                <td><?= htmlspecialchars($g['institution'] ?: '-') ?></td>
+                                <td><?= date('d/m/Y H:i', strtotime($g['time_in'])) ?></td>
                                 <td>
                                     <?php if ($g['time_out']): ?>
                                         <span class="badge badge-secondary">Selesai</span>
@@ -200,8 +211,8 @@ include __DIR__ . '/includes/header.php';
     <!-- Tabel 2: Recent Borrowings -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Peminjaman Terbaru</h3>
-            <a href="borrowing.php" class="btn btn-sm btn-outline">Lihat →</a>
+            <h3 class="card-title">Peminjaman Barang & Kunci (Terbaru)</h3>
+            <a href="borrowing.php" class="btn btn-sm btn-outline">Lihat Lengkap →</a>
         </div>
         <div class="table-responsive">
             <table class="table">
@@ -209,19 +220,21 @@ include __DIR__ . '/includes/header.php';
                     <tr>
                         <th>Peminjam</th>
                         <th>Barang</th>
+                        <th>Waktu Pinjam</th>
                         <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (count($recent_borrowings) === 0): ?>
                         <tr>
-                            <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">Belum ada peminjaman.</td>
+                            <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">Belum ada peminjaman barang.</td>
                         </tr>
                     <?php else: ?>
                         <?php foreach ($recent_borrowings as $b): ?>
                             <tr>
                                 <td><strong><?= htmlspecialchars($b['borrower_name']) ?></strong></td>
                                 <td><?= htmlspecialchars($b['item_name']) ?></td>
+                                <td><?= date('H:i', strtotime($b['borrow_time'])) ?></td>
                                 <td>
                                     <?php if ($b['status'] === 'borrowed'): ?>
                                         <span class="badge badge-warning">Dipinjam</span>
@@ -236,41 +249,111 @@ include __DIR__ . '/includes/header.php';
             </table>
         </div>
     </div>
+</div>
 
-    <!-- Tabel 3: Consolidated Logistic Activity Monitoring Table (1 Tabel Utuh) -->
+<!-- SECTION 2: MONITORING LOGISTIK (3 TABEL DITAMPILKAN TERPISAH) -->
+<div style="margin-bottom: 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+    <h2 style="font-size: 1.2rem; font-weight: 700; color: var(--primary); margin: 0;">
+        🚛 Monitoring Lalu Lintas Logistik (3 Fitur Dihadirkan Semua)
+    </h2>
+    <a href="logistic.php" class="btn btn-sm btn-primary">Buka Logistik →</a>
+</div>
+
+<div class="grid-3">
+    <!-- Tabel 1: Gate In -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Monitoring Logistik (1 Tabel)</h3>
-            <a href="logistic.php" class="btn btn-sm btn-outline">Lihat Semua →</a>
+            <h3 class="card-title">1. Buku Masuk (Gate In)</h3>
+            <a href="logistic.php?tab=gate_in" class="btn btn-sm btn-outline">Lihat →</a>
         </div>
         <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Layanan</th>
-                        <th>Nopol / MOPOR</th>
+                        <th>Nopol</th>
+                        <th>Sopir</th>
+                        <th>Waktu Masuk</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (count($recent_gate_ins) === 0): ?>
+                        <tr>
+                            <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">Belum ada armada masuk.</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($recent_gate_ins as $gi): ?>
+                            <tr>
+                                <td><code><strong><?= htmlspecialchars($gi['nopol']) ?></strong></code></td>
+                                <td><?= htmlspecialchars($gi['driver_name']) ?></td>
+                                <td><?= date('H:i', strtotime($gi['entry_time'])) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Tabel 2: Gate Out -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">2. Buku Keluar (Gate Out)</h3>
+            <a href="logistic.php?tab=gate_out" class="btn btn-sm btn-outline">Lihat →</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nopol</th>
+                        <th>No. DO</th>
+                        <th>Waktu Keluar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (count($recent_gate_outs) === 0): ?>
+                        <tr>
+                            <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">Belum ada armada keluar.</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($recent_gate_outs as $go): ?>
+                            <tr>
+                                <td><code><strong><?= htmlspecialchars($go['nopol']) ?></strong></code></td>
+                                <td><code><?= htmlspecialchars($go['do_number']) ?></code></td>
+                                <td><?= date('H:i', strtotime($go['exit_time'])) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Tabel 3: Export NEX / MOPOR -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">3. Export NEX / MOPOR</h3>
+            <a href="logistic.php?tab=export_nex" class="btn btn-sm btn-outline">Lihat →</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>No. MOPOR</th>
+                        <th>No. Kontainer</th>
                         <th>Waktu</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if (count($recent_logistics) === 0): ?>
+                    <?php if (count($recent_exports) === 0): ?>
                         <tr>
-                            <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">Belum ada aktivitas logistik.</td>
+                            <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">Belum ada kontainer ekspor.</td>
                         </tr>
                     <?php else: ?>
-                        <?php foreach ($recent_logistics as $l): ?>
+                        <?php foreach ($recent_exports as $ex): ?>
                             <tr>
-                                <td>
-                                    <?php if ($l['category'] === 'Gate In'): ?>
-                                        <span class="badge badge-primary">Gate In</span>
-                                    <?php elseif ($l['category'] === 'Gate Out'): ?>
-                                        <span class="badge badge-info">Gate Out</span>
-                                    <?php else: ?>
-                                        <span class="badge badge-success">Export NEX</span>
-                                    <?php endif; ?>
-                                </td>
-                                <td><code><strong><?= htmlspecialchars($l['identifier']) ?></strong></code></td>
-                                <td><?= date('H:i', strtotime($l['log_time'])) ?></td>
+                                <td><code><strong><?= htmlspecialchars($ex['mopor_number']) ?></strong></code></td>
+                                <td><code><?= htmlspecialchars($ex['container_number']) ?></code></td>
+                                <td><?= date('H:i', strtotime($ex['exit_time'])) ?></td>
                             </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>
