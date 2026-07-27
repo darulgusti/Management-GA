@@ -203,6 +203,8 @@ $stmt = $pdo->prepare($data_query_exp);
 $stmt->execute($params_exp);
 $exports = $stmt->fetchAll();
 
+$active_tab = $_GET['tab'] ?? 'all';
+
 include __DIR__ . '/includes/header.php';
 ?>
 
@@ -215,14 +217,14 @@ include __DIR__ . '/includes/header.php';
     </div>
 <?php endif; ?>
 
-<!-- HEADER CARDS WITH ACTIONS -->
+<!-- HEADER CARDS WITH TAB NAVIGATION -->
 <div class="card" style="border-top: 4px solid var(--primary);">
     <div class="card-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
         <div>
             <h2 class="card-title" style="color: var(--primary);">
                 🚚 Logistic Gate Pass System
             </h2>
-            <small style="color: var(--text-muted); display: block; margin-top: 0.2rem;">Pencatatan &amp; Pemantauan Lalu Lintas Kendaraan Logistik (Pos Gerbang)</small>
+            <small style="color: var(--text-muted); display: block; margin-top: 0.2rem;">Pencatatan &amp; Pemantauan Lalu Lintas Kendaraan Logistik Pos Gerbang</small>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
             <button type="button" onclick="window.print()" class="btn btn-outline btn-sm">
@@ -230,16 +232,39 @@ include __DIR__ . '/includes/header.php';
                 Cetak / Print
             </button>
             <?php if ($can_input): ?>
-                <button type="button" onclick="openModal('modalGateIn')" class="btn btn-primary btn-sm">+ Gate In (Masuk)</button>
-                <button type="button" onclick="openModal('modalGateOut')" class="btn btn-primary btn-sm">+ Gate Out (Keluar)</button>
-                <button type="button" onclick="openModal('modalExport')" class="btn btn-primary btn-sm">+ Export NEX/MOPOR</button>
+                <?php if ($active_tab === 'all' || $active_tab === 'gate_in'): ?>
+                    <button type="button" onclick="openModal('modalGateIn')" class="btn btn-primary btn-sm">+ Gate In (Masuk)</button>
+                <?php endif; ?>
+                <?php if ($active_tab === 'all' || $active_tab === 'gate_out'): ?>
+                    <button type="button" onclick="openModal('modalGateOut')" class="btn btn-primary btn-sm">+ Gate Out (Keluar)</button>
+                <?php endif; ?>
+                <?php if ($active_tab === 'all' || $active_tab === 'export_nex'): ?>
+                    <button type="button" onclick="openModal('modalExport')" class="btn btn-primary btn-sm">+ Export NEX/MOPOR</button>
+                <?php endif; ?>
             <?php endif; ?>
         </div>
     </div>
+
+    <!-- TAB FILTER SWITCHER -->
+    <div style="display: flex; gap: 0.5rem; margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 0.75rem; flex-wrap: wrap;">
+        <a href="logistic.php?tab=all" class="btn btn-sm <?= $active_tab === 'all' ? 'btn-primary' : 'btn-outline' ?>">
+            📋 Semua Logistik
+        </a>
+        <a href="logistic.php?tab=gate_in" class="btn btn-sm <?= $active_tab === 'gate_in' ? 'btn-primary' : 'btn-outline' ?>">
+            📥 Buku Masuk (Gate In)
+        </a>
+        <a href="logistic.php?tab=gate_out" class="btn btn-sm <?= $active_tab === 'gate_out' ? 'btn-primary' : 'btn-outline' ?>">
+            📤 Buku Keluar (Gate Out)
+        </a>
+        <a href="logistic.php?tab=export_nex" class="btn btn-sm <?= $active_tab === 'export_nex' ? 'btn-primary' : 'btn-outline' ?>">
+            🚢 Export NEX / MOPOR
+        </a>
+    </div>
 </div>
 
+<?php if ($active_tab === 'all' || $active_tab === 'gate_in'): ?>
 <!-- SECTION 1: BUKU MASUK (GATE IN) -->
-<div class="card" style="margin-top: 1.5rem;">
+<div id="sec-gate-in" class="card" style="margin-top: 1.5rem;">
     <div class="card-header">
         <div>
             <h3 class="card-title">
@@ -252,12 +277,13 @@ include __DIR__ . '/includes/header.php';
 
     <!-- Search Bar Gate In -->
     <form method="GET" action="logistic.php" class="search-form-bar">
+        <input type="hidden" name="tab" value="<?= htmlspecialchars($active_tab) ?>">
         <div style="flex: 1; min-width: 220px;">
             <input type="text" name="search_in" class="form-control" placeholder="Cari Nopol, Sopir, Transportir, Tujuan..." value="<?= htmlspecialchars($search_in) ?>">
         </div>
         <button type="submit" class="btn btn-secondary">Cari Gate In</button>
         <?php if (!empty($search_in)): ?>
-            <a href="logistic.php" class="btn btn-outline">Reset</a>
+            <a href="logistic.php?tab=<?= urlencode($active_tab) ?>" class="btn btn-outline">Reset</a>
         <?php endif; ?>
     </form>
 
@@ -313,11 +339,13 @@ include __DIR__ . '/includes/header.php';
             </tbody>
         </table>
     </div>
-    <?= render_pagination($page_in, $total_in_pages, ['search_in' => $search_in], 'page_in') ?>
+    <?= render_pagination($page_in, $total_in_pages, ['tab' => $active_tab, 'search_in' => $search_in], 'page_in') ?>
 </div>
+<?php endif; ?>
 
+<?php if ($active_tab === 'all' || $active_tab === 'gate_out'): ?>
 <!-- SECTION 2: BUKU KELUAR (GATE OUT) -->
-<div class="card" style="margin-top: 2rem;">
+<div id="sec-gate-out" class="card" style="margin-top: 2rem;">
     <div class="card-header">
         <div>
             <h3 class="card-title">
@@ -330,12 +358,13 @@ include __DIR__ . '/includes/header.php';
 
     <!-- Search Bar Gate Out -->
     <form method="GET" action="logistic.php" class="search-form-bar">
+        <input type="hidden" name="tab" value="<?= htmlspecialchars($active_tab) ?>">
         <div style="flex: 1; min-width: 220px;">
             <input type="text" name="search_out" class="form-control" placeholder="Cari Nopol, Sopir, No. DO, Tujuan, Transportir..." value="<?= htmlspecialchars($search_out) ?>">
         </div>
         <button type="submit" class="btn btn-secondary">Cari Gate Out</button>
         <?php if (!empty($search_out)): ?>
-            <a href="logistic.php" class="btn btn-outline">Reset</a>
+            <a href="logistic.php?tab=<?= urlencode($active_tab) ?>" class="btn btn-outline">Reset</a>
         <?php endif; ?>
     </form>
 
@@ -387,11 +416,13 @@ include __DIR__ . '/includes/header.php';
             </tbody>
         </table>
     </div>
-    <?= render_pagination($page_out, $total_out_pages, ['search_out' => $search_out], 'page_out') ?>
+    <?= render_pagination($page_out, $total_out_pages, ['tab' => $active_tab, 'search_out' => $search_out], 'page_out') ?>
 </div>
+<?php endif; ?>
 
+<?php if ($active_tab === 'all' || $active_tab === 'export_nex'): ?>
 <!-- SECTION 3: EXPORT NEX / MOPOR -->
-<div class="card" style="margin-top: 2rem;">
+<div id="sec-export" class="card" style="margin-top: 2rem;">
     <div class="card-header">
         <div>
             <h3 class="card-title">
@@ -404,12 +435,13 @@ include __DIR__ . '/includes/header.php';
 
     <!-- Search Bar Export -->
     <form method="GET" action="logistic.php" class="search-form-bar">
+        <input type="hidden" name="tab" value="<?= htmlspecialchars($active_tab) ?>">
         <div style="flex: 1; min-width: 220px;">
             <input type="text" name="search_exp" class="form-control" placeholder="Cari No. MOPOR, Sopir, No. Kontainer, No. Segel, No. DO..." value="<?= htmlspecialchars($search_exp) ?>">
         </div>
         <button type="submit" class="btn btn-secondary">Cari Export</button>
         <?php if (!empty($search_exp)): ?>
-            <a href="logistic.php" class="btn btn-outline">Reset</a>
+            <a href="logistic.php?tab=<?= urlencode($active_tab) ?>" class="btn btn-outline">Reset</a>
         <?php endif; ?>
     </form>
 
@@ -465,8 +497,9 @@ include __DIR__ . '/includes/header.php';
             </tbody>
         </table>
     </div>
-    <?= render_pagination($page_exp, $total_exp_pages, ['search_exp' => $search_exp], 'page_exp') ?>
+    <?= render_pagination($page_exp, $total_exp_pages, ['tab' => $active_tab, 'search_exp' => $search_exp], 'page_exp') ?>
 </div>
+<?php endif; ?>
 
 <!-- MODALS UNTUK INPUT DATA (HANYA STAF SECOM) -->
 <?php if ($can_input): ?>
