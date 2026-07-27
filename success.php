@@ -2,8 +2,32 @@
 session_start();
 require_once __DIR__ . '/config/database.php';
 
-$title = trim($_GET['title'] ?? 'Pendaftaran Berhasil!');
-$msg   = trim($_GET['msg'] ?? 'Data Anda telah berhasil dicatat ke dalam sistem GA Management. Terima kasih!');
+$type = trim($_GET['type'] ?? 'guest');
+$messages = [
+    'guest' => [
+        'title' => 'Check-in Tamu Berhasil!',
+        'msg'   => 'Data pendaftaran tamu Anda telah berhasil dicatat ke dalam sistem. Selamat datang!'
+    ],
+    'borrowing' => [
+        'title' => 'Peminjaman Berhasil!',
+        'msg'   => 'Data peminjaman barang / kunci Anda telah berhasil dicatat. Terima kasih!'
+    ],
+    'gate_in' => [
+        'title' => 'Gate In Berhasil!',
+        'msg'   => 'Data kendaraan masuk (Gate In) telah berhasil disimpan ke sistem Pos 4. Terima kasih!'
+    ],
+    'gate_out' => [
+        'title' => 'Gate Out Berhasil!',
+        'msg'   => 'Data kendaraan keluar (Gate Out) telah berhasil disimpan ke sistem Pos 4. Terima kasih!'
+    ],
+    'export' => [
+        'title' => 'Export Berhasil!',
+        'msg'   => 'Data Export NEX / NOPOR telah berhasil disimpan ke sistem Pos 4. Terima kasih!'
+    ],
+];
+
+$title = $_GET['title'] ?? ($messages[$type]['title'] ?? 'Pendaftaran Berhasil!');
+$msg   = $_GET['msg'] ?? ($messages[$type]['msg'] ?? 'Data Anda telah berhasil dicatat ke dalam sistem. Terima kasih!');
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -88,6 +112,10 @@ $msg   = trim($_GET['msg'] ?? 'Data Anda telah berhasil dicatat ke dalam sistem 
         </div>
     </div>
     <script>
+        // Clean URL address bar to remove query parameters
+        if (window.history.replaceState) {
+            window.history.replaceState({}, document.title, "success.php");
+        }
         // Prevent user from pressing Back button to return to the form page
         history.pushState(null, null, location.href);
         window.onpopstate = function () {
