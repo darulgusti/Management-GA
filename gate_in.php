@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sim = isset($_POST['checklist_sim']) ? 1 : 0;
         $stnk = isset($_POST['checklist_stnk']) ? 1 : 0;
         $kir = isset($_POST['checklist_kir']) ? 1 : 0;
-        $entry_time = date('Y-m-d H:i:s');
+        $entry_time = !empty($_POST['entry_time']) ? date('Y-m-d H:i:s', strtotime($_POST['entry_time'])) : date('Y-m-d H:i:s');
 
         if (!empty($nopol) && !empty($driver_name)) {
             $stmt = $pdo->prepare("INSERT INTO logistic_gate_ins (nopol, driver_name, visitor_number, antree_number, transportir, destination, checklist_sim, checklist_stnk, checklist_kir, entry_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -239,6 +239,11 @@ include __DIR__ . '/includes/header.php';
                         <div class="form-group">
                             <label class="form-label" style="font-weight: 600;">Antree Number</label>
                             <input type="text" name="antree_number" class="form-control" placeholder="Nomor Antrian...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Masuk *</label>
+                            <input type="datetime-local" name="entry_time" required class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
                         </div>
                     </div>
 

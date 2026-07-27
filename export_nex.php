@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $destination = trim($_POST['destination'] ?? '');
         $tonnage = floatval($_POST['tonnage'] ?? 0);
         $transportir = trim($_POST['transportir'] ?? '');
-        $exit_time = date('Y-m-d H:i:s');
+        $exit_time = !empty($_POST['exit_time']) ? date('Y-m-d H:i:s', strtotime($_POST['exit_time'])) : date('Y-m-d H:i:s');
 
         if (!empty($mopor_number) && !empty($driver_name) && !empty($container_number)) {
             $stmt = $pdo->prepare("INSERT INTO logistic_export_nex_mopors (mopor_number, driver_name, do_number, container_number, seal_number, destination, tonnage, transportir, exit_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -259,6 +259,11 @@ include __DIR__ . '/includes/header.php';
                         <div class="form-group">
                             <label class="form-label" style="font-weight: 600;">Tujuan</label>
                             <input type="text" name="destination" class="form-control" placeholder="Pelabuhan / Negara Tujuan...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Keluar *</label>
+                            <input type="datetime-local" name="exit_time" required class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
                         </div>
                     </div>
 
