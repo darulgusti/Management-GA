@@ -1,53 +1,118 @@
-# 🇮🇩 GA & Logistic Management System
+# 🏬 General Affair & Logistic Management System (Management-GA)
 
-Platform web terpadu untuk manajemen **General Affairs (GA)** dan **Logistic Gate Pass System** berbasis **Pure PHP** modern. Dirancang untuk mengelola **Buku Tamu Digital**, **Peminjaman Barang & Kunci**, serta **Lalu Lintas Kendaraan & Kontainer Logistik** secara *real-time*, dilengkapi dengan **Tanda Tangan Digital**, **Laporan Excel Multi-Sheet**, **Fitur Cetak/Print Mode**, dan siap di-deploy ke **Vercel** & **TiDB Cloud**.
-
----
-
-## 🌟 Fitur Utama
-
-### 1. 🚚 Logistic Gate Pass System (`logistic.php`)
-- **Buku Masuk (Gate In):** Pencatatan armada masuk (Nopol, Sopir, Transportir, Tujuan Kirim/Export Ajinex/Umbal-umbal/Muat, Checklist SIM/STNK/KIR).
-- **Buku Keluar (Gate Out):** Pencatatan armada keluar non-ekspor (Nopol, Sopir, No. DO, Tujuan, Tonase, Transportir).
-- **Export NEX / MOPOR:** Pencatatan khusus armada kontainer logistik ekspor (No. MOPOR, Sopir, No. DO, No. Kontainer, No. Segel, Tujuan, Tonase).
-- **Hak Akses Khusus:**
-  - **Staf Secom (`secom`):** Memiliki akses Penuh (View & Input/Simpan/Hapus Data).
-  - **Manager (`manager`):** Memiliki akses **Read-Only / Hanya Lihat Data** (Tidak dapat menambah/mengedit/menghapus data logistik).
-
-### 2. 📖 Buku Tamu Digital (`guest.php` & `guest_form.php`)
-- **Formulir Mandiri Tamu:** Tamu mengisi Nama, Instansi, Kategori, Tujuan, Orang Ditemui, No. Kartu Visitor.
-- **Tanda Tangan Digital:** Canvas HTML5 untuk pembubuhan TTD digital.
-- **Monitoring Tamu Aktif & Check-out:** Staf Secom mengelola tamu aktif di lokasi dan proses check-out.
-
-### 3. 🔑 Peminjaman Barang & Kunci (`borrowing.php` & `borrowing_form.php`)
-- **Peminjaman Aset GA:** Pencatatan peminjam, departemen, barang/kunci, kondisi awal & kondisi kembali.
-- **Monitoring Peminjaman & Pengembalian:** Pantau status barang yang sedang dipinjam & proses pengembalian.
-
-### 4. 📊 Dashboard & Rekap Laporan GA (`dashboard.php` & `report.php`)
-- **Dashboard Real-Time:** Monitoring total tamu, peminjaman, dan armada logistik masuk/keluar harian.
-- **Rekap Laporan GA:** Filter tanggal & kategori (Semua, Buku Tamu, Peminjaman, Gate In, Gate Out, Export NEX).
-- **Ekspor Excel (.xls):** Ekspor multi-worksheet format Excel siap olah.
-- **Fitur Cetak / Print Mode (A4 Landscape):** Cetak laporan rapi bebas elemen UI/tombol web.
+A comprehensive, web-based management system designed for operational General Affairs (GA) and Security/Logistic teams. Built with Native PHP, PDO MySQL, and Vanilla CSS/JS.
 
 ---
 
-## 🛠️ Teknologi yang Digunakan
+## 📌 Deskripsi Sistem
 
-- **Backend:** Pure PHP (PHP 7.4 / 8.x)
-- **Database:** MySQL / MariaDB / TiDB Cloud (MySQL Compatible)
-- **Frontend:** HTML5, Vanilla CSS3 (Custom Design System Merah Putih 🇮🇩), Vanilla JavaScript
-- **Deployment:** Vercel Serverless (`vercel-php`) & TiDB Cloud SSL
+**Management-GA** menyatukan seluruh operasional pencatatan pos keamanan, penerimaan tamu, peminjaman aset/kunci, serta manajemen lalu lintas armada logistik (*Gate In*, *Gate Out*, dan *Export NEX/MOPOR*) ke dalam satu platform terpusat yang cepat, responsif, dan aman.
+
+Sistem ini mendukung **Role-Based Access Control (RBAC)**:
+- 🛡️ **Staf Secom / Keamanan:** Memiliki hak akses penuh untuk melakukan penginputan, pengeditan, serta penghapusan data operasional harian.
+- 👁️ **Manager:** Memiliki hak akses *Read-Only* (hanya melihat data), melihat tabel pemantauan real-time, rekap statistik, serta melakukan export laporan ke Excel.
 
 ---
 
-## 🔑 Akun Default (Seeder)
+## ✨ Fitur Utama & Modul
 
-| Peran (Role) | Email | Password | Akses Logistik |
+### 1. 📊 Dashboard Utama (`dashboard.php`)
+- Ringkasan kartu statistik real-time (Tamu Aktif, Peminjaman Barang, Armada Masuk, Armada Keluar, Kontainer Ekspor).
+- Tabel monitoring cepat untuk aktivitas transaksi terkini.
+- Akses navigasi langsung ke setiap modul operasional.
+
+### 2. 👥 Buku Tamu Digital (`guest.php`, `guest_form.php`)
+- Formulir pendaftaran tamu digital interaktif.
+- Fitur **Tanda Tangan Digital (Digital Signature Canvas)**.
+- Pencatatan Kategori Tamu, Nomor Kartu Visitor, Tujuan, dan Orang yang Ditemui.
+- Pemisahan tabel **Tamu Masih di Lokasi (Aktif)** dan **Riwayat Tamu Selesai**.
+- Export data tamu ke format Excel (`export_guest.php`).
+
+### 3. 🔑 Peminjaman Barang & Kunci (`borrowing.php`, `borrowing_form.php`)
+- Pencatatan peminjaman barang inventaris kantor & kunci ruangan.
+- Pelacakan kondisi barang (Baik / Rusak) serta status peminjaman (*Dipinjam* vs *Dikembalikan*).
+- Pemisahan tabel **Peminjaman Aktif** dan **Riwayat Peminjaman Selesai**.
+- Export data peminjaman ke format Excel (`export_borrowing.php`).
+
+### 4. 📥 Buku Masuk Kendaraan - Gate In (`gate_in.php`)
+- Pencatatan armada masuk pos gerbang (Nopol, Nama Sopir, Visitor Card Number, Antree Number, Transportir, Tujuan).
+- Checklist kelengkapan berkas driver (SIM, STNK, KIR).
+- Form input 2-kolom interaktif dengan pemilih tanggal & waktu (*datetime picker*).
+
+### 5. 📤 Buku Keluar Kendaraan - Gate Out (`gate_out.php`)
+- Pencatatan kendaraan keluar non-ekspor.
+- Input Nomor Delivery Order (DO), Tujuan Pengiriman, Tonase (Ton), dan Nama Transportir.
+- Form input 2-kolom interaktif dengan pemilih tanggal & waktu (*datetime picker*).
+
+### 6. 🚢 Export NEX / MOPOR (`export_nex.php`)
+- Pencatatan khusus armada kontainer ekspor & MOPOR.
+- Input Nomor MOPOR, Nama Sopir, Nomor DO, Nomor Kontainer, Nomor Segel (Seal), Pelabuhan/Negara Tujuan, Tonase, dan Transportir.
+- Form input 2-kolom interaktif dengan pemilih tanggal & waktu (*datetime picker*).
+
+### 7. 📑 Rekap Laporan GA & Logistik (`report.php`, `export_report.php`)
+- Penarikan laporan gabungan dengan filter rentang tanggal (Tanggal Mulai s/d Tanggal Selesai) dan pilihan modul.
+- Fitur cetak (*print*) dan **Export Laporan ke Excel Ready** secara komprehensif.
+
+### 8. 📦 Arsip Data (`archives/`)
+- Manajemen dan pemantauan arsip dokumen serta data lama sistem General Affair.
+
+---
+
+## 🛠️ Teknologi & Arsitektur
+
+- **Language:** PHP 7.4+ (Pure Native, No Heavy Framework Dependency)
+- **Database:** MySQL / MariaDB (Driver PDO with Prepared Statements)
+- **Styling:** Modern Vanilla CSS (Design Tokens, Glassmorphism, CSS Grid & Flexbox, Responsive Mobile & Desktop Layout)
+- **Interactive UI:** Vanilla JavaScript & SignaturePad
+- **Deployment Ready:** Compatible with Laragon, XAMPP, Apache/Nginx, Vercel, and Aiven Cloud Database.
+
+---
+
+## 🗄️ Struktur Database (`database.sql`)
+
+Tabel utama yang digunakan oleh sistem:
+1. `users` — Data akun login pengguna (`username`, `password`, `name`, `role`).
+2. `guest_logs` — Transaksi pencatatan tamu digital & stempel waktu.
+3. `borrowing_logs` — Transaksi peminjaman barang inventaris & kunci.
+4. `logistic_gate_ins` — Transaksi armada masuk gerbang (*Gate In*).
+5. `logistic_gate_outs` — Transaksi armada keluar gerbang (*Gate Out*).
+6. `logistic_export_nex_mopors` — Transaksi kontainer ekspor (*Export NEX/MOPOR*).
+
+---
+
+## 🚀 Panduan Instalasi Lokal
+
+1. **Clone / Copy Repositori**
+   Simpan folder project ke direktori server lokal (misalnya `C:\laragon\www\management-GA`).
+
+2. **Import Database**
+   - Buka phpMyAdmin / HeidiSQL.
+   - Buat database baru dengan nama `management_ga`.
+   - Import file [`database.sql`](file:///c:/laragon/www/management-GA/database.sql) ke database tersebut.
+
+3. **Konfigurasi Koneksi Database**
+   Sesuaikan kredensial database di [`config/database.php`](file:///c:/laragon/www/management-GA/config/database.php):
+   ```php
+   define('DB_HOST', 'localhost');
+   define('DB_USER', 'root');
+   define('DB_PASS', '');
+   define('DB_NAME', 'management_ga');
+   ```
+
+4. **Akses Aplikasi**
+   Buka browser dan akses:
+   `http://localhost/management-GA/login.php`
+
+---
+
+## 🔒 Akun Login Default
+
+| Role | Username | Password | Hak Akses |
 | :--- | :--- | :--- | :--- |
-| **Staf Secom** | `secom@ga.com` | `secom123` | **Full Access** (Bisa Input, Edit, Hapus Data Logistik & Operasional) |
-| **Manager** | `admin@ga.com` | `admin123` | **Read-Only** (Hanya Bisa Melihat Tabel Data Logistik, Full GA, User & Archive) |
+| **Staf Secom** | `secom` | `secom123` | Full Access (Input, Edit, Hapus Data) |
+| **Manager** | `manager` | `manager123` | View Only (Monitoring Dashboard & Export Laporan) |
 
 ---
 
-## ⚠️ Catatan Penting
-Perubahan kode saat ini **belum di-push ke GitHub** sesuai instruksi.
+## 📄 Lisensi & Hak Cipta
+© 2026 Management-GA System. Hak cipta dilindungi undang-undang.
