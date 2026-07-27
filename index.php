@@ -31,7 +31,7 @@ $flash = get_flash_message();
             </div>
         </div>
         <div>
-            <a href="login.php" class="btn btn-sm" style="color: var(--primary); border: 1px solid var(--primary); background: transparent;">Login</a>
+            <a href="login.php" class="btn btn-sm btn-primary">Login</a>
         </div>
     </header>
 

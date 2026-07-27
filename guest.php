@@ -152,11 +152,11 @@ include __DIR__ . '/includes/header.php';
     </div>
 
     <!-- Search Bar khusus Riwayat -->
-    <form method="GET" action="guest.php" class="search-form-bar">
+    <form method="GET" action="guest.php" style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; padding: 0 1.5rem;">
         <div style="flex: 1; min-width: 220px;">
             <input type="text" name="search" class="form-control" placeholder="Cari nama, instansi, atau kartu di riwayat..." value="<?= htmlspecialchars($search) ?>">
         </div>
-        <button type="submit" class="btn btn-secondary">Cari Riwayat</button>
+        <button type="submit" class="btn btn-secondary">Cari</button>
         <?php if (!empty($search)): ?>
             <a href="guest.php" class="btn btn-outline">Reset</a>
         <?php endif; ?>

@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
         <div>
-            <a href="login.php" class="btn btn-sm" style="color: var(--primary); border: 1px solid var(--primary); background: transparent;">Login Petugas / Manager</a>
+            <a href="login.php" class="btn btn-sm btn-primary">Login Petugas / Manager</a>
         </div>
     </header>
 

@@ -25,30 +25,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $logged_user['role'] === 'secom') {
     exit();
 }
 
+$active_tab = $_GET['tab'] ?? 'all';
+$category_filter_sql = "";
+$category_filter_params = [];
+if ($active_tab === 'ga') {
+    $category_filter_sql = " AND category = 'GA'";
+} elseif ($active_tab === 'secom') {
+    $category_filter_sql = " AND category = 'SECOM'";
+}
+
 $per_page = 5;
 
 // 1. QUERY TABEL ATAS: Barang Sedang Dipinjam (Aktif) dengan Pagination 5 Data
 $active_page = max(1, intval($_GET['active_page'] ?? 1));
-$stmt = $pdo->query("SELECT COUNT(*) FROM item_borrowings WHERE status = 'borrowed'");
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM item_borrowings WHERE status = 'borrowed' $category_filter_sql");
+$stmt->execute($category_filter_params);
 $total_active_records = $stmt->fetchColumn();
 $total_active_pages = ceil($total_active_records / $per_page);
 $active_offset = ($active_page - 1) * $per_page;
 
-$stmt = $pdo->prepare("SELECT id, borrower_name, department, item_name, item_code, quantity, borrow_time, return_time, initial_condition, return_condition, signature, status FROM item_borrowings WHERE status = 'borrowed' ORDER BY borrow_time DESC LIMIT $per_page OFFSET $active_offset");
-$stmt->execute();
+$stmt = $pdo->prepare("SELECT id, borrower_name, category, department, item_name, item_code, quantity, borrow_time, return_time, initial_condition, return_condition, signature, status FROM item_borrowings WHERE status = 'borrowed' $category_filter_sql ORDER BY borrow_time DESC LIMIT $per_page OFFSET $active_offset");
+$stmt->execute($category_filter_params);
 $active_borrowings = $stmt->fetchAll();
 
 // 2. QUERY TABEL BAWAH: Riwayat Peminjaman (Sudah Dikembalikan) dengan Pagination 5 Data
 $search = trim($_GET['search'] ?? '');
 $history_page = max(1, intval($_GET['history_page'] ?? 1));
 
-$count_query = "SELECT COUNT(*) FROM item_borrowings WHERE status = 'returned'";
-$params = [];
+$count_query = "SELECT COUNT(*) FROM item_borrowings WHERE status = 'returned' $category_filter_sql";
+$params = $category_filter_params;
 
 if (!empty($search)) {
     $count_query .= " AND (borrower_name LIKE ? OR department LIKE ? OR item_name LIKE ? OR item_code LIKE ?)";
     $searchTerm = "%$search%";
-    $params = [$searchTerm, $searchTerm, $searchTerm, $searchTerm];
+    array_push($params, $searchTerm, $searchTerm, $searchTerm, $searchTerm);
 }
 
 $stmt = $pdo->prepare($count_query);
@@ -57,13 +67,31 @@ $total_history_records = $stmt->fetchColumn();
 $total_history_pages = ceil($total_history_records / $per_page);
 $history_offset = ($history_page - 1) * $per_page;
 
-$data_query = str_replace("SELECT COUNT(*)", "SELECT id, borrower_name, department, item_name, item_code, quantity, borrow_time, return_time, initial_condition, return_condition, signature, status", $count_query) . " ORDER BY return_time DESC LIMIT $per_page OFFSET $history_offset";
+$data_query = str_replace("SELECT COUNT(*)", "SELECT id, borrower_name, category, department, item_name, item_code, quantity, borrow_time, return_time, initial_condition, return_condition, signature, status", $count_query) . " ORDER BY return_time DESC LIMIT $per_page OFFSET $history_offset";
 $stmt = $pdo->prepare($data_query);
 $stmt->execute($params);
 $history_borrowings = $stmt->fetchAll();
 
 include __DIR__ . '/includes/header.php';
 ?>
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <a href="borrowing.php?tab=all" class="btn btn-sm <?= $active_tab === 'all' ? 'btn-primary' : 'btn-outline' ?>">
+            📊 Semua Peminjaman
+        </a>
+        <a href="borrowing.php?tab=ga" class="btn btn-sm <?= $active_tab === 'ga' ? 'btn-primary' : 'btn-outline' ?>">
+            🏢 Inventaris GA
+        </a>
+        <a href="borrowing.php?tab=secom" class="btn btn-sm <?= $active_tab === 'secom' ? 'btn-primary' : 'btn-outline' ?>">
+            🛡️ Inventaris SECOM
+        </a>
+    </div>
+    <a href="borrowing_form.php" class="btn btn-primary" style="display: flex; align-items: center; gap: 0.5rem;">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        Input Peminjaman
+    </a>
+</div>
 
 <!-- TABEL 1: BARANG SEDANG DIPINJAM (AKTIF) -->
 <div class="card" style="border-top: 4px solid var(--warning);">
@@ -148,13 +176,14 @@ include __DIR__ . '/includes/header.php';
     </div>
 
     <!-- Search Bar khusus Riwayat -->
-    <form method="GET" action="borrowing.php" class="search-form-bar">
+    <form method="GET" action="borrowing.php" style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap;">
+        <input type="hidden" name="tab" value="<?= htmlspecialchars($active_tab) ?>">
         <div style="flex: 1; min-width: 220px;">
             <input type="text" name="search" class="form-control" placeholder="Cari nama, barang, atau dept di riwayat..." value="<?= htmlspecialchars($search) ?>">
         </div>
-        <button type="submit" class="btn btn-secondary">Cari Riwayat</button>
+        <button type="submit" class="btn btn-secondary">Cari</button>
         <?php if (!empty($search)): ?>
-            <a href="borrowing.php" class="btn btn-outline">Reset Pencarian</a>
+            <a href="borrowing.php?tab=<?= htmlspecialchars($active_tab) ?>" class="btn btn-outline">Reset</a>
         <?php endif; ?>
     </form>
 
@@ -197,7 +226,7 @@ include __DIR__ . '/includes/header.php';
                                 <div style="font-size: 0.8rem;"><strong>Awal:</strong> <?= htmlspecialchars($b['initial_condition']) ?></div>
                                 <div style="font-size: 0.75rem; color: var(--text-muted);"><strong>Kembali:</strong> <?= htmlspecialchars($b['return_condition'] ?: '-') ?></div>
                             </td>
-                            <td class="col-nowrap"><span class="badge badge-success">Dikembalikan</span></td>
+                            <td class="col-nowrap"><span class="badge badge-success">Sudah Dikembalikan</span></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -206,7 +235,7 @@ include __DIR__ . '/includes/header.php';
     </div>
 
     <!-- Pagination Tabel Riwayat Peminjaman (5 Data Per Halaman) -->
-    <?= render_pagination($history_page, $total_history_pages, ['search' => $search], 'history_page') ?>
+    <?= render_pagination($history_page, $total_history_pages, ['search' => $search, 'tab' => $active_tab], 'history_page') ?>
 </div>
 
 <?php if ($logged_user['role'] === 'secom'): ?>

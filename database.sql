@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS `guests` (
 CREATE TABLE IF NOT EXISTS `item_borrowings` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `borrower_name` VARCHAR(255) NOT NULL,
+  `category` VARCHAR(50) NOT NULL DEFAULT 'GA',
   `department` VARCHAR(255) NOT NULL,
   `item_name` VARCHAR(255) NOT NULL,
   `item_code` VARCHAR(255) NULL,

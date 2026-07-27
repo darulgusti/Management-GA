@@ -11,6 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $item_name = trim($_POST['item_name'] ?? '');
     $item_code = trim($_POST['item_code'] ?? '');
     $quantity = intval($_POST['quantity'] ?? 1);
+    $category = trim($_POST['category'] ?? 'GA');
     $initial_condition = trim($_POST['initial_condition'] ?? 'Baik');
     $signature = $_POST['signature'] ?? '';
 
@@ -19,8 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         try {
             $now = date('Y-m-d H:i:s');
-            $stmt = $pdo->prepare("INSERT INTO item_borrowings (borrower_name, department, item_name, item_code, quantity, borrow_time, initial_condition, signature, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'borrowed')");
-            $stmt->execute([$borrower_name, $department, $item_name, $item_code, $quantity, $now, $initial_condition, $signature]);
+            $stmt = $pdo->prepare("INSERT INTO item_borrowings (borrower_name, category, department, item_name, item_code, quantity, borrow_time, initial_condition, signature, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'borrowed')");
+            $stmt->execute([$borrower_name, $category, $department, $item_name, $item_code, $quantity, $now, $initial_condition, $signature]);
             
             set_flash_message('success', 'Peminjaman barang/kunci berhasil dicatat!');
             header("Location: index.php");
@@ -50,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
         <div>
-            <a href="login.php" class="btn btn-sm" style="color: var(--primary); border: 1px solid var(--primary); background: transparent;">Login Petugas / Manager</a>
+            <a href="login.php" class="btn btn-sm btn-primary">Login Petugas / Manager</a>
         </div>
     </header>
 
@@ -82,11 +83,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="grid-2">
                     <div class="form-group">
+                        <label class="form-label">Tujuan Peminjaman *</label>
+                        <select name="category" class="form-select" required>
+                            <option value="GA" <?= (isset($_POST['category']) && $_POST['category'] === 'GA') ? 'selected' : '' ?>>Inventaris General Affairs (GA)</option>
+                            <option value="SECOM" <?= (isset($_POST['category']) && $_POST['category'] === 'SECOM') ? 'selected' : '' ?>>Inventaris Security (SECOM)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label class="form-label">Nama Peminjam (Karyawan / Staf) *</label>
                         <input type="text" name="borrower_name" required class="form-control" placeholder="Nama Lengkap" value="<?= htmlspecialchars($_POST['borrower_name'] ?? '') ?>">
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" style="grid-column: span 2;">
                         <label class="form-label">Departemen / Bagian *</label>
                         <input type="text" name="department" required class="form-control" placeholder="Contoh: IT / Production / HR" value="<?= htmlspecialchars($_POST['department'] ?? '') ?>">
                     </div>
