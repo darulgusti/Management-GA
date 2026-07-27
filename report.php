@@ -151,12 +151,12 @@ include __DIR__ . '/includes/header.php';
             <div style="flex: 1;">
                 <label class="form-label">Kategori Laporan</label>
                 <select name="type" class="form-select">
-                    <option value="all" <?= $type === 'all' ? 'selected' : '' ?>>Semua Modul (Tamu, Pinjam & Logistik)</option>
+                    <option value="all" <?= $type === 'all' ? 'selected' : '' ?>>Semua Modul (Tamu, Pinjam & Pos 4)</option>
                     <option value="guest" <?= $type === 'guest' ? 'selected' : '' ?>>Buku Tamu Digital</option>
                     <option value="borrowing" <?= $type === 'borrowing' ? 'selected' : '' ?>>Peminjaman Barang & Kunci</option>
-                    <option value="gate_in" <?= $type === 'gate_in' ? 'selected' : '' ?>>Logistik - Buku Masuk (Gate In)</option>
-                    <option value="gate_out" <?= $type === 'gate_out' ? 'selected' : '' ?>>Logistik - Buku Keluar (Gate Out)</option>
-                    <option value="export_nex" <?= $type === 'export_nex' ? 'selected' : '' ?>>Logistik - Export NEX / NOPOR</option>
+                    <option value="gate_in" <?= $type === 'gate_in' ? 'selected' : '' ?>>Pos 4 - Buku Masuk (Gate In)</option>
+                    <option value="gate_out" <?= $type === 'gate_out' ? 'selected' : '' ?>>Pos 4 - Buku Keluar (Gate Out)</option>
+                    <option value="export_nex" <?= $type === 'export_nex' ? 'selected' : '' ?>>Pos 4 - Export NEX / NOPOR</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary" style="height: 38px;">Filter</button>
@@ -192,7 +192,7 @@ include __DIR__ . '/includes/header.php';
         </div>
         <div class="stat-content">
             <div class="stat-value"><?= number_format($total_gin_records + $total_gout_records) ?></div>
-            <div class="stat-label">Logistik Gate In/Out</div>
+            <div class="stat-label">Pos 4 Gate In/Out</div>
         </div>
     </div>
 
@@ -300,7 +300,7 @@ include __DIR__ . '/includes/header.php';
 <?php if ($type === 'all' || $type === 'gate_in'): ?>
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Rekap Logistik - Buku Masuk Gate In (<?= number_format($total_gin_records) ?> Records)</h3>
+        <h3 class="card-title">Rekap Pos 4 - Buku Masuk Gate In (<?= number_format($total_gin_records) ?> Records)</h3>
     </div>
     <div class="table-responsive">
         <table class="table">
@@ -341,7 +341,7 @@ include __DIR__ . '/includes/header.php';
 <?php if ($type === 'all' || $type === 'gate_out'): ?>
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Rekap Logistik - Buku Keluar Gate Out (<?= number_format($total_gout_records) ?> Records)</h3>
+        <h3 class="card-title">Rekap Pos 4 - Buku Keluar Gate Out (<?= number_format($total_gout_records) ?> Records)</h3>
     </div>
     <div class="table-responsive">
         <table class="table">
@@ -384,7 +384,7 @@ include __DIR__ . '/includes/header.php';
 <?php if ($type === 'all' || $type === 'export_nex'): ?>
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Rekap Logistik - Export NEX / NOPOR (<?= number_format($total_exp_records) ?> Records)</h3>
+        <h3 class="card-title">Rekap Pos 4 - Export NEX / NOPOR (<?= number_format($total_exp_records) ?> Records)</h3>
     </div>
     <div class="table-responsive">
         <table class="table">

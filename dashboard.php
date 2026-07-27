@@ -139,7 +139,7 @@ include __DIR__ . '/includes/header.php';
         </div>
         <div class="stat-content">
             <div class="stat-value"><?= number_format($count_gate_in_today) ?></div>
-            <div class="stat-label">Logistik Gate In Hari Ini</div>
+            <div class="stat-label">Pos 4 Gate In Hari Ini</div>
         </div>
     </div>
 
@@ -149,7 +149,7 @@ include __DIR__ . '/includes/header.php';
         </div>
         <div class="stat-content">
             <div class="stat-value"><?= number_format($count_gate_out_today) ?></div>
-            <div class="stat-label">Logistik Gate Out Hari Ini</div>
+            <div class="stat-label">Pos 4 Gate Out Hari Ini</div>
         </div>
     </div>
 
@@ -254,7 +254,7 @@ include __DIR__ . '/includes/header.php';
 <!-- SECTION 2: MONITORING LOGISTIK (3 TABEL DITAMPILKAN TERPISAH) -->
 <div style="margin-bottom: 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem;">
     <h2 style="font-size: 1.2rem; font-weight: 700; color: var(--primary); margin: 0;">
-        🚛 Monitoring Lalu Lintas Logistik
+        🚛 Monitoring Lalu Lintas Pos 4
     </h2>
 </div>
 

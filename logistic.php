@@ -1,5 +1,5 @@
 <?php
-$page_title = 'Logistik Gate Pass System';
+$page_title = 'Pos 4 - Gate Pass System';
 require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/includes/auth_check.php';
 
@@ -232,7 +232,7 @@ include __DIR__ . '/includes/header.php';
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
     <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
         <a href="logistic.php?tab=all" class="btn btn-sm <?= $active_tab === 'all' ? 'btn-primary' : 'btn-outline' ?>">
-            📊 Semua Logistik
+            📊 Semua Pos 4
         </a>
         <a href="logistic.php?tab=gate_in" class="btn btn-sm <?= $active_tab === 'gate_in' ? 'btn-primary' : 'btn-outline' ?>">
             📥 Buku Masuk (Gate In)
@@ -427,7 +427,7 @@ include __DIR__ . '/includes/header.php';
         <div>
             <h3 class="card-title">
                 <span class="badge badge-primary" style="font-size: 0.85rem;"><?= number_format($total_exp_records) ?> Kontainer</span>
-                3. Export NEX / NOPOR (Kontainer Logistik Ekspor)
+                3. Export NEX / NOPOR (Kontainer Pos 4 Ekspor)
             </h3>
             <small style="color: var(--text-muted);">Pencatatan khusus armada kontainer logistik ekspor &amp; NOPOR</small>
         </div>

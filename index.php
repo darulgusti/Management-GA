@@ -89,13 +89,13 @@ $flash = get_flash_message();
                     <div style="width: 44px; height: 44px; background-color: var(--primary-light); color: var(--primary); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-bottom: 0.85rem;">
                         <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"></path></svg>
                     </div>
-                    <h2 style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Logistik Gate Pass System</h2>
+                    <h2 style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Pos 4 - Gate Pass System</h2>
                     <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1.25rem;">
                         Pencatatan &amp; pemantauan lalu lintas armada (Buku Masuk, Buku Keluar &amp; Export NEX/NOPOR).
                     </p>
                 </div>
                 <a href="logistic_form.php" class="btn btn-primary btn-block" style="font-size: 0.85rem; padding: 0.55rem;">
-                    Form Input Logistik →
+                    Form Input Pos 4 →
                 </a>
             </div>
 

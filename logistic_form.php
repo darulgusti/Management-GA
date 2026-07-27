@@ -91,17 +91,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Input Logistik Gate Pass - GA Management</title>
+    <title>Form Input Pos 4 Gate Pass - GA Management</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="portal-body">
 
-    <header class="portal-navbar">
+    <header class="portal-navbar" style="background: linear-gradient(135deg, #ce1126 0%, #a50e1e 100%); padding: 0.9rem 1.5rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(206,17,38,0.18);">
         <div style="display: flex; align-items: center; gap: 0.75rem;">
             <div class="sidebar-logo-icon">GA</div>
             <div>
-                <strong style="font-size: 1.1rem; color: #fff;">Form Logistik Gate Pass System</strong>
-                <div style="font-size: 0.75rem; color: #94a3b8;">General Affairs Fleet & Container Logistics Registration</div>
+                <strong style="font-size: 1.1rem; color: #fff;">Form Pos 4 - Gate Pass System</strong>
+                <div style="font-size: 0.75rem; color: #fca5a5;">General Affairs Fleet &amp; Container Logistics Registration</div>
             </div>
         </div>
         <div>
