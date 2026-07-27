@@ -559,8 +559,8 @@ include __DIR__ . '/includes/header.php';
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Transportir / Perusahaan *</label>
-                            <input type="text" name="transportir" required class="form-control" placeholder="Nama Perusahaan / Transportir...">
+                            <label class="form-label" style="font-weight: 600;">Transportir / Perusahaan</label>
+                            <input type="text" name="transportir" class="form-control" placeholder="Nama Perusahaan / Transportir (Opsional)...">
                         </div>
                     </div>
 
@@ -604,8 +604,8 @@ include __DIR__ . '/includes/header.php';
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Transportir / Perusahaan *</label>
-                            <input type="text" name="transportir" required class="form-control" placeholder="Nama Transportir...">
+                            <label class="form-label" style="font-weight: 600;">Transportir / Perusahaan</label>
+                            <input type="text" name="transportir" class="form-control" placeholder="Nama Transportir (Opsional)...">
                         </div>
                     </div>
 
@@ -668,7 +668,7 @@ include __DIR__ . '/includes/header.php';
 
                         <div class="form-group">
                             <label class="form-label" style="font-weight: 600;">Transportir</label>
-                            <input type="text" name="transportir" class="form-control" placeholder="Transportir / Ekspedisi...">
+                            <input type="text" name="transportir" class="form-control" placeholder="Transportir / Ekspedisi (Opsional)...">
                         </div>
                     </div>
 
