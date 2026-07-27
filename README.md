@@ -34,22 +34,13 @@ Sistem ini mendukung **Role-Based Access Control (RBAC)**:
 - Pemisahan tabel **Peminjaman Aktif** dan **Riwayat Peminjaman Selesai**.
 - Export data peminjaman ke format Excel (`export_borrowing.php`).
 
-### 4. 📥 Buku Masuk Kendaraan - Gate In (`gate_in.php`)
-- Pencatatan armada masuk pos gerbang (Nopol, Nama Sopir, Visitor Card Number, Antree Number, Transportir, Tujuan).
-- Checklist kelengkapan berkas driver (SIM, STNK, KIR).
-- Form input 2-kolom interaktif dengan pemilih tanggal & waktu (*datetime picker*).
+### 4. 🚚 Logistik Gate Pass System (`logistic.php`)
+- Menyajikan **ketiga tabel pemantauan logistik** (Buku Masuk, Buku Keluar, dan Export NEX / NOPOR) secara terpadu dalam 1 halaman terpusat.
+- **Buku Masuk (Gate In):** Nopol, Driver, Visitor Number (Opsional), Antre Number (Opsional), Jenis SIM (SIM A, SIM B, SIM B2), STNK, KIR, Transportir (Opsional), dan Pemilih Waktu.
+- **Buku Keluar (Gate Out):** Nopol, Driver, No. DO, Tujuan, Tonase, Transportir (Opsional), dan Pemilih Waktu.
+- **Export NEX / NOPOR:** No. NOPOR, Driver, No. DO, No. Kontainer, No. Segel, Tujuan, Tonase, Transportir (Opsional), dan Pemilih Waktu.
 
-### 5. 📤 Buku Keluar Kendaraan - Gate Out (`gate_out.php`)
-- Pencatatan kendaraan keluar non-ekspor.
-- Input Nomor Delivery Order (DO), Tujuan Pengiriman, Tonase (Ton), dan Nama Transportir.
-- Form input 2-kolom interaktif dengan pemilih tanggal & waktu (*datetime picker*).
-
-### 6. 🚢 Export NEX / MOPOR (`export_nex.php`)
-- Pencatatan khusus armada kontainer ekspor & MOPOR.
-- Input Nomor MOPOR, Nama Sopir, Nomor DO, Nomor Kontainer, Nomor Segel (Seal), Pelabuhan/Negara Tujuan, Tonase, dan Transportir.
-- Form input 2-kolom interaktif dengan pemilih tanggal & waktu (*datetime picker*).
-
-### 7. 📑 Rekap Laporan GA & Logistik (`report.php`, `export_report.php`)
+### 5. 📑 Rekap Laporan GA & Logistik (`report.php`, `export_report.php`)
 - Penarikan laporan gabungan dengan filter rentang tanggal (Tanggal Mulai s/d Tanggal Selesai) dan pilihan modul.
 - Fitur cetak (*print*) dan **Export Laporan ke Excel Ready** secara komprehensif.
 

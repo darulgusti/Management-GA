@@ -156,7 +156,7 @@ include __DIR__ . '/includes/header.php';
                     <option value="borrowing" <?= $type === 'borrowing' ? 'selected' : '' ?>>Peminjaman Barang & Kunci</option>
                     <option value="gate_in" <?= $type === 'gate_in' ? 'selected' : '' ?>>Logistik - Buku Masuk (Gate In)</option>
                     <option value="gate_out" <?= $type === 'gate_out' ? 'selected' : '' ?>>Logistik - Buku Keluar (Gate Out)</option>
-                    <option value="export_nex" <?= $type === 'export_nex' ? 'selected' : '' ?>>Logistik - Export NEX / MOPOR</option>
+                    <option value="export_nex" <?= $type === 'export_nex' ? 'selected' : '' ?>>Logistik - Export NEX / NOPOR</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary" style="height: 38px;">Filter</button>
@@ -202,7 +202,7 @@ include __DIR__ . '/includes/header.php';
         </div>
         <div class="stat-content">
             <div class="stat-value"><?= number_format($total_exp_records) ?></div>
-            <div class="stat-label">Export NEX / MOPOR</div>
+            <div class="stat-label">Export NEX / NOPOR</div>
         </div>
     </div>
 </div>
@@ -384,14 +384,14 @@ include __DIR__ . '/includes/header.php';
 <?php if ($type === 'all' || $type === 'export_nex'): ?>
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Rekap Logistik - Export NEX / MOPOR (<?= number_format($total_exp_records) ?> Records)</h3>
+        <h3 class="card-title">Rekap Logistik - Export NEX / NOPOR (<?= number_format($total_exp_records) ?> Records)</h3>
     </div>
     <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>No. MOPOR</th>
+                    <th>No. NOPOR</th>
                     <th>Sopir</th>
                     <th>No. DO</th>
                     <th>No. Kontainer</th>

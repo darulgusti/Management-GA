@@ -327,17 +327,17 @@ include __DIR__ . '/includes/header.php';
         </div>
     </div>
 
-    <!-- Tabel 3: Export NEX / MOPOR -->
+    <!-- Tabel 3: Export NEX / NOPOR -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">3. Export NEX / MOPOR</h3>
+            <h3 class="card-title">3. Export NEX / NOPOR</h3>
             <a href="export_nex.php" class="btn btn-sm btn-outline">Lihat →</a>
         </div>
         <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>No. MOPOR</th>
+                        <th>No. NOPOR</th>
                         <th>No. Kontainer</th>
                         <th>Waktu</th>
                     </tr>
