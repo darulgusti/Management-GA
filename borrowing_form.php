@@ -94,7 +94,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="card-header">
                 <div>
                     <h2 class="card-title">Form Peminjaman Barang / Kunci (<?= $category === 'SECOM' ? 'Inventaris SECOM' : 'Inventaris GA' ?>)</h2>
-                    <small style="color: var(--text-muted);">Lengkapi data peminjaman peralatan inventaris <?= $category === 'SECOM' ? 'Security / SECOM' : 'General Affairs / GA' ?></small>
                 </div>
             </div>
 

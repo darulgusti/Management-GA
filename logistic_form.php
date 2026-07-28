@@ -155,7 +155,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php if ($type === 'gate_in'): ?>
                 <div style="margin-bottom: 1rem;">
                     <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 0.25rem;">Form Buku Masuk Kendaraan (Gate In)</h2>
-                    <p style="color: var(--text-muted); font-size: 0.85rem;">Input data armada kendaraan yang baru tiba di pos gerbang logistik pabrik.</p>
                 </div>
 
                 <form method="POST" action="logistic_form.php?type=gate_in">
@@ -204,7 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <option value="Kirim">Kirim</option>
                                     <option value="Export Ajinex">Export Ajinex</option>
                                     <option value="Transit">Transit</option>
-                                    <option value="Muat">Muat</option>
+                                    <option value="Muatan Barang">Muatan Barang</option>
                                     <option value="EDC">EDC</option>
                                 </select>
                             </div>
@@ -255,7 +254,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php elseif ($type === 'gate_out'): ?>
                 <div style="margin-bottom: 1rem;">
                     <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 0.25rem;">Form Input Keluar EDC</h2>
-                    <p style="color: var(--text-muted); font-size: 0.85rem;">Input data armada kendaraan pengiriman yang keluar (EDC).</p>
                 </div>
 
                 <form method="POST" action="logistic_form.php?type=gate_out">
@@ -310,7 +308,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php elseif ($type === 'export_nex'): ?>
                 <div style="margin-bottom: 1rem;">
                     <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 0.25rem;">Form Input Keluar Export NEX</h2>
-                    <p style="color: var(--text-muted); font-size: 0.85rem;">Input data khusus armada kontainer logistik ekspor &amp; NOPOR.</p>
                 </div>
 
                 <form method="POST" action="logistic_form.php?type=export_nex">

@@ -254,7 +254,6 @@ include __DIR__ . '/includes/header.php';
                 <span class="badge badge-primary" style="font-size: 0.85rem;"><?= number_format($total_in_records) ?> Armada</span>
                 1. Buku Masuk Kendaraan (Gate In)
             </h3>
-            <small style="color: var(--text-muted);">Pencatatan kendaraan armada yang tiba di pos gerbang</small>
         </div>
         <?php if ($can_input): ?>
             <button type="button" onclick="openModal('modalGateIn')" class="btn btn-primary btn-sm">+ Input Gate In (Masuk)</button>
@@ -348,7 +347,6 @@ include __DIR__ . '/includes/header.php';
                 <span class="badge badge-primary" style="font-size: 0.85rem;"><?= number_format($total_out_records) ?> Armada</span>
                 2. Keluar EDC
             </h3>
-            <small style="color: var(--text-muted);">Pencatatan keberangkatan armada pengiriman barang (EDC)</small>
         </div>
         <?php if ($can_input): ?>
             <button type="button" onclick="openModal('modalGateOut')" class="btn btn-primary btn-sm">+ Input Keluar EDC</button>
@@ -426,7 +424,6 @@ include __DIR__ . '/includes/header.php';
                 <span class="badge badge-primary" style="font-size: 0.85rem;"><?= number_format($total_exp_records) ?> Kontainer</span>
                 3. Keluar Export NEX (Kontainer Pos 4 Ekspor)
             </h3>
-            <small style="color: var(--text-muted);">Pencatatan khusus armada kontainer logistik ekspor &amp; NOPOR</small>
         </div>
         <?php if ($can_input): ?>
             <button type="button" onclick="openModal('modalExport')" class="btn btn-primary btn-sm">+ Input Keluar Export NEX</button>
@@ -552,7 +549,7 @@ include __DIR__ . '/includes/header.php';
                                 <option value="Kirim">Kirim</option>
                                 <option value="Export Ajinex">Export Ajinex</option>
                                 <option value="Transit">Transit</option>
-                                <option value="Muat">Muat</option>
+                                <option value="Muatan Barang">Muatan Barang</option>
                                 <option value="EDC">EDC</option>
                             </select>
                         </div>

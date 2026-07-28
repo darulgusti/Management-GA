@@ -83,7 +83,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="card-header">
                 <div>
                     <h2 class="card-title">Form Registrasi Tamu Baru</h2>
-                    <small style="color: var(--text-muted);">Lengkapi formulir di bawah ini untuk mencatat kunjungan Anda</small>
                 </div>
             </div>
 
