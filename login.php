@@ -29,11 +29,8 @@ if (is_logged_in() && !isset($_GET['error'])) {
         $_SESSION['role'] = 'secom';
         $user_role = 'secom';
     }
-    if ($user_role === 'manager') {
+    if ($user_role === 'manager' || $user_role === 'secom') {
         header("Location: dashboard.php");
-        exit();
-    } elseif ($user_role === 'secom') {
-        header("Location: guest.php");
         exit();
     } else {
         session_unset();
@@ -66,10 +63,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['email']   = $user['email'];
                 $_SESSION['role']    = $role;
 
-                if ($role === 'manager') {
+                if ($role === 'manager' || $role === 'secom') {
                     header("Location: dashboard.php");
                 } else {
-                    header("Location: guest.php");
+                    header("Location: dashboard.php");
                 }
                 exit();
             } else {
