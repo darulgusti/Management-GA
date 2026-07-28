@@ -104,19 +104,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="grid-2">
                     <div class="form-group">
-                        <label class="form-label">Nama Peminjam (Karyawan / Staf) *</label>
+                        <label class="form-label">Nama Peminjam (Karyawan / Staf) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="borrower_name" required class="form-control" placeholder="Nama Lengkap" value="<?= htmlspecialchars($_POST['borrower_name'] ?? '') ?>">
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Departemen / Bagian *</label>
+                        <label class="form-label">Departemen / Bagian <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="department" required class="form-control" placeholder="Contoh: IT / Production / HR" value="<?= htmlspecialchars($_POST['department'] ?? '') ?>">
                     </div>
                 </div>
 
                 <div class="grid-3">
                     <div class="form-group">
-                        <label class="form-label">Nama Barang / Kunci *</label>
+                        <label class="form-label">Nama Barang / Kunci <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="item_name" required class="form-control" placeholder="Kunci Ruang Meeting A / Proyektor" value="<?= htmlspecialchars($_POST['item_name'] ?? '') ?>">
                     </div>
 

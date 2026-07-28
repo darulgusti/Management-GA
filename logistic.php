@@ -306,10 +306,16 @@ include __DIR__ . '/includes/header.php';
                             <td><?= htmlspecialchars($gi['transportir'] ?: '-') ?></td>
                             <td><span class="badge badge-info"><?= htmlspecialchars($gi['destination']) ?></span></td>
                             <td>
-                                <div style="display: flex; gap: 0.25rem;">
+                                <div style="display: flex; gap: 0.25rem; flex-wrap: wrap;">
                                     <span class="badge badge-info" title="Jenis SIM"><?= htmlspecialchars($gi['sim_type'] ?? 'SIM B') ?></span>
+                                    <?php if (!empty($gi['sim_number'])): ?>
+                                        <span class="badge badge-secondary" title="No. SIM">SIM: <?= htmlspecialchars($gi['sim_number']) ?></span>
+                                    <?php endif; ?>
                                     <span class="badge <?= $gi['checklist_stnk'] ? 'badge-success' : 'badge-secondary' ?>" title="STNK">STNK <?= $gi['checklist_stnk'] ? '✓' : '✗' ?></span>
                                     <span class="badge <?= $gi['checklist_kir'] ? 'badge-success' : 'badge-secondary' ?>" title="KIR">KIR <?= $gi['checklist_kir'] ? '✓' : '✗' ?></span>
+                                    <?php if (!empty($gi['document_photo'])): ?>
+                                        <button type="button" onclick="showDocumentPhoto('<?= htmlspecialchars($gi['document_photo']) ?>')" class="badge badge-warning" style="border:none; cursor:pointer;" title="Lihat Foto SIM/Dokumen">📷 Foto SIM</button>
+                                    <?php endif; ?>
                                 </div>
                             </td>
                             <td><?= date('d/m/Y H:i', strtotime($gi['entry_time'])) ?></td>
@@ -722,6 +728,22 @@ include __DIR__ . '/includes/header.php';
     </div>
 </div>
 
+<!-- MODAL DOCUMENT PHOTO PREVIEW -->
+<div id="modalDocumentPhoto" class="modal">
+    <div class="modal-content" style="max-width: 500px; text-align: center;">
+        <div class="modal-header">
+            <h3 class="modal-title">Foto SIM / Dokumen Lampiran</h3>
+            <button type="button" class="modal-close" onclick="closeModal('modalDocumentPhoto')">&times;</button>
+        </div>
+        <div class="modal-body" style="padding: 1.5rem;">
+            <img id="doc_photo_preview_src" src="" style="max-width: 100%; height: auto; border-radius: var(--radius-md); border: 1px solid var(--border);">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modalDocumentPhoto')">Tutup</button>
+        </div>
+    </div>
+</div>
+
 <script>
 function openModal(id) {
     document.getElementById(id).classList.add('show');
@@ -729,7 +751,10 @@ function openModal(id) {
 function closeModal(id) {
     document.getElementById(id).classList.remove('show');
 }
+function showDocumentPhoto(src) {
+    document.getElementById('doc_photo_preview_src').src = src;
+    openModal('modalDocumentPhoto');
+}
 </script>
-<?php endif; ?>
-
 <?php include __DIR__ . '/includes/footer.php'; ?>
+

@@ -48,9 +48,10 @@ try {
     }
 }
 
-// Auto-migration: Pastikan kolom 'category' ada di tabel item_borrowings (untuk Cloud DB / Vercel)
-try {
-    $pdo->exec("ALTER TABLE item_borrowings ADD COLUMN category VARCHAR(50) NOT NULL DEFAULT 'GA' AFTER borrower_name");
-} catch (\Throwable $t) {
-    // Abaikan jika kolom sudah ada
-}
+// Auto-migration: Pastikan kolom baru ada di tabel (untuk Cloud DB / Vercel)
+try { $pdo->exec("ALTER TABLE item_borrowings ADD COLUMN category VARCHAR(50) NOT NULL DEFAULT 'GA' AFTER borrower_name"); } catch (\Throwable $t) {}
+try { $pdo->exec("ALTER TABLE logistic_gate_ins ADD COLUMN sim_number VARCHAR(100) NULL AFTER destination"); } catch (\Throwable $t) {}
+try { $pdo->exec("ALTER TABLE logistic_gate_ins ADD COLUMN document_photo LONGTEXT NULL AFTER sim_number"); } catch (\Throwable $t) {}
+try { $pdo->exec("ALTER TABLE guests ADD COLUMN sim_number VARCHAR(100) NULL AFTER visitor_card_number"); } catch (\Throwable $t) {}
+try { $pdo->exec("ALTER TABLE guests ADD COLUMN document_photo LONGTEXT NULL AFTER sim_number"); } catch (\Throwable $t) {}
+
