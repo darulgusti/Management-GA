@@ -30,9 +30,7 @@ $flash = get_flash_message();
                 <strong style="font-size: 1.1rem; color: var(--primary);">Portal Layanan GA</strong>
             </div>
         </div>
-        <div>
-            <a href="login.php" class="btn btn-sm btn-primary">Login</a>
-        </div>
+
     </header>
 
     <div class="portal-container" style="max-width: 1200px;">
