@@ -54,4 +54,6 @@ try { $pdo->exec("ALTER TABLE logistic_gate_ins ADD COLUMN sim_number VARCHAR(10
 try { $pdo->exec("ALTER TABLE logistic_gate_ins ADD COLUMN document_photo LONGTEXT NULL AFTER sim_number"); } catch (\Throwable $t) {}
 try { $pdo->exec("ALTER TABLE guests ADD COLUMN sim_number VARCHAR(100) NULL AFTER visitor_card_number"); } catch (\Throwable $t) {}
 try { $pdo->exec("ALTER TABLE guests ADD COLUMN document_photo LONGTEXT NULL AFTER sim_number"); } catch (\Throwable $t) {}
+try { $pdo->exec("ALTER TABLE logistic_gate_outs MODIFY COLUMN tonnage VARCHAR(100) NOT NULL DEFAULT '-'"); } catch (\Throwable $t) {}
+try { $pdo->exec("ALTER TABLE logistic_export_nex_mopors MODIFY COLUMN tonnage VARCHAR(100) NOT NULL DEFAULT '-'"); } catch (\Throwable $t) {}
 
