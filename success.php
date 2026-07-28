@@ -21,8 +21,8 @@ $messages = [
         'msg'   => 'Data kendaraan keluar (Gate Out) telah berhasil disimpan ke sistem Pos 4. Terima kasih!'
     ],
     'export' => [
-        'title' => 'Export Berhasil!',
-        'msg'   => 'Data Export NEX / NOPOR telah berhasil disimpan ke sistem Pos 4. Terima kasih!'
+        'title' => 'Keluar Export NEX Berhasil!',
+        'msg'   => 'Data Keluar Export NEX telah berhasil disimpan ke sistem Pos 4. Terima kasih!'
     ],
 ];
 

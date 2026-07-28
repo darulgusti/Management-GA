@@ -147,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     📤 Buku Keluar (Gate Out)
                 </a>
                 <a href="logistic_form.php?type=export_nex" class="btn btn-sm <?= $type === 'export_nex' ? 'btn-primary' : 'btn-outline' ?>" style="font-weight: 600;">
-                    🚢 Export NEX / NOPOR
+                    🚢 Keluar Export NEX
                 </a>
             </div>
 
@@ -310,10 +310,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </button>
                 </form>
 
-            <!-- FORM 3: EXPORT NEX / NOPOR -->
+            <!-- FORM 3: KELUAR EXPORT NEX -->
             <?php elseif ($type === 'export_nex'): ?>
                 <div style="margin-bottom: 1rem;">
-                    <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 0.25rem;">Form Input Export NEX / NOPOR</h2>
+                    <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 0.25rem;">Form Input Keluar Export NEX</h2>
                     <p style="color: var(--text-muted); font-size: 0.85rem;">Input data khusus armada kontainer logistik ekspor &amp; NOPOR.</p>
                 </div>
 
@@ -376,7 +376,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top: 1.5rem;">
                         <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        Simpan Data Export NEX / NOPOR
+                        Simpan Data Keluar Export NEX
                     </button>
                 </form>
             <?php endif; ?>

@@ -159,7 +159,7 @@ include __DIR__ . '/includes/header.php';
         </div>
         <div class="stat-content">
             <div class="stat-value"><?= number_format($count_export_today) ?></div>
-            <div class="stat-label">Export NEX/MOPOR Hari Ini</div>
+            <div class="stat-label">Keluar Export NEX Hari Ini</div>
         </div>
     </div>
 </div>
@@ -329,7 +329,7 @@ include __DIR__ . '/includes/header.php';
     <!-- Tabel 3: Export NEX / NOPOR -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">3. Export NEX / NOPOR</h3>
+            <h3 class="card-title">3. Keluar Export NEX</h3>
         </div>
         <div class="table-responsive">
             <table class="table">

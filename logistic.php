@@ -234,7 +234,7 @@ include __DIR__ . '/includes/header.php';
             📤 Buku Keluar (Gate Out)
         </a>
         <a href="logistic.php?tab=export_nex" class="btn btn-sm <?= $active_tab === 'export_nex' ? 'btn-primary' : 'btn-outline' ?>">
-            🚢 Export NEX / NOPOR
+            🚢 Keluar Export NEX
         </a>
     </div>
     <div>
@@ -426,12 +426,12 @@ include __DIR__ . '/includes/header.php';
         <div>
             <h3 class="card-title">
                 <span class="badge badge-primary" style="font-size: 0.85rem;"><?= number_format($total_exp_records) ?> Kontainer</span>
-                3. Export NEX / NOPOR (Kontainer Pos 4 Ekspor)
+                3. Keluar Export NEX (Kontainer Pos 4 Ekspor)
             </h3>
             <small style="color: var(--text-muted);">Pencatatan khusus armada kontainer logistik ekspor &amp; NOPOR</small>
         </div>
         <?php if ($can_input): ?>
-            <button type="button" onclick="openModal('modalExport')" class="btn btn-primary btn-sm">+ Input Export NEX/NOPOR</button>
+            <button type="button" onclick="openModal('modalExport')" class="btn btn-primary btn-sm">+ Input Keluar Export NEX</button>
         <?php endif; ?>
     </div>
 
@@ -659,7 +659,7 @@ include __DIR__ . '/includes/header.php';
 <div id="modalExport" class="modal-backdrop">
     <div class="modal-dialog" style="max-width: 760px; width: 95%;">
         <div class="modal-header">
-            <h3 class="modal-title">Form Input Export NEX / NOPOR</h3>
+            <h3 class="modal-title">Form Input Keluar Export NEX</h3>
             <button type="button" class="modal-close" onclick="closeModal('modalExport')">&times;</button>
         </div>
         <form method="POST" action="logistic.php?tab=<?= urlencode($active_tab) ?>">
