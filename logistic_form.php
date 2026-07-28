@@ -179,10 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <input type="text" name="antree_number" required class="form-control" placeholder="Nomor Antre...">
                             </div>
 
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Masuk (Opsional)</label>
-                                <input type="datetime-local" name="entry_time" class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
-                            </div>
+
 
                             <div class="form-group">
                                 <label class="form-label" style="font-weight: 600;">Nomor SIM Driver <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
@@ -296,10 +293,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <input type="text" name="destination" required class="form-control" placeholder="Tujuan Pengiriman / Alamat...">
                             </div>
 
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Keluar (Opsional)</label>
-                                <input type="datetime-local" name="exit_time" class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
-                            </div>
+
                         </div>
 
                     </div>
@@ -366,13 +360,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <input type="text" name="destination" required class="form-control" placeholder="Pelabuhan / Negara Tujuan...">
                             </div>
 
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Keluar (Opsional)</label>
-                                <input type="datetime-local" name="exit_time" class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
-                            </div>
-                        </div>
-                                <input type="datetime-local" name="exit_time" required class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
-                            </div>
+
                         </div>
 
                     </div>
