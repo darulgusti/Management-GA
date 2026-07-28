@@ -23,8 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $person_to_meet = trim($_POST['person_to_meet'] ?? '');
     $id_type = trim($_POST['id_type'] ?? '');
     $visitor_card = trim($_POST['visitor_card_number'] ?? '');
-    $sim_number = trim($_POST['sim_number'] ?? '');
-    $document_photo = $_POST['document_photo'] ?? '';
     $signature = $_POST['signature'] ?? '';
 
     if (empty($name) || empty($category) || empty($person_to_meet)) {
@@ -32,8 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         try {
             $now = date('Y-m-d H:i:s');
-            $stmt = $pdo->prepare("INSERT INTO guests (name, guest_category, institution, purpose, person_to_meet, id_type, visitor_card_number, sim_number, document_photo, time_in, signature) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$name, $category, $institution, $purpose, $person_to_meet, $id_type, $visitor_card, $sim_number, $document_photo, $now, $signature]);
+            $stmt = $pdo->prepare("INSERT INTO guests (name, guest_category, institution, purpose, person_to_meet, id_type, visitor_card_number, time_in, signature) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$name, $category, $institution, $purpose, $person_to_meet, $id_type, $visitor_card, $now, $signature]);
             
             header("Location: success.php?type=guest");
             exit();
@@ -144,23 +142,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </div>
 
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label class="form-label">Nomor SIM / KTP (Opsional)</label>
-                        <input type="text" name="sim_number" class="form-control" placeholder="Contoh: 3171234567890001" value="<?= htmlspecialchars($_POST['sim_number'] ?? '') ?>">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Upload Foto SIM / Identitas (Opsional)</label>
-                        <input type="file" id="document_file_input" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this)">
-                        <input type="hidden" name="document_photo" id="document_photo_input">
-                        <div id="photo_preview_container" style="display: none; margin-top: 0.5rem; text-align: center;">
-                            <img id="photo_preview_img" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
-                            <div style="font-size: 0.75rem; color: var(--success); font-weight: 600; margin-top: 0.25rem;">✓ Foto berhasil dikompresi (siap simpan)</div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="form-group">
                     <label class="form-label">Tujuan Kunjungan (Opsional)</label>
                     <textarea name="purpose" class="form-control" placeholder="Jelaskan keperluan/tujuan kunjungan Anda (opsional)..."><?= htmlspecialchars($_POST['purpose'] ?? '') ?></textarea>
@@ -199,42 +180,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             container.style.display = 'none';
             input.removeAttribute('required');
         }
-    }
-
-    function compressAndPreviewPhoto(input) {
-        if (!input.files || !input.files[0]) return;
-        const file = input.files[0];
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = new Image();
-            img.onload = function() {
-                const canvas = document.createElement('canvas');
-                let width = img.width;
-                let height = img.height;
-                const max_size = 1200;
-                if (width > height) {
-                    if (width > max_size) {
-                        height = Math.round((height * max_size) / width);
-                        width = max_size;
-                    }
-                } else {
-                    if (height > max_size) {
-                        width = Math.round((width * max_size) / height);
-                        height = max_size;
-                    }
-                }
-                canvas.width = width;
-                canvas.height = height;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, width, height);
-                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.75);
-                document.getElementById('document_photo_input').value = compressedBase64;
-                document.getElementById('photo_preview_img').src = compressedBase64;
-                document.getElementById('photo_preview_container').style.display = 'block';
-            };
-            img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
     }
     </script>
 </body>

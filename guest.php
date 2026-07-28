@@ -119,15 +119,7 @@ include __DIR__ . '/includes/header.php';
                                 <div><strong>Tujuan:</strong> <?= htmlspecialchars($g['purpose'] ?: '-') ?></div>
                                 <div style="font-size: 0.775rem; color: var(--text-muted);">Bertemu: <?= htmlspecialchars($g['person_to_meet']) ?></div>
                             </td>
-                            <td class="col-nowrap">
-                                <code><?= htmlspecialchars($g['visitor_card_number'] ?: '-') ?></code>
-                                <?php if (!empty($g['sim_number'])): ?>
-                                    <div style="font-size: 0.725rem; color: var(--text-muted);">No. ID: <?= htmlspecialchars($g['sim_number']) ?></div>
-                                <?php endif; ?>
-                                <?php if (!empty($g['document_photo'])): ?>
-                                    <div style="margin-top: 0.2rem;"><button type="button" onclick="showDocumentPhoto('<?= htmlspecialchars($g['document_photo']) ?>')" class="badge badge-warning" style="border:none; cursor:pointer;" title="Lihat Foto SIM/Identitas">📷 Foto Identitas</button></div>
-                                <?php endif; ?>
-                            </td>
+                            <td class="col-nowrap"><code><?= htmlspecialchars($g['visitor_card_number'] ?: '-') ?></code></td>
                             <td class="col-date"><?= date('d/m/Y H:i', strtotime($g['time_in'])) ?></td>
                             <td class="col-nowrap"><span class="badge badge-success">Masih di Lokasi</span></td>
                             <?php if ($logged_user['role'] === 'secom'): ?>
@@ -201,15 +193,7 @@ include __DIR__ . '/includes/header.php';
                                 <div><strong>Tujuan:</strong> <?= htmlspecialchars($g['purpose'] ?: '-') ?></div>
                                 <div style="font-size: 0.775rem; color: var(--text-muted);">Bertemu: <?= htmlspecialchars($g['person_to_meet']) ?></div>
                             </td>
-                            <td class="col-nowrap">
-                                <code><?= htmlspecialchars($g['visitor_card_number'] ?: '-') ?></code>
-                                <?php if (!empty($g['sim_number'])): ?>
-                                    <div style="font-size: 0.725rem; color: var(--text-muted);">No. ID: <?= htmlspecialchars($g['sim_number']) ?></div>
-                                <?php endif; ?>
-                                <?php if (!empty($g['document_photo'])): ?>
-                                    <div style="margin-top: 0.2rem;"><button type="button" onclick="showDocumentPhoto('<?= htmlspecialchars($g['document_photo']) ?>')" class="badge badge-warning" style="border:none; cursor:pointer;" title="Lihat Foto SIM/Identitas">📷 Foto Identitas</button></div>
-                                <?php endif; ?>
-                            </td>
+                            <td class="col-nowrap"><code><?= htmlspecialchars($g['visitor_card_number'] ?: '-') ?></code></td>
                             <td class="col-date"><?= date('d/m/Y H:i', strtotime($g['time_in'])) ?></td>
                             <td class="col-date"><?= date('d/m/Y H:i', strtotime($g['time_out'])) ?></td>
                             <td class="col-nowrap"><span class="badge badge-secondary">Sudah Keluar</span></td>
@@ -223,34 +207,5 @@ include __DIR__ . '/includes/header.php';
     <!-- Pagination Tabel Riwayat Tamu (5 Data Per Halaman) -->
     <?= render_pagination($history_page, $total_history_pages, ['search' => $search], 'history_page') ?>
 </div>
-
-<!-- MODAL DOCUMENT PHOTO PREVIEW -->
-<div id="modalDocumentPhoto" class="modal">
-    <div class="modal-content" style="max-width: 500px; text-align: center;">
-        <div class="modal-header">
-            <h3 class="modal-title">Foto Identitas / Dokumen Tamu</h3>
-            <button type="button" class="modal-close" onclick="closeModal('modalDocumentPhoto')">&times;</button>
-        </div>
-        <div class="modal-body" style="padding: 1.5rem;">
-            <img id="doc_photo_preview_src" src="" style="max-width: 100%; height: auto; border-radius: var(--radius-md); border: 1px solid var(--border);">
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" onclick="closeModal('modalDocumentPhoto')">Tutup</button>
-        </div>
-    </div>
-</div>
-
-<script>
-function openModal(id) {
-    document.getElementById(id).classList.add('show');
-}
-function closeModal(id) {
-    document.getElementById(id).classList.remove('show');
-}
-function showDocumentPhoto(src) {
-    document.getElementById('doc_photo_preview_src').src = src;
-    openModal('modalDocumentPhoto');
-}
-</script>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>
