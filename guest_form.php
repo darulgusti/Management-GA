@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $person_to_meet = trim($_POST['person_to_meet'] ?? '');
     $id_type = trim($_POST['id_type'] ?? '');
     $visitor_card = trim($_POST['visitor_card_number'] ?? '');
+    $document_photo = $_POST['document_photo'] ?? '';
     $signature = $_POST['signature'] ?? '';
 
     if (empty($name) || empty($category) || empty($institution) || empty($person_to_meet) || empty($purpose)) {
@@ -30,8 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         try {
             $now = date('Y-m-d H:i:s');
-            $stmt = $pdo->prepare("INSERT INTO guests (name, guest_category, institution, purpose, person_to_meet, id_type, visitor_card_number, time_in, signature) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$name, $category, $institution, $purpose, $person_to_meet, $id_type, $visitor_card, $now, $signature]);
+            $stmt = $pdo->prepare("INSERT INTO guests (name, guest_category, institution, purpose, person_to_meet, id_type, visitor_card_number, document_photo, time_in, signature) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$name, $category, $institution, $purpose, $person_to_meet, $id_type, $visitor_card, $document_photo, $now, $signature]);
             
             header("Location: success.php?type=guest");
             exit();
@@ -147,6 +148,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <div class="form-group">
+                    <label class="form-label">Upload Foto Dokumen (Opsional)</label>
+                    <input type="file" id="document_file_input" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this)">
+                    <input type="hidden" name="document_photo" id="document_photo_input" value="<?= htmlspecialchars($_POST['document_photo'] ?? '') ?>">
+                    <div id="photo_preview_container" style="display: none; margin-top: 0.5rem; text-align: center;">
+                        <img id="photo_preview_img" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+                        <div style="font-size: 0.75rem; color: var(--success); font-weight: 600; margin-top: 0.25rem;">✓ Foto dokumen berhasil dikompresi (siap simpan)</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label class="form-label">Tanda Tangan Digital Tamu <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                     <div class="signature-container">
                         <canvas id="guest_signature_canvas" class="signature-canvas"></canvas>
@@ -179,6 +190,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             container.style.display = 'none';
             input.removeAttribute('required');
         }
+    }
+
+    function compressAndPreviewPhoto(fileInput) {
+        const file = fileInput.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                const maxDimension = 1200;
+
+                if (width > height && width > maxDimension) {
+                    height = Math.round((height * maxDimension) / width);
+                    width = maxDimension;
+                } else if (height > maxDimension) {
+                    width = Math.round((width * maxDimension) / height);
+                    height = maxDimension;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                document.getElementById('document_photo_input').value = compressedDataUrl;
+                document.getElementById('photo_preview_img').src = compressedDataUrl;
+                document.getElementById('photo_preview_container').style.display = 'block';
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
     }
     </script>
 </body>

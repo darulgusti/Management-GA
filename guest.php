@@ -112,6 +112,9 @@ include __DIR__ . '/includes/header.php';
                                 <?php if (!empty($g['signature'])): ?>
                                     <div style="font-size: 0.725rem; color: var(--primary); font-weight: 500;">✓ Ada Ttd Digital</div>
                                 <?php endif; ?>
+                                <?php if (!empty($g['document_photo'])): ?>
+                                    <button type="button" onclick="showDocumentPhoto('<?= htmlspecialchars($g['document_photo']) ?>')" class="badge badge-warning" style="border:none; cursor:pointer; margin-top:0.25rem;" title="Lihat Foto Dokumen">📷 Foto Dokumen</button>
+                                <?php endif; ?>
                             </td>
                             <td class="col-nowrap"><?= htmlspecialchars($g['institution'] ?: '-') ?></td>
                             <td class="col-nowrap"><span class="badge badge-info"><?= htmlspecialchars(ucfirst($g['guest_category'])) ?></span></td>
@@ -186,7 +189,12 @@ include __DIR__ . '/includes/header.php';
                     <?php $no = $history_offset + 1; foreach ($history_guests as $g): ?>
                         <tr>
                             <td><?= $no++ ?></td>
-                            <td class="col-name"><strong><?= htmlspecialchars($g['name']) ?></strong></td>
+                            <td class="col-name">
+                                <strong><?= htmlspecialchars($g['name']) ?></strong>
+                                <?php if (!empty($g['document_photo'])): ?>
+                                    <br><button type="button" onclick="showDocumentPhoto('<?= htmlspecialchars($g['document_photo']) ?>')" class="badge badge-warning" style="border:none; cursor:pointer; margin-top:0.25rem;" title="Lihat Foto Dokumen">📷 Foto Dokumen</button>
+                                <?php endif; ?>
+                            </td>
                             <td class="col-nowrap"><?= htmlspecialchars($g['institution'] ?: '-') ?></td>
                             <td class="col-nowrap"><span class="badge badge-info"><?= htmlspecialchars(ucfirst($g['guest_category'])) ?></span></td>
                             <td class="col-nowrap">
@@ -207,5 +215,34 @@ include __DIR__ . '/includes/header.php';
     <!-- Pagination Tabel Riwayat Tamu (5 Data Per Halaman) -->
     <?= render_pagination($history_page, $total_history_pages, ['search' => $search], 'history_page') ?>
 </div>
+
+<!-- MODAL DOCUMENT PHOTO PREVIEW -->
+<div id="modalDocumentPhoto" class="modal-backdrop">
+    <div class="modal-dialog" style="max-width: 520px; width: 92%;">
+        <div class="modal-header">
+            <h3 class="modal-title">Foto Dokumen Lampiran Tamu</h3>
+            <button type="button" class="modal-close" onclick="closeModal('modalDocumentPhoto')">&times;</button>
+        </div>
+        <div class="modal-body" style="padding: 1.25rem; text-align: center;">
+            <img id="doc_photo_preview_src" src="" style="max-width: 100%; max-height: 70vh; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modalDocumentPhoto')">Tutup</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function openModal(id) {
+    document.getElementById(id).classList.add('show');
+}
+function closeModal(id) {
+    document.getElementById(id).classList.remove('show');
+}
+function showDocumentPhoto(src) {
+    document.getElementById('doc_photo_preview_src').src = src;
+    openModal('modalDocumentPhoto');
+}
+</script>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>
