@@ -155,7 +155,7 @@ include __DIR__ . '/includes/header.php';
                     <option value="guest" <?= $type === 'guest' ? 'selected' : '' ?>>Buku Tamu Digital</option>
                     <option value="borrowing" <?= $type === 'borrowing' ? 'selected' : '' ?>>Peminjaman Barang & Kunci</option>
                     <option value="gate_in" <?= $type === 'gate_in' ? 'selected' : '' ?>>Pos 4 - Buku Masuk (Gate In)</option>
-                    <option value="gate_out" <?= $type === 'gate_out' ? 'selected' : '' ?>>Pos 4 - Buku Keluar (Gate Out)</option>
+                    <option value="gate_out" <?= $type === 'gate_out' ? 'selected' : '' ?>>Pos 4 - Keluar EDC</option>
                     <option value="export_nex" <?= $type === 'export_nex' ? 'selected' : '' ?>>Pos 4 - Export NEX / NOPOR</option>
                 </select>
             </div>
@@ -341,7 +341,7 @@ include __DIR__ . '/includes/header.php';
 <?php if ($type === 'all' || $type === 'gate_out'): ?>
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Rekap Pos 4 - Buku Keluar Gate Out (<?= number_format($total_gout_records) ?> Records)</h3>
+        <h3 class="card-title">Rekap Pos 4 - Keluar EDC (<?= number_format($total_gout_records) ?> Records)</h3>
     </div>
     <div class="table-responsive">
         <table class="table">
@@ -350,25 +350,23 @@ include __DIR__ . '/includes/header.php';
                     <th>No</th>
                     <th>Nopol</th>
                     <th>Sopir</th>
-                    <th>No. DO</th>
-                    <th>Tujuan</th>
-                    <th>Tonase</th>
+                    <th>Total Nett Weight</th>
+                    <th>Alamat Kirim / Tujuan</th>
                     <th>Transportir</th>
                     <th>Waktu Keluar</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (count($gate_outs) === 0): ?>
-                    <tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2rem;">Tidak ada data Gate Out di rentang tanggal ini.</td></tr>
+                    <tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">Tidak ada data Keluar EDC di rentang tanggal ini.</td></tr>
                 <?php else: ?>
                     <?php $no = $gout_offset + 1; foreach ($gate_outs as $go): ?>
                         <tr>
                             <td><?= $no++ ?></td>
                             <td><code><strong><?= htmlspecialchars($go['nopol']) ?></strong></code></td>
                             <td><?= htmlspecialchars($go['driver_name']) ?></td>
-                            <td><code><?= htmlspecialchars($go['do_number']) ?></code></td>
+                            <td><?= number_format($go['tonnage'], 2) ?></td>
                             <td><?= htmlspecialchars($go['destination']) ?></td>
-                            <td><?= number_format($go['tonnage'], 2) ?> Ton</td>
                             <td><?= htmlspecialchars($go['transportir']) ?></td>
                             <td><?= date('d/m/Y H:i', strtotime($go['exit_time'])) ?></td>
                         </tr>

@@ -100,18 +100,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($action === 'add_gate_out') {
         $nopol = trim($_POST['nopol'] ?? '');
         $driver_name = trim($_POST['driver_name'] ?? '');
-        $do_number = trim($_POST['do_number'] ?? '');
+        $do_number = '-';
         $destination = trim($_POST['destination'] ?? '');
         $tonnage = floatval($_POST['tonnage'] ?? 0);
         $transportir = trim($_POST['transportir'] ?? '');
         $exit_time = !empty($_POST['exit_time']) ? date('Y-m-d H:i:s', strtotime($_POST['exit_time'])) : date('Y-m-d H:i:s');
 
-        if (!empty($nopol) && !empty($driver_name) && !empty($do_number) && !empty($destination)) {
+        if (!empty($nopol) && !empty($driver_name) && !empty($destination) && !empty($transportir)) {
             $stmt = $pdo->prepare("INSERT INTO logistic_gate_outs (nopol, driver_name, do_number, destination, tonnage, transportir, exit_time) VALUES (?, ?, ?, ?, ?, ?, ?)");
             $stmt->execute([$nopol, $driver_name, $do_number, $destination, $tonnage, $transportir, $exit_time]);
-            set_flash_message('success', 'Data Kendaraan Keluar (Gate Out) berhasil disimpan.');
+            set_flash_message('success', 'Data Keluar EDC berhasil disimpan.');
         } else {
-            set_flash_message('danger', 'Mohon lengkapi Nopol, Driver, No. DO, dan Tujuan!');
+            set_flash_message('danger', 'Mohon lengkapi Nopol, Sopir, Total Nett Weight, Transportir, dan Alamat Kirim/Tujuan!');
         }
     } elseif ($action === 'delete_gate_out') {
         $id = intval($_POST['id'] ?? 0);
@@ -231,7 +231,7 @@ include __DIR__ . '/includes/header.php';
             📥 Buku Masuk (Gate In)
         </a>
         <a href="logistic.php?tab=gate_out" class="btn btn-sm <?= $active_tab === 'gate_out' ? 'btn-primary' : 'btn-outline' ?>">
-            📤 Buku Keluar (Gate Out)
+            📤 Keluar EDC
         </a>
         <a href="logistic.php?tab=export_nex" class="btn btn-sm <?= $active_tab === 'export_nex' ? 'btn-primary' : 'btn-outline' ?>">
             🚢 Keluar Export NEX
@@ -346,12 +346,12 @@ include __DIR__ . '/includes/header.php';
         <div>
             <h3 class="card-title">
                 <span class="badge badge-primary" style="font-size: 0.85rem;"><?= number_format($total_out_records) ?> Armada</span>
-                2. Buku Keluar Kendaraan (Gate Out)
+                2. Keluar EDC
             </h3>
-            <small style="color: var(--text-muted);">Pencatatan keberangkatan armada pengiriman barang non-ekspor</small>
+            <small style="color: var(--text-muted);">Pencatatan keberangkatan armada pengiriman barang (EDC)</small>
         </div>
         <?php if ($can_input): ?>
-            <button type="button" onclick="openModal('modalGateOut')" class="btn btn-primary btn-sm">+ Input Gate Out (Keluar)</button>
+            <button type="button" onclick="openModal('modalGateOut')" class="btn btn-primary btn-sm">+ Input Keluar EDC</button>
         <?php endif; ?>
     </div>
 
@@ -374,9 +374,8 @@ include __DIR__ . '/includes/header.php';
                     <th>No</th>
                     <th>Nopol</th>
                     <th>Nama Sopir</th>
-                    <th>No. DO</th>
-                    <th>Tujuan</th>
-                    <th>Tonase (Ton)</th>
+                    <th>Total Nett Weight</th>
+                    <th>Alamat Kirim / Tujuan</th>
                     <th>Transportir</th>
                     <th>Waktu Keluar</th>
                     <th>Status</th>
@@ -386,7 +385,7 @@ include __DIR__ . '/includes/header.php';
             <tbody>
                 <?php if (count($gate_outs) === 0): ?>
                     <tr>
-                        <td colspan="<?= $can_input ? '10' : '9' ?>" style="text-align: center; color: var(--text-muted); padding: 1.75rem;">Belum ada data kendaraan keluar.</td>
+                        <td colspan="<?= $can_input ? '9' : '8' ?>" style="text-align: center; color: var(--text-muted); padding: 1.75rem;">Belum ada data Keluar EDC.</td>
                     </tr>
                 <?php else: ?>
                     <?php $no = $offset_out + 1; foreach ($gate_outs as $go): ?>
@@ -394,9 +393,8 @@ include __DIR__ . '/includes/header.php';
                             <td><?= $no++ ?></td>
                             <td><code><strong><?= htmlspecialchars($go['nopol']) ?></strong></code></td>
                             <td><?= htmlspecialchars($go['driver_name']) ?></td>
-                            <td><code><?= htmlspecialchars($go['do_number']) ?></code></td>
-                            <td><?= htmlspecialchars($go['destination']) ?></td>
                             <td><strong><?= number_format($go['tonnage'], 2) ?></strong></td>
+                            <td><?= htmlspecialchars($go['destination']) ?></td>
                             <td><?= htmlspecialchars($go['transportir'] ?: '-') ?></td>
                             <td><?= date('d/m/Y H:i', strtotime($go['exit_time'])) ?></td>
                             <td><span class="badge badge-success"><?= htmlspecialchars($go['status']) ?></span></td>
@@ -555,6 +553,7 @@ include __DIR__ . '/includes/header.php';
                                 <option value="Export Ajinex">Export Ajinex</option>
                                 <option value="Transit">Transit</option>
                                 <option value="Muat">Muat</option>
+                                <option value="EDC">EDC</option>
                             </select>
                         </div>
 
@@ -592,11 +591,11 @@ include __DIR__ . '/includes/header.php';
     </div>
 </div>
 
-<!-- MODAL GATE OUT -->
+<!-- MODAL GATE OUT (KELUAR EDC) -->
 <div id="modalGateOut" class="modal-backdrop">
     <div class="modal-dialog" style="max-width: 760px; width: 95%;">
         <div class="modal-header">
-            <h3 class="modal-title">Form Input Kendaraan Keluar (Gate Out)</h3>
+            <h3 class="modal-title">Form Input Keluar EDC</h3>
             <button type="button" class="modal-close" onclick="closeModal('modalGateOut')">&times;</button>
         </div>
         <form method="POST" action="logistic.php?tab=<?= urlencode($active_tab) ?>">
@@ -612,18 +611,13 @@ include __DIR__ . '/includes/header.php';
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Nomor Delivery Order (DO) *</label>
-                            <input type="text" name="do_number" required class="form-control" placeholder="Nomor Delivery Order...">
+                            <label class="form-label" style="font-weight: 600;">Total Nett Weight (Kg / Ton) *</label>
+                            <input type="number" step="0.01" name="tonnage" required class="form-control" placeholder="Total Nett Weight diisi manual...">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Tonase / Jumlah Muatan (Ton)</label>
-                            <input type="number" step="0.01" name="tonnage" class="form-control" placeholder="Jumlah Tonase (Ton)...">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Transportir / Perusahaan</label>
-                            <input type="text" name="transportir" class="form-control" placeholder="Nama Transportir (Opsional)...">
+                            <label class="form-label" style="font-weight: 600;">Nama Transportir *</label>
+                            <input type="text" name="transportir" required class="form-control" placeholder="Nama Perusahaan / Transportir...">
                         </div>
                     </div>
 
@@ -635,8 +629,8 @@ include __DIR__ . '/includes/header.php';
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Tujuan Pengiriman *</label>
-                            <input type="text" name="destination" required class="form-control" placeholder="Tujuan Pengiriman / Alamat...">
+                            <label class="form-label" style="font-weight: 600;">Alamat Kirim / Tujuan *</label>
+                            <input type="text" name="destination" required class="form-control" placeholder="Alamat Kirim / Tujuan...">
                         </div>
 
                         <div class="form-group">
@@ -649,7 +643,7 @@ include __DIR__ . '/includes/header.php';
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="closeModal('modalGateOut')">Batal</button>
-                <button type="submit" class="btn btn-primary">Simpan Gate Out</button>
+                <button type="submit" class="btn btn-primary">Simpan Keluar EDC</button>
             </div>
         </form>
     </div>

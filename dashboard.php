@@ -149,7 +149,7 @@ include __DIR__ . '/includes/header.php';
         </div>
         <div class="stat-content">
             <div class="stat-value"><?= number_format($count_gate_out_today) ?></div>
-            <div class="stat-label">Pos 4 Gate Out Hari Ini</div>
+            <div class="stat-label">Keluar EDC Hari Ini</div>
         </div>
     </div>
 
@@ -293,30 +293,30 @@ include __DIR__ . '/includes/header.php';
         </div>
     </div>
 
-    <!-- Tabel 2: Gate Out -->
+    <!-- Tabel 2: Keluar EDC -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">2. Buku Keluar (Gate Out)</h3>
+            <h3 class="card-title">2. Keluar EDC</h3>
         </div>
         <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
                         <th>Nopol</th>
-                        <th>No. DO</th>
+                        <th>Alamat Kirim / Tujuan</th>
                         <th>Waktu Keluar</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (count($recent_gate_outs) === 0): ?>
                         <tr>
-                            <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">Belum ada armada keluar.</td>
+                            <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">Belum ada armada Keluar EDC.</td>
                         </tr>
                     <?php else: ?>
                         <?php foreach ($recent_gate_outs as $go): ?>
                             <tr>
                                 <td><code><strong><?= htmlspecialchars($go['nopol']) ?></strong></code></td>
-                                <td><code><?= htmlspecialchars($go['do_number']) ?></code></td>
+                                <td><?= htmlspecialchars($go['destination']) ?></td>
                                 <td><?= date('H:i', strtotime($go['exit_time'])) ?></td>
                             </tr>
                         <?php endforeach; ?>

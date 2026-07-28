@@ -47,14 +47,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($action === 'add_gate_out') {
         $nopol = trim($_POST['nopol'] ?? '');
         $driver_name = trim($_POST['driver_name'] ?? '');
-        $do_number = trim($_POST['do_number'] ?? '');
+        $do_number = '-';
         $destination = trim($_POST['destination'] ?? '');
         $tonnage = floatval($_POST['tonnage'] ?? 0);
         $transportir = trim($_POST['transportir'] ?? '');
         $exit_time = !empty($_POST['exit_time']) ? date('Y-m-d H:i:s', strtotime($_POST['exit_time'])) : date('Y-m-d H:i:s');
 
-        if (empty($nopol) || empty($driver_name) || empty($do_number) || empty($destination) || empty($tonnage) || empty($transportir)) {
-            $error_msg = "Seluruh kolom formulir Gate Out wajib diisi!";
+        if (empty($nopol) || empty($driver_name) || empty($destination) || empty($tonnage) || empty($transportir)) {
+            $error_msg = "Mohon lengkapi Nopol, Sopir, Total Nett Weight, Transportir, dan Alamat Kirim/Tujuan!";
         } else {
             try {
                 $stmt = $pdo->prepare("INSERT INTO logistic_gate_outs (nopol, driver_name, do_number, destination, tonnage, transportir, exit_time) VALUES (?, ?, ?, ?, ?, ?, ?)");
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header("Location: success.php?type=gate_out");
                 exit();
             } catch (Exception $e) {
-                $error_msg = "Gagal menyimpan data Gate Out: " . $e->getMessage();
+                $error_msg = "Gagal menyimpan data Keluar EDC: " . $e->getMessage();
             }
         }
     } elseif ($action === 'add_export') {
@@ -144,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     📥 Buku Masuk (Gate In)
                 </a>
                 <a href="logistic_form.php?type=gate_out" class="btn btn-sm <?= $type === 'gate_out' ? 'btn-primary' : 'btn-outline' ?>" style="font-weight: 600;">
-                    📤 Buku Keluar (Gate Out)
+                    📤 Keluar EDC
                 </a>
                 <a href="logistic_form.php?type=export_nex" class="btn btn-sm <?= $type === 'export_nex' ? 'btn-primary' : 'btn-outline' ?>" style="font-weight: 600;">
                     🚢 Keluar Export NEX
@@ -205,6 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <option value="Export Ajinex">Export Ajinex</option>
                                     <option value="Transit">Transit</option>
                                     <option value="Muat">Muat</option>
+                                    <option value="EDC">EDC</option>
                                 </select>
                             </div>
 
@@ -250,11 +251,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </button>
                 </form>
 
-            <!-- FORM 2: BUKU KELUAR (GATE OUT) -->
+            <!-- FORM 2: KELUAR EDC -->
             <?php elseif ($type === 'gate_out'): ?>
                 <div style="margin-bottom: 1rem;">
-                    <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 0.25rem;">Form Buku Keluar Kendaraan (Gate Out)</h2>
-                    <p style="color: var(--text-muted); font-size: 0.85rem;">Input data armada kendaraan pengiriman non-ekspor yang keluar dari gerbang.</p>
+                    <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 0.25rem;">Form Input Keluar EDC</h2>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;">Input data armada kendaraan pengiriman yang keluar (EDC).</p>
                 </div>
 
                 <form method="POST" action="logistic_form.php?type=gate_out">
@@ -269,18 +270,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Nomor Delivery Order (DO) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="do_number" required class="form-control" placeholder="Nomor Delivery Order...">
+                                <label class="form-label" style="font-weight: 600;">Total Nett Weight (Kg / Ton) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                                <input type="number" step="0.01" name="tonnage" required class="form-control" placeholder="Total Nett Weight diisi manual...">
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Tonase / Jumlah Muatan (Ton) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="number" step="0.01" name="tonnage" required class="form-control" placeholder="Jumlah Tonase (Ton)...">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Transportir / Perusahaan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="transportir" required class="form-control" placeholder="Nama Transportir...">
+                                <label class="form-label" style="font-weight: 600;">Nama Transportir <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                                <input type="text" name="transportir" required class="form-control" placeholder="Nama Perusahaan / Transportir...">
                             </div>
                         </div>
 
@@ -292,8 +288,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Tujuan Pengiriman <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="destination" required class="form-control" placeholder="Tujuan Pengiriman / Alamat...">
+                                <label class="form-label" style="font-weight: 600;">Alamat Kirim / Tujuan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                                <input type="text" name="destination" required class="form-control" placeholder="Alamat Kirim / Tujuan...">
                             </div>
 
                             <div class="form-group">
@@ -306,7 +302,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top: 1.5rem;">
                         <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        Simpan Data Gate Out
+                        Simpan Data Keluar EDC
                     </button>
                 </form>
 

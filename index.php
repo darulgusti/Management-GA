@@ -91,7 +91,7 @@ $flash = get_flash_message();
                     </div>
                     <h2 style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">Pos 4 - Gate Pass System</h2>
                     <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1.25rem;">
-                        Pencatatan &amp; pemantauan lalu lintas armada (Buku Masuk, Buku Keluar &amp; Export NEX/NOPOR).
+                        Pencatatan &amp; pemantauan lalu lintas armada (Gate In, Keluar EDC &amp; Keluar Export NEX).
                     </p>
                 </div>
                 <a href="logistic_form.php" class="btn btn-primary btn-block" style="font-size: 0.85rem; padding: 0.55rem;">
