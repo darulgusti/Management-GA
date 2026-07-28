@@ -394,7 +394,7 @@ include __DIR__ . '/includes/header.php';
                             <td><?= $no++ ?></td>
                             <td><code><strong><?= htmlspecialchars($go['nopol']) ?></strong></code></td>
                             <td><?= htmlspecialchars($go['driver_name']) ?></td>
-                            <td><strong><?= number_format($go['tonnage'], 2) ?></strong></td>
+                            <td><strong><?= is_numeric($go['tonnage']) ? number_format((float)$go['tonnage'], 2) : htmlspecialchars($go['tonnage']) ?></strong></td>
                             <td><?= htmlspecialchars($go['destination']) ?></td>
                             <td><?= htmlspecialchars($go['transportir'] ?: '-') ?></td>
                             <td><?= date('d/m/Y H:i', strtotime($go['exit_time'])) ?></td>
@@ -478,7 +478,7 @@ include __DIR__ . '/includes/header.php';
                             <td><code><?= htmlspecialchars($ex['container_number']) ?></code></td>
                             <td><code><?= htmlspecialchars($ex['seal_number']) ?></code></td>
                             <td><?= htmlspecialchars($ex['destination'] ?: '-') ?></td>
-                            <td><strong><?= number_format($ex['tonnage'], 2) ?></strong></td>
+                            <td><strong><?= is_numeric($ex['tonnage']) ? number_format((float)$ex['tonnage'], 2) : htmlspecialchars($ex['tonnage']) ?></strong></td>
                             <td><?= htmlspecialchars($ex['transportir'] ?: '-') ?></td>
                             <td><?= date('d/m/Y H:i', strtotime($ex['exit_time'])) ?></td>
                             <td><span class="badge badge-success"><?= htmlspecialchars($ex['status']) ?></span></td>

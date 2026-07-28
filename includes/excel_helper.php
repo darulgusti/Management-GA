@@ -312,7 +312,7 @@ function generate_gate_outs_xml_worksheet($gate_outs, $sheet_title = "Logistik G
         $xml .= '    <Cell ss:StyleID="CellData"><Data ss:Type="String">' . htmlspecialchars($go['driver_name']) . '</Data></Cell>' . "\n";
         $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . htmlspecialchars($go['do_number']) . '</Data></Cell>' . "\n";
         $xml .= '    <Cell ss:StyleID="CellData"><Data ss:Type="String">' . htmlspecialchars($go['destination']) . '</Data></Cell>' . "\n";
-        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="Number">' . $go['tonnage'] . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="' . (is_numeric($go['tonnage']) ? 'Number' : 'String') . '">' . htmlspecialchars($go['tonnage']) . '</Data></Cell>' . "\n";
         $xml .= '    <Cell ss:StyleID="CellData"><Data ss:Type="String">' . htmlspecialchars($go['transportir']) . '</Data></Cell>' . "\n";
         $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . format_excel_date($go['exit_time']) . '</Data></Cell>' . "\n";
         $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . format_excel_time($go['exit_time']) . '</Data></Cell>' . "\n";
@@ -365,7 +365,7 @@ function generate_export_nex_xml_worksheet($exports, $sheet_title = "Logistik Ex
         $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . htmlspecialchars($ex['container_number']) . '</Data></Cell>' . "\n";
         $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . htmlspecialchars($ex['seal_number']) . '</Data></Cell>' . "\n";
         $xml .= '    <Cell ss:StyleID="CellData"><Data ss:Type="String">' . htmlspecialchars($ex['destination']) . '</Data></Cell>' . "\n";
-        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="Number">' . $ex['tonnage'] . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="' . (is_numeric($ex['tonnage']) ? 'Number' : 'String') . '">' . htmlspecialchars($ex['tonnage']) . '</Data></Cell>' . "\n";
         $xml .= '    <Cell ss:StyleID="CellData"><Data ss:Type="String">' . htmlspecialchars($ex['transportir']) . '</Data></Cell>' . "\n";
         $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . format_excel_date($ex['exit_time']) . '</Data></Cell>' . "\n";
         $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . format_excel_time($ex['exit_time']) . '</Data></Cell>' . "\n";

@@ -365,7 +365,7 @@ include __DIR__ . '/includes/header.php';
                             <td><?= $no++ ?></td>
                             <td><code><strong><?= htmlspecialchars($go['nopol']) ?></strong></code></td>
                             <td><?= htmlspecialchars($go['driver_name']) ?></td>
-                            <td><?= number_format($go['tonnage'], 2) ?></td>
+                            <td><?= is_numeric($go['tonnage']) ? number_format((float)$go['tonnage'], 2) : htmlspecialchars($go['tonnage']) ?></td>
                             <td><?= htmlspecialchars($go['destination']) ?></td>
                             <td><?= htmlspecialchars($go['transportir']) ?></td>
                             <td><?= date('d/m/Y H:i', strtotime($go['exit_time'])) ?></td>
@@ -412,7 +412,7 @@ include __DIR__ . '/includes/header.php';
                             <td><code><?= htmlspecialchars($ex['container_number']) ?></code></td>
                             <td><code><?= htmlspecialchars($ex['seal_number']) ?></code></td>
                             <td><?= htmlspecialchars($ex['destination']) ?></td>
-                            <td><?= number_format($ex['tonnage'], 2) ?> Ton</td>
+                            <td><?= is_numeric($ex['tonnage']) ? number_format((float)$ex['tonnage'], 2) . ' Ton' : htmlspecialchars($ex['tonnage']) ?></td>
                             <td><?= date('d/m/Y H:i', strtotime($ex['exit_time'])) ?></td>
                         </tr>
                     <?php endforeach; ?>
