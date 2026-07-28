@@ -232,8 +232,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Upload Foto Dokumen <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="file" id="document_file_input" required accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this)">
+                                <label class="form-label" style="font-weight: 600;">Upload Foto Dokumen <small style="color: var(--text-muted); font-weight: 400;">(Opsional)</small></label>
+                                <input type="file" id="document_file_input" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this)">
                                 <input type="hidden" name="document_photo" id="document_photo_input">
                                 <div id="photo_preview_container" style="display: none; margin-top: 0.5rem; text-align: center;">
                                     <img id="photo_preview_img" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
