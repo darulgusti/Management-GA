@@ -173,14 +173,12 @@ include __DIR__ . '/includes/header.php';
     </div>
 
     <!-- Search Bar khusus Riwayat -->
-    <form method="GET" action="borrowing.php" style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap;">
+    <form method="GET" action="borrowing.php" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
         <input type="hidden" name="tab" value="<?= htmlspecialchars($active_tab) ?>">
-        <div style="flex: 1; min-width: 220px;">
-            <input type="text" name="search" class="form-control" placeholder="Cari nama, barang, atau dept di riwayat..." value="<?= htmlspecialchars($search) ?>">
-        </div>
-        <button type="submit" class="btn btn-secondary">Cari</button>
+        <input type="text" name="search" class="form-control" placeholder="Cari nama, barang, atau dept di riwayat..." value="<?= htmlspecialchars($search) ?>" style="flex: 1; min-width: 220px; margin: 0;">
+        <button type="submit" class="btn btn-primary" style="margin: 0;">Cari</button>
         <?php if (!empty($search)): ?>
-            <a href="borrowing.php?tab=<?= htmlspecialchars($active_tab) ?>" class="btn btn-outline">Reset</a>
+            <a href="borrowing.php?tab=<?= htmlspecialchars($active_tab) ?>" class="btn btn-outline" style="margin: 0;">Reset</a>
         <?php endif; ?>
     </form>
 
