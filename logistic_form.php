@@ -32,8 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $kir = isset($_POST['checklist_kir']) ? 1 : 0;
         $entry_time = !empty($_POST['entry_time']) ? date('Y-m-d H:i:s', strtotime($_POST['entry_time'])) : date('Y-m-d H:i:s');
 
-        if (empty($nopol) || empty($driver_name)) {
-            $error_msg = "Nomor Polisi (Nopol) dan Nama Sopir wajib diisi!";
+        if (empty($nopol) || empty($driver_name) || empty($visitor_number) || empty($antree_number) || empty($transportir) || empty($destination) || empty($sim_type) || empty($sim_number) || empty($document_photo)) {
+            $error_msg = "Seluruh kolom formulir Gate In (termasuk foto SIM/Dokumen) wajib diisi!";
         } else {
             try {
                 $stmt = $pdo->prepare("INSERT INTO logistic_gate_ins (nopol, driver_name, visitor_number, antree_number, transportir, destination, sim_type, sim_number, document_photo, checklist_sim, checklist_stnk, checklist_kir, entry_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -53,8 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $transportir = trim($_POST['transportir'] ?? '');
         $exit_time = !empty($_POST['exit_time']) ? date('Y-m-d H:i:s', strtotime($_POST['exit_time'])) : date('Y-m-d H:i:s');
 
-        if (empty($nopol) || empty($driver_name) || empty($do_number) || empty($destination)) {
-            $error_msg = "Mohon lengkapi Nopol, Driver, No. DO, dan Tujuan Pengiriman!";
+        if (empty($nopol) || empty($driver_name) || empty($do_number) || empty($destination) || empty($tonnage) || empty($transportir)) {
+            $error_msg = "Seluruh kolom formulir Gate Out wajib diisi!";
         } else {
             try {
                 $stmt = $pdo->prepare("INSERT INTO logistic_gate_outs (nopol, driver_name, do_number, destination, tonnage, transportir, exit_time) VALUES (?, ?, ?, ?, ?, ?, ?)");
@@ -76,8 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $transportir = trim($_POST['transportir'] ?? '');
         $exit_time = !empty($_POST['exit_time']) ? date('Y-m-d H:i:s', strtotime($_POST['exit_time'])) : date('Y-m-d H:i:s');
 
-        if (empty($mopor_number) || empty($driver_name) || empty($container_number)) {
-            $error_msg = "Mohon lengkapi No. NOPOR, Driver, dan No. Kontainer!";
+        if (empty($mopor_number) || empty($driver_name) || empty($container_number) || empty($do_number) || empty($seal_number) || empty($tonnage) || empty($transportir) || empty($destination)) {
+            $error_msg = "Seluruh kolom formulir Export NEX (NOPOR) wajib diisi!";
         } else {
             try {
                 $stmt = $pdo->prepare("INSERT INTO logistic_export_nex_mopors (mopor_number, driver_name, do_number, container_number, seal_number, destination, tonnage, transportir, exit_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -170,13 +170,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Visitor Number (Opsional)</label>
-                                <input type="text" name="visitor_number" class="form-control" placeholder="Visitor Card Number (Opsional)...">
+                                <label class="form-label" style="font-weight: 600;">Visitor Number <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                                <input type="text" name="visitor_number" required class="form-control" placeholder="Visitor Card Number...">
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Antre Number (Opsional)</label>
-                                <input type="text" name="antree_number" class="form-control" placeholder="Nomor Antre (Opsional)...">
+                                <label class="form-label" style="font-weight: 600;">Antre Number <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                                <input type="text" name="antree_number" required class="form-control" placeholder="Nomor Antre...">
                             </div>
 
                             <div class="form-group">
@@ -185,8 +185,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Nomor SIM Driver (Opsional)</label>
-                                <input type="text" name="sim_number" class="form-control" placeholder="Nomor SIM Driver...">
+                                <label class="form-label" style="font-weight: 600;">Nomor SIM Driver <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                                <input type="text" name="sim_number" required class="form-control" placeholder="Nomor SIM Driver...">
                             </div>
                         </div>
 
@@ -203,7 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <option value="">-- Pilih Tujuan --</option>
                                     <option value="Kirim">Kirim</option>
                                     <option value="Export Ajinex">Export Ajinex</option>
-                                    <option value="Umbal-umbal">Umbal-umbal</option>
+                                    <option value="Transit">Transit</option>
                                     <option value="Muat">Muat</option>
                                 </select>
                             </div>
@@ -219,7 +219,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Kelengkapan Berkas (STNK &amp; KIR)</label>
+                                <label class="form-label" style="font-weight: 600;">Kelengkapan Berkas (STNK &amp; KIR) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                                 <div style="display: flex; gap: 1rem; padding: 0.55rem 0.75rem; background: var(--bg-surface-alt); border-radius: var(--radius-sm); border: 1px solid var(--border);">
                                     <label style="cursor: pointer; display: flex; align-items: center; gap: 0.35rem;"><input type="checkbox" name="checklist_stnk" value="1" checked> STNK</label>
                                     <label style="cursor: pointer; display: flex; align-items: center; gap: 0.35rem;"><input type="checkbox" name="checklist_kir" value="1" checked> KIR</label>
@@ -227,13 +227,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Transportir / Perusahaan</label>
-                                <input type="text" name="transportir" class="form-control" placeholder="Nama Perusahaan / Transportir (Opsional)...">
+                                <label class="form-label" style="font-weight: 600;">Transportir / Perusahaan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                                <input type="text" name="transportir" required class="form-control" placeholder="Nama Perusahaan / Transportir...">
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Upload Foto SIM / Dokumen (Opsional)</label>
-                                <input type="file" id="document_file_input" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this)">
+                                <label class="form-label" style="font-weight: 600;">Upload Foto SIM / Dokumen <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                                <input type="file" id="document_file_input" required accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this)">
                                 <input type="hidden" name="document_photo" id="document_photo_input">
                                 <div id="photo_preview_container" style="display: none; margin-top: 0.5rem; text-align: center;">
                                     <img id="photo_preview_img" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
@@ -274,13 +274,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Tonase / Jumlah Muatan (Ton)</label>
-                                <input type="number" step="0.01" name="tonnage" class="form-control" placeholder="Jumlah Tonase (Ton)...">
+                                <label class="form-label" style="font-weight: 600;">Tonase / Jumlah Muatan (Ton) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                                <input type="number" step="0.01" name="tonnage" required class="form-control" placeholder="Jumlah Tonase (Ton)...">
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Transportir / Perusahaan</label>
-                                <input type="text" name="transportir" class="form-control" placeholder="Nama Transportir (Opsional)...">
+                                <label class="form-label" style="font-weight: 600;">Transportir / Perusahaan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                                <input type="text" name="transportir" required class="form-control" placeholder="Nama Transportir...">
                             </div>
                         </div>
 
@@ -324,13 +324,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <!-- LEFT COLUMN -->
                         <div>
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Nomor NOPOR <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                                <label class="form-label" style="font-weight: 600;">Nomor NOPOR (Nomor Ekspor) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                                 <input type="text" name="mopor_number" required class="form-control" placeholder="Masukkan NOPOR...">
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Nomor DO</label>
-                                <input type="text" name="do_number" class="form-control" placeholder="Nomor DO...">
+                                <label class="form-label" style="font-weight: 600;">Nomor DO <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                                <input type="text" name="do_number" required class="form-control" placeholder="Nomor DO...">
                             </div>
 
                             <div class="form-group">
@@ -339,13 +339,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Tonase (Ton)</label>
-                                <input type="number" step="0.01" name="tonnage" class="form-control" placeholder="Jumlah Tonase (Ton)...">
+                                <label class="form-label" style="font-weight: 600;">Tonase (Ton) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                                <input type="number" step="0.01" name="tonnage" required class="form-control" placeholder="Jumlah Tonase (Ton)...">
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Transportir</label>
-                                <input type="text" name="transportir" class="form-control" placeholder="Transportir / Ekspedisi (Opsional)...">
+                                <label class="form-label" style="font-weight: 600;">Transportir <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                                <input type="text" name="transportir" required class="form-control" placeholder="Transportir / Ekspedisi...">
                             </div>
                         </div>
 
@@ -362,12 +362,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Tujuan</label>
-                                <input type="text" name="destination" class="form-control" placeholder="Pelabuhan / Negara Tujuan...">
+                                <label class="form-label" style="font-weight: 600;">Tujuan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                                <input type="text" name="destination" required class="form-control" placeholder="Pelabuhan / Negara Tujuan...">
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Keluar <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                                <input type="datetime-local" name="exit_time" required class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
+                            </div>
+                        </div>
                                 <input type="datetime-local" name="exit_time" required class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
                             </div>
                         </div>

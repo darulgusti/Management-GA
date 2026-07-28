@@ -553,7 +553,7 @@ include __DIR__ . '/includes/header.php';
                                 <option value="">-- Pilih Tujuan --</option>
                                 <option value="Kirim">Kirim</option>
                                 <option value="Export Ajinex">Export Ajinex</option>
-                                <option value="Umbal-umbal">Umbal-umbal</option>
+                                <option value="Transit">Transit</option>
                                 <option value="Muat">Muat</option>
                             </select>
                         </div>

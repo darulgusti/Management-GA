@@ -25,8 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $visitor_card = trim($_POST['visitor_card_number'] ?? '');
     $signature = $_POST['signature'] ?? '';
 
-    if (empty($name) || empty($category) || empty($person_to_meet)) {
-        $error_msg = "Nama Tamu, Kategori Tamu, dan Orang yang Ditemui wajib diisi!";
+    if (empty($name) || empty($category) || empty($institution) || empty($person_to_meet) || empty($visitor_card) || empty($purpose)) {
+        $error_msg = "Seluruh kolom formulir pendaftaran tamu wajib diisi!";
     } else {
         try {
             $now = date('Y-m-d H:i:s');
@@ -116,8 +116,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="grid-2">
                     <div class="form-group">
-                        <label class="form-label">Instansi / Perusahaan Asal</label>
-                        <input type="text" name="institution" class="form-control" placeholder="PT / Instansi Asal" value="<?= htmlspecialchars($_POST['institution'] ?? '') ?>">
+                        <label class="form-label">Instansi / Perusahaan Asal <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <input type="text" name="institution" required class="form-control" placeholder="PT / Instansi Asal" value="<?= htmlspecialchars($_POST['institution'] ?? '') ?>">
                     </div>
 
                     <div class="form-group">
@@ -128,8 +128,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="grid-2">
                     <div class="form-group">
-                        <label class="form-label">Jenis Kartu Identitas</label>
-                        <select name="id_type" class="form-select">
+                        <label class="form-label">Jenis Kartu Identitas <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <select name="id_type" class="form-select" required>
                             <option value="KTP">KTP</option>
                             <option value="SIM">SIM</option>
                             <option value="PASPOR">Paspor / ID Card</option>
@@ -137,18 +137,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Nomor Kartu Akses Tamu (Visitor Card)</label>
-                        <input type="text" name="visitor_card_number" class="form-control" placeholder="Contoh: V-012" value="<?= htmlspecialchars($_POST['visitor_card_number'] ?? '') ?>">
+                        <label class="form-label">Nomor Kartu Akses Tamu (Visitor Card) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <input type="text" name="visitor_card_number" required class="form-control" placeholder="Contoh: V-012" value="<?= htmlspecialchars($_POST['visitor_card_number'] ?? '') ?>">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Tujuan Kunjungan (Opsional)</label>
-                    <textarea name="purpose" class="form-control" placeholder="Jelaskan keperluan/tujuan kunjungan Anda (opsional)..."><?= htmlspecialchars($_POST['purpose'] ?? '') ?></textarea>
+                    <label class="form-label">Tujuan Kunjungan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                    <textarea name="purpose" required class="form-control" placeholder="Jelaskan keperluan/tujuan kunjungan Anda..."><?= htmlspecialchars($_POST['purpose'] ?? '') ?></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Tanda Tangan Digital Tamu</label>
+                    <label class="form-label">Tanda Tangan Digital Tamu <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                     <div class="signature-container">
                         <canvas id="guest_signature_canvas" class="signature-canvas"></canvas>
                         <div class="signature-controls">

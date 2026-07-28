@@ -25,8 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $initial_condition = trim($_POST['initial_condition'] ?? 'Baik');
     $signature = $_POST['signature'] ?? '';
 
-    if (empty($borrower_name) || empty($department) || empty($item_name)) {
-        $error_msg = "Nama Peminjam, Departemen, dan Nama Barang wajib diisi!";
+    if (empty($borrower_name) || empty($department) || empty($item_name) || empty($item_code) || empty($quantity)) {
+        $error_msg = "Seluruh kolom formulir peminjaman wajib diisi!";
     } else {
         try {
             $now = date('Y-m-d H:i:s');
@@ -121,19 +121,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Kode / Nomor Barang (Opsional)</label>
-                        <input type="text" name="item_code" class="form-control" placeholder="Contoh: K-05 / PRJ-01" value="<?= htmlspecialchars($_POST['item_code'] ?? '') ?>">
+                        <label class="form-label">Kode / Nomor Barang <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <input type="text" name="item_code" required class="form-control" placeholder="Contoh: K-05 / PRJ-01" value="<?= htmlspecialchars($_POST['item_code'] ?? '') ?>">
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Jumlah (Qty)</label>
-                        <input type="number" name="quantity" value="<?= intval($_POST['quantity'] ?? 1) ?>" min="1" class="form-control">
+                        <label class="form-label">Jumlah (Qty) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <input type="number" name="quantity" required value="<?= intval($_POST['quantity'] ?? 1) ?>" min="1" class="form-control">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Kondisi Awal Barang</label>
-                    <select name="initial_condition" class="form-select">
+                    <label class="form-label">Kondisi Awal Barang <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                    <select name="initial_condition" class="form-select" required>
                         <option value="Baik">Baik & Berfungsi Normal</option>
                         <option value="Cacat Fisik Ringan">Cacat Fisik Ringan (Goresan)</option>
                         <option value="Kondisi Khusus">Kondisi Khusus / Catatan</option>
@@ -141,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Tanda Tangan Digital Peminjam</label>
+                    <label class="form-label">Tanda Tangan Digital Peminjam <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                     <div class="signature-container">
                         <canvas id="borrow_signature_canvas" class="signature-canvas"></canvas>
                         <div class="signature-controls">
