@@ -727,6 +727,7 @@ include __DIR__ . '/includes/header.php';
         </form>
     </div>
 </div>
+<?php endif; ?>
 
 <!-- MODAL DOCUMENT PHOTO PREVIEW -->
 <div id="modalDocumentPhoto" class="modal">
