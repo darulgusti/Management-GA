@@ -371,9 +371,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <input type="datetime-local" name="exit_time" class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
                             </div>
                         </div>
-                                <input type="datetime-local" name="exit_time" required class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
-                            </div>
-                        </div>
 
                     </div>
 
