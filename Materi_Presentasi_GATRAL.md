@@ -66,7 +66,6 @@ Untuk mempermudah dan mempercepat akses bagi orang awam (tamu, kurir, sopir), si
 *(Catatan: Tombol "Kembali ke Portal" telah dihapus dari seluruh form agar pengunjung terfokus 100% pada pengisian data saja).*
 
 ### B. Portal Utama (Single Login Gateway)
-Halaman awal (Portal Utama) kini disulap secara eksklusif menjadi halaman pendaratan khusus Login yang bersih, elegan, dan tanpa menu publik ganda. Portal ini murni digunakan oleh petugas internal (SECOM & Manager).
 *(Catatan: Begitu petugas SECOM berhasil login, sistem akan langsung mengarahkan mereka secara otomatis (direct-redirect) ke halaman Dashboard Monitoring).*
 
 ### C. Dashboard Monitoring (SECOM & Manager)
