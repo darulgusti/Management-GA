@@ -67,12 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="portal-container" style="max-width: 800px; margin-top: 2rem; margin-bottom: 3rem;">
         
-        <div style="margin-bottom: 1.5rem;">
-            <a href="index.php" class="btn-back">
-                ← Kembali ke Portal Utama
-            </a>
-        </div>
-
         <?php if ($error_msg): ?>
             <div class="alert alert-danger">
                 <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
