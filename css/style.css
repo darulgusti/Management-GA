@@ -1166,7 +1166,7 @@ textarea.form-control {
 @media (max-width: 768px) {
 
   /* --- Stat Cards Grid: 2 columns on mobile --- */
-  .grid-stat {
+  .grid-4.grid-stat, .grid-3.grid-stat, .grid-stat {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 0.65rem !important;
