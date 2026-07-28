@@ -48,25 +48,29 @@ Berikut adalah gambaran skenario berjalannya sistem di pos gerbang sehari-hari:
 2. **Pengisian Mandiri (Self-Service):** 
    Setelah melakukan scan QR, *smartphone* pengguna akan **langsung diarahkan masuk ke halaman formulir spesifik**. Tamu tinggal mengisi data diri, menjepret foto dokumen, membubuhkan Tanda Tangan Digital, lalu menekan *Submit*.
 3. **Input Kartu Mandiri & Monitoring Real-Time:** 
-   Saat mengisi formulir, tamu/sopir akan menerima Kartu Visitor fisik dari petugas dan langsung menginputkan nomor kartu tersebut (misal: V-012) ke dalam form. Setelah tamu menekan *Submit*, data seketika terdaftar secara *real-time* di **Dashboard Petugas (SECOM)** dan pengunjung dipersilakan masuk (mengeliminasi langkah verifikasi input ulang oleh petugas).
+   Saat mengisi formulir, tamu/sopir akan menerima Kartu Visitor fisik dari petugas dan langsung menginputkan nomor kartu tersebut (misal: V-012) ke dalam form. Setelah tamu menekan *Submit*, data seketika terdaftar secara *real-time* di **Dashboard Petugas (SECOM)** dan pengunjung dipersilakan masuk.
 4. **Saat Tamu Pulang (Check-out):** 
    Tamu mengembalikan Kartu Visitor. Petugas cukup melihat Dashboard *Tamu Masih di Lokasi*, mencari nama tamu tersebut, dan menekan tombol merah **Check-out**. Sistem otomatis mencatat jam kepulangan tamu dan memindahkannya ke tabel Riwayat.
 
 ---
 
-## 5. Penjelasan Menu Tampilan Awal (Publik vs SECOM)
+## 5. Penjelasan Menu Tampilan Awal (Publik vs Internal)
 
-Sistem memisahkan antarmuka (UI) menjadi dua bagian agar tidak membingungkan pengguna:
+Sistem memisahkan alur pengguna dengan sangat tegas agar prosesnya jauh lebih instan:
 
-### A. Tampilan Portal Publik & Akses Direct QR Code
-Untuk mempermudah dan mempercepat akses bagi orang awam (tamu, kurir, sopir), sistem menyediakan jalur akses instan berupa **3 QR Code Spesifik** agar pengunjung tidak perlu bingung mencari menu. Sistem ini tidak memerlukan Login:
-1. **Form Buku Tamu Digital (Guest Book):** Diakses via QR Tamu (untuk kunjungan dinas, vendor, interview).
-2. **Form Peminjaman (Borrowing):** Diakses via QR Peminjaman (untuk peminjaman kendaraan GA atau kunci SECOM).
-3. **Form Pos 4 (Gate Pass System):** Diakses via QR Logistik (untuk mendaftar Gate In, Keluar EDC, atau Ekspor NEX).
-*(Catatan: Sistem juga tetap memiliki Tampilan Landing Page yang menampung ke-3 menu tersebut sebagai cadangan jika tamu mengaksesnya melalui layar Tablet/Kiosk).*
+### A. Akses Tamu Publik (Direct QR Code)
+Untuk mempermudah dan mempercepat akses bagi orang awam (tamu, kurir, sopir), sistem murni menggunakan jalur akses instan berupa **3 QR Code Spesifik** agar pengunjung tidak perlu bingung mencari menu. Sistem ini tidak memerlukan Login:
+1. **Form Buku Tamu Digital (Guest Book):** Diakses via QR Tamu.
+2. **Form Peminjaman (Borrowing):** Diakses via QR Peminjaman.
+3. **Form Pos 4 (Gate Pass System):** Diakses via QR Logistik.
+*(Catatan: Tombol "Kembali ke Portal" telah dihapus dari seluruh form agar pengunjung terfokus 100% pada pengisian data saja).*
 
-### B. Tampilan Petugas / Admin (Dashboard SECOM)
-Ini adalah "Dapur" dari sistem yang hanya bisa diakses menggunakan kata sandi (Login). Didesain untuk **Monitoring dan Aksi Cepat**:
+### B. Portal Utama (Single Login Gateway)
+Halaman awal (Portal Utama) kini disulap secara eksklusif menjadi halaman pendaratan khusus Login yang bersih, elegan, dan tanpa menu publik ganda. Portal ini murni digunakan oleh petugas internal (SECOM & Manager).
+*(Catatan: Begitu petugas SECOM berhasil login, sistem akan langsung mengarahkan mereka secara otomatis (direct-redirect) ke halaman Dashboard Monitoring).*
+
+### C. Dashboard Monitoring (SECOM & Manager)
+Ini adalah "Dapur" dari sistem yang hanya bisa diakses menggunakan kata sandi (Login). Didesain secara *Mobile-Responsive* (tampil rapi 2 kolom bersampingan saat dibuka via layar *smartphone*) untuk **Monitoring dan Aksi Cepat**:
 1. **Statistik Kartu (Atas):** Menampilkan jumlah total tamu aktif, armada logistik, dan peminjaman hari ini secara instan (Angka besar).
 2. **Tabel "Masih di Lokasi" (Tengah):** Hanya menampilkan orang/kendaraan yang statusnya masih *Aktif* di dalam pabrik. Terdapat tombol aksi **[Check-out]** atau **[Hapus]**.
 3. **Menu Navigasi (Samping/Atas):** Terdapat tab terpisah untuk melihat *Riwayat* (data masa lalu), serta *Laporan* untuk keperluan mencetak/mem-filter data berdasarkan tanggal tertentu.
