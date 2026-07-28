@@ -71,5 +71,5 @@ Untuk mempermudah dan mempercepat akses bagi orang awam (tamu, kurir, sopir), si
 ### C. Dashboard Monitoring (SECOM & Manager)
 Ini adalah "Dapur" dari sistem yang hanya bisa diakses menggunakan kata sandi (Login). Didesain secara *Mobile-Responsive* (tampil rapi 2 kolom bersampingan saat dibuka via layar *smartphone*) untuk **Monitoring dan Aksi Cepat**:
 1. **Statistik Kartu (Atas):** Menampilkan jumlah total tamu aktif, armada logistik, dan peminjaman hari ini secara instan (Angka besar).
-2. **Tabel "Masih di Lokasi" (Tengah):** Hanya menampilkan orang/kendaraan yang statusnya masih *Aktif* di dalam pabrik. Terdapat tombol aksi **[Check-out]** atau **[Hapus]**.
+2. **Tabel "Masih di Lokasi" (Tengah):** Hanya menampilkan orang/kendaraan yang statusnya masih *Aktif* di dalam pabrik. Terdapat tombol aksi **[Check-out]**.
 3. **Menu Navigasi (Samping/Atas):** Terdapat tab terpisah untuk melihat *Riwayat* (data masa lalu), serta *Laporan* untuk keperluan mencetak/mem-filter data berdasarkan tanggal tertentu.
