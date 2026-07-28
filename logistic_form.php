@@ -232,7 +232,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Upload Foto SIM / Dokumen <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                                <label class="form-label" style="font-weight: 600;">Upload Foto Dokumen <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                                 <input type="file" id="document_file_input" required accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this)">
                                 <input type="hidden" name="document_photo" id="document_photo_input">
                                 <div id="photo_preview_container" style="display: none; margin-top: 0.5rem; text-align: center;">
