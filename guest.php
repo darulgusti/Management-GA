@@ -155,7 +155,7 @@ include __DIR__ . '/includes/header.php';
     </div>
 
     <!-- Search Bar khusus Riwayat -->
-    <form method="GET" action="guest.php" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; padding: 0 1.5rem; flex-wrap: wrap;">
+    <form method="GET" action="guest.php" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
         <input type="text" name="search" class="form-control" placeholder="Cari nama, instansi, atau kartu di riwayat..." value="<?= htmlspecialchars($search) ?>" style="flex: 1; min-width: 220px; margin: 0;">
         <button type="submit" class="btn btn-primary" style="margin: 0;">Cari</button>
         <?php if (!empty($search)): ?>
