@@ -25,8 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $visitor_card = trim($_POST['visitor_card_number'] ?? '');
     $signature = $_POST['signature'] ?? '';
 
-    if (empty($name) || empty($category) || empty($institution) || empty($person_to_meet) || empty($visitor_card) || empty($purpose)) {
-        $error_msg = "Seluruh kolom formulir pendaftaran tamu wajib diisi!";
+    if (empty($name) || empty($category) || empty($institution) || empty($person_to_meet) || empty($purpose)) {
+        $error_msg = "Mohon lengkapi seluruh kolom wajib pendaftaran tamu!";
     } else {
         try {
             $now = date('Y-m-d H:i:s');
@@ -137,8 +137,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Nomor Kartu Akses Tamu (Visitor Card) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                        <input type="text" name="visitor_card_number" required class="form-control" placeholder="Contoh: V-012" value="<?= htmlspecialchars($_POST['visitor_card_number'] ?? '') ?>">
+                        <label class="form-label">Nomor Kartu Akses Tamu (Visitor Card) (Opsional)</label>
+                        <input type="text" name="visitor_card_number" class="form-control" placeholder="Contoh: V-012 (Opsional)..." value="<?= htmlspecialchars($_POST['visitor_card_number'] ?? '') ?>">
                     </div>
                 </div>
 

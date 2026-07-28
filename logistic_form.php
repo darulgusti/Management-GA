@@ -32,8 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $kir = isset($_POST['checklist_kir']) ? 1 : 0;
         $entry_time = !empty($_POST['entry_time']) ? date('Y-m-d H:i:s', strtotime($_POST['entry_time'])) : date('Y-m-d H:i:s');
 
-        if (empty($nopol) || empty($driver_name) || empty($visitor_number) || empty($antree_number) || empty($transportir) || empty($destination) || empty($sim_type) || empty($sim_number) || empty($document_photo)) {
-            $error_msg = "Seluruh kolom formulir Gate In (termasuk foto SIM/Dokumen) wajib diisi!";
+        if (empty($nopol) || empty($driver_name) || empty($transportir) || empty($destination) || empty($sim_type) || empty($sim_number) || empty($document_photo)) {
+            $error_msg = "Mohon lengkapi Nopol, Driver, SIM, Foto, Transportir, dan Tujuan Gate In!";
         } else {
             try {
                 $stmt = $pdo->prepare("INSERT INTO logistic_gate_ins (nopol, driver_name, visitor_number, antree_number, transportir, destination, sim_type, sim_number, document_photo, checklist_sim, checklist_stnk, checklist_kir, entry_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -170,13 +170,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Visitor Number <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="visitor_number" required class="form-control" placeholder="Visitor Card Number...">
+                                <label class="form-label" style="font-weight: 600;">Visitor Number (Opsional)</label>
+                                <input type="text" name="visitor_number" class="form-control" placeholder="Visitor Card Number (Opsional)...">
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Antre Number <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="antree_number" required class="form-control" placeholder="Nomor Antre...">
+                                <label class="form-label" style="font-weight: 600;">Antre Number (Opsional)</label>
+                                <input type="text" name="antree_number" class="form-control" placeholder="Nomor Antre (Opsional)...">
                             </div>
 
                             <div class="form-group">

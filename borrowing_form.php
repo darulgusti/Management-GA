@@ -25,8 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $initial_condition = trim($_POST['initial_condition'] ?? 'Baik');
     $signature = $_POST['signature'] ?? '';
 
-    if (empty($borrower_name) || empty($department) || empty($item_name) || empty($item_code) || empty($quantity)) {
-        $error_msg = "Seluruh kolom formulir peminjaman wajib diisi!";
+    if (empty($borrower_name) || empty($department) || empty($item_name) || empty($quantity)) {
+        $error_msg = "Mohon lengkapi seluruh kolom wajib formulir peminjaman!";
     } else {
         try {
             $now = date('Y-m-d H:i:s');
@@ -121,8 +121,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Kode / Nomor Barang <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                        <input type="text" name="item_code" required class="form-control" placeholder="Contoh: K-05 / PRJ-01" value="<?= htmlspecialchars($_POST['item_code'] ?? '') ?>">
+                        <label class="form-label">Kode / Nomor Barang (Opsional)</label>
+                        <input type="text" name="item_code" class="form-control" placeholder="Contoh: K-05 / PRJ-01 (Opsional)" value="<?= htmlspecialchars($_POST['item_code'] ?? '') ?>">
                     </div>
 
                     <div class="form-group">
