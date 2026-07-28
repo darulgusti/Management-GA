@@ -68,6 +68,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
+    try { $pdo->exec("ALTER TABLE `logistic_gate_outs` MODIFY COLUMN `tonnage` VARCHAR(100) NOT NULL DEFAULT '-'"); } catch (Exception $e) {}
+    try { $pdo->exec("ALTER TABLE `logistic_export_nex_mopors` MODIFY COLUMN `tonnage` VARCHAR(100) NOT NULL DEFAULT '-'"); } catch (Exception $e) {}
+
     $action = $_POST['action'] ?? '';
 
     if ($action === 'add_gate_in') {
@@ -102,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $driver_name = trim($_POST['driver_name'] ?? '');
         $do_number = '-';
         $destination = trim($_POST['destination'] ?? '');
-        $tonnage = floatval($_POST['tonnage'] ?? 0);
+        $tonnage = trim($_POST['tonnage'] ?? '');
         $transportir = trim($_POST['transportir'] ?? '');
         $exit_time = !empty($_POST['exit_time']) ? date('Y-m-d H:i:s', strtotime($_POST['exit_time'])) : date('Y-m-d H:i:s');
 
@@ -127,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $container_number = trim($_POST['container_number'] ?? '');
         $seal_number = trim($_POST['seal_number'] ?? '');
         $destination = trim($_POST['destination'] ?? '');
-        $tonnage = floatval($_POST['tonnage'] ?? 0);
+        $tonnage = trim($_POST['tonnage'] ?? '');
         $transportir = trim($_POST['transportir'] ?? '');
         $exit_time = !empty($_POST['exit_time']) ? date('Y-m-d H:i:s', strtotime($_POST['exit_time'])) : date('Y-m-d H:i:s');
 
@@ -609,7 +612,7 @@ include __DIR__ . '/includes/header.php';
 
                         <div class="form-group">
                             <label class="form-label" style="font-weight: 600;">Total Nett Weight (Kg / Ton) *</label>
-                            <input type="number" step="0.01" name="tonnage" required class="form-control" placeholder="Total Nett Weight diisi manual...">
+                            <input type="text" name="tonnage" required class="form-control" placeholder="Total Nett Weight diisi manual...">
                         </div>
 
                         <div class="form-group">
@@ -677,7 +680,7 @@ include __DIR__ . '/includes/header.php';
 
                         <div class="form-group">
                             <label class="form-label" style="font-weight: 600;">Tonase (Ton)</label>
-                            <input type="number" step="0.01" name="tonnage" class="form-control" placeholder="Jumlah Tonase (Ton)...">
+                            <input type="text" name="tonnage" class="form-control" placeholder="Jumlah Tonase diisi manual...">
                         </div>
 
                         <div class="form-group">

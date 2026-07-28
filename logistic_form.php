@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $driver_name = trim($_POST['driver_name'] ?? '');
         $do_number = '-';
         $destination = trim($_POST['destination'] ?? '');
-        $tonnage = floatval($_POST['tonnage'] ?? 0);
+        $tonnage = trim($_POST['tonnage'] ?? '');
         $transportir = trim($_POST['transportir'] ?? '');
         $exit_time = !empty($_POST['exit_time']) ? date('Y-m-d H:i:s', strtotime($_POST['exit_time'])) : date('Y-m-d H:i:s');
 
@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $container_number = trim($_POST['container_number'] ?? '');
         $seal_number = trim($_POST['seal_number'] ?? '');
         $destination = trim($_POST['destination'] ?? '');
-        $tonnage = floatval($_POST['tonnage'] ?? 0);
+        $tonnage = trim($_POST['tonnage'] ?? '');
         $transportir = trim($_POST['transportir'] ?? '');
         $exit_time = !empty($_POST['exit_time']) ? date('Y-m-d H:i:s', strtotime($_POST['exit_time'])) : date('Y-m-d H:i:s');
 
@@ -263,7 +263,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             <div class="form-group">
                                 <label class="form-label" style="font-weight: 600;">Total Nett Weight (Kg / Ton) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="number" step="0.01" name="tonnage" required class="form-control" placeholder="Total Nett Weight diisi manual...">
+                                <input type="text" name="tonnage" required class="form-control" placeholder="Total Nett Weight diisi manual...">
                             </div>
 
                             <div class="form-group">
@@ -327,7 +327,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             <div class="form-group">
                                 <label class="form-label" style="font-weight: 600;">Tonase (Ton) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="number" step="0.01" name="tonnage" required class="form-control" placeholder="Jumlah Tonase (Ton)...">
+                                <input type="text" name="tonnage" required class="form-control" placeholder="Jumlah Tonase diisi manual...">
                             </div>
 
                             <div class="form-group">
