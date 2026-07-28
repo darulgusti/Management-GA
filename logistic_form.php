@@ -180,8 +180,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Masuk <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="datetime-local" name="entry_time" required class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
+                                <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Masuk (Opsional)</label>
+                                <input type="datetime-local" name="entry_time" class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
                             </div>
 
                             <div class="form-group">
@@ -297,8 +297,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Keluar <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="datetime-local" name="exit_time" required class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
+                                <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Keluar (Opsional)</label>
+                                <input type="datetime-local" name="exit_time" class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
                             </div>
                         </div>
 
@@ -367,8 +367,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Keluar <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="datetime-local" name="exit_time" required class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
+                                <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Keluar (Opsional)</label>
+                                <input type="datetime-local" name="exit_time" class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
                             </div>
                         </div>
                                 <input type="datetime-local" name="exit_time" required class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
