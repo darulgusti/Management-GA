@@ -6,6 +6,7 @@
 <div id="instant-loader" style="position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg, #3b82f6, #6366f1);width:0%;transition:width 0.2s ease, opacity 0.4s ease;z-index:99999;pointer-events:none;"></div>
 
 <script src="js/signature_pad.js"></script>
+<script src="js/auto_dismiss_alerts.js"></script>
 <script>
 function toggleSidebarToggle() {
     const container = document.getElementById('app-container');

@@ -55,7 +55,6 @@ $flash = get_flash_message();
             </a>
         </div>
 
-    </div>
-
+    <script src="js/auto_dismiss_alerts.js"></script>
 </body>
 </html>

@@ -167,5 +167,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script src="js/signature_pad.js"></script>
+    <script src="js/auto_dismiss_alerts.js"></script>
 </body>
 </html>

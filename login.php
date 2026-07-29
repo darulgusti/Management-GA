@@ -131,7 +131,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </button>
         </form>
 
-    </div>
-
+    <script src="js/auto_dismiss_alerts.js"></script>
 </body>
 </html>
