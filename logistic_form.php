@@ -94,89 +94,92 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <form method="POST" action="logistic_form.php?type=gate_in">
                 <input type="hidden" name="action" value="add_gate_in">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
-                    
-                    <!-- LEFT COLUMN -->
-                    <div>
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Nomor Polisi (Nopol) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                            <input type="text" name="nopol" required class="form-control" placeholder="Masukkan Nopol (e.g. B 1234 XYZ)...">
-                        </div>
 
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Visitor Number (Opsional)</label>
-                            <input type="text" name="visitor_number" class="form-control" placeholder="Visitor Card Number (Opsional)...">
-                        </div>
+                <!-- INFORMASI UTAMA & WAJIB DIISI -->
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Nomor Polisi (Nopol) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <input type="text" name="nopol" required class="form-control" placeholder="Masukkan Nopol (e.g. B 1234 XYZ)..." value="<?= htmlspecialchars($_POST['nopol'] ?? '') ?>">
+                    </div>
 
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Antre Number (Opsional)</label>
-                            <input type="text" name="antree_number" class="form-control" placeholder="Nomor Antre (Opsional)...">
-                        </div>
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Nama Sopir <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <input type="text" name="driver_name" required class="form-control" placeholder="Nama sopir / driver..." value="<?= htmlspecialchars($_POST['driver_name'] ?? '') ?>">
+                    </div>
+                </div>
 
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Masuk</label>
-                            <input type="datetime-local" name="entry_time" class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
-                        </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Transportir / Perusahaan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <input type="text" name="transportir" required class="form-control" placeholder="Nama Perusahaan / Transportir..." value="<?= htmlspecialchars($_POST['transportir'] ?? '') ?>">
+                    </div>
 
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Nomor SIM Driver <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                            <input type="text" name="sim_number" required class="form-control" placeholder="Nomor SIM Driver...">
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Tujuan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <select name="destination" class="form-select" required>
+                            <option value="">-- Pilih Tujuan --</option>
+                            <option value="Kirim" <?= ($_POST['destination'] ?? '') === 'Kirim' ? 'selected' : '' ?>>Kirim</option>
+                            <option value="Export Ajinex" <?= ($_POST['destination'] ?? '') === 'Export Ajinex' ? 'selected' : '' ?>>Export Ajinex</option>
+                            <option value="Transit" <?= ($_POST['destination'] ?? '') === 'Transit' ? 'selected' : '' ?>>Transit</option>
+                            <option value="Muatan Barang" <?= ($_POST['destination'] ?? '') === 'Muatan Barang' ? 'selected' : '' ?>>Muatan Barang</option>
+                            <option value="EDC" <?= ($_POST['destination'] ?? '') === 'EDC' ? 'selected' : '' ?>>EDC</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Jenis SIM Driver <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <select name="sim_type" class="form-select" required>
+                            <option value="SIM A" <?= ($_POST['sim_type'] ?? '') === 'SIM A' ? 'selected' : '' ?>>SIM A</option>
+                            <option value="SIM B" <?= ($_POST['sim_type'] ?? 'SIM B') === 'SIM B' ? 'selected' : '' ?>>SIM B</option>
+                            <option value="SIM B2" <?= ($_POST['sim_type'] ?? '') === 'SIM B2' ? 'selected' : '' ?>>SIM B2</option>
+                            <option value="Tidak Ada" <?= ($_POST['sim_type'] ?? '') === 'Tidak Ada' ? 'selected' : '' ?>>Tidak Ada</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Nomor SIM Driver <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <input type="text" name="sim_number" required class="form-control" placeholder="Nomor SIM Driver..." value="<?= htmlspecialchars($_POST['sim_number'] ?? '') ?>">
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Kelengkapan Berkas (STNK &amp; KIR) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <div style="display: flex; gap: 1.5rem; padding: 0.6rem 0.85rem; background: var(--bg-surface-alt); border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                            <label style="cursor: pointer; display: flex; align-items: center; gap: 0.35rem; font-weight: 500;"><input type="checkbox" name="checklist_stnk" value="1" checked> STNK</label>
+                            <label style="cursor: pointer; display: flex; align-items: center; gap: 0.35rem; font-weight: 500;"><input type="checkbox" name="checklist_kir" value="1" checked> KIR</label>
                         </div>
                     </div>
 
-                    <!-- RIGHT COLUMN -->
-                    <div>
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Nama Sopir <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                            <input type="text" name="driver_name" required class="form-control" placeholder="Nama sopir / driver...">
-                        </div>
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Masuk</label>
+                        <input type="datetime-local" name="entry_time" class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
+                    </div>
+                </div>
 
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Tujuan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                            <select name="destination" class="form-select" required>
-                                <option value="">-- Pilih Tujuan --</option>
-                                <option value="Kirim">Kirim</option>
-                                <option value="Export Ajinex">Export Ajinex</option>
-                                <option value="Transit">Transit</option>
-                                <option value="Muatan Barang">Muatan Barang</option>
-                                <option value="EDC">EDC</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Jenis SIM Driver <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                            <select name="sim_type" class="form-select" required>
-                                <option value="SIM A">SIM A</option>
-                                <option value="SIM B" selected>SIM B</option>
-                                <option value="SIM B2">SIM B2</option>
-                                <option value="Tidak Ada">Tidak Ada</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Kelengkapan Berkas (STNK &amp; KIR) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                            <div style="display: flex; gap: 1rem; padding: 0.55rem 0.75rem; background: var(--bg-surface-alt); border-radius: var(--radius-sm); border: 1px solid var(--border);">
-                                <label style="cursor: pointer; display: flex; align-items: center; gap: 0.35rem;"><input type="checkbox" name="checklist_stnk" value="1" checked> STNK</label>
-                                <label style="cursor: pointer; display: flex; align-items: center; gap: 0.35rem;"><input type="checkbox" name="checklist_kir" value="1" checked> KIR</label>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Transportir / Perusahaan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                            <input type="text" name="transportir" required class="form-control" placeholder="Nama Perusahaan / Transportir...">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Upload Foto Dokumen <small style="color: var(--text-muted); font-weight: 400;">(Opsional)</small></label>
-                            <input type="file" id="document_file_input" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this)">
-                            <input type="hidden" name="document_photo" id="document_photo_input">
-                            <div id="photo_preview_container" style="display: none; margin-top: 0.5rem; text-align: center;">
-                                <img id="photo_preview_img" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
-                                <div style="font-size: 0.75rem; color: var(--success); font-weight: 600; margin-top: 0.25rem;">✓ Foto berhasil dikompresi (siap simpan)</div>
-                            </div>
-                        </div>
+                <!-- BIDANG OPSIONAL -->
+                <div class="grid-2" style="margin-top: 0.5rem; border-top: 1px dashed var(--border); padding-top: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Visitor Number (Opsional)</label>
+                        <input type="text" name="visitor_number" class="form-control" placeholder="Visitor Card Number (Opsional)..." value="<?= htmlspecialchars($_POST['visitor_number'] ?? '') ?>">
                     </div>
 
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Antre Number (Opsional)</label>
+                        <input type="text" name="antree_number" class="form-control" placeholder="Nomor Antre (Opsional)..." value="<?= htmlspecialchars($_POST['antree_number'] ?? '') ?>">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" style="font-weight: 600;">Upload Foto Dokumen <small style="color: var(--text-muted); font-weight: 400;">(Opsional)</small></label>
+                    <input type="file" id="document_file_input" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this)">
+                    <input type="hidden" name="document_photo" id="document_photo_input" value="<?= htmlspecialchars($_POST['document_photo'] ?? '') ?>">
+                    <div id="photo_preview_container" style="display: none; margin-top: 0.5rem; text-align: center;">
+                        <img id="photo_preview_img" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+                        <div style="font-size: 0.75rem; color: var(--success); font-weight: 600; margin-top: 0.25rem;">✓ Foto berhasil dikompresi (siap simpan)</div>
+                    </div>
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top: 1.5rem;">

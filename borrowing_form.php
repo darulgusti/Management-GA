@@ -128,21 +128,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                     </div>
                 <?php else: ?>
-                    <div class="grid-3">
+                    <div class="grid-2">
                         <div class="form-group">
                             <label class="form-label">Nama Barang GA <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                             <input type="text" name="item_name" required class="form-control" placeholder="Contoh: Proyektor / Mobil GA" value="<?= htmlspecialchars($_POST['item_name'] ?? '') ?>">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">Kode / Identitas Barang (Opsional)</label>
-                            <input type="text" name="item_code" class="form-control" placeholder="Contoh: PRJ-01 (Opsional)" value="<?= htmlspecialchars($_POST['item_code'] ?? '') ?>">
-                        </div>
-
-                        <div class="form-group">
                             <label class="form-label">Jumlah (Qty) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                             <input type="number" name="quantity" required value="<?= intval($_POST['quantity'] ?? 1) ?>" min="1" class="form-control">
                         </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 0.5rem; border-top: 1px dashed var(--border); padding-top: 1rem;">
+                        <label class="form-label">Kode / Identitas Barang (Opsional)</label>
+                        <input type="text" name="item_code" class="form-control" placeholder="Contoh: PRJ-01 (Opsional)" value="<?= htmlspecialchars($_POST['item_code'] ?? '') ?>">
                     </div>
                 <?php endif; ?>
 

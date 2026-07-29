@@ -131,23 +131,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Nomor Kartu Akses Tamu (Visitor Card) (Opsional)</label>
-                        <input type="text" name="visitor_card_number" class="form-control" placeholder="Contoh: V-012 (Opsional)..." value="<?= htmlspecialchars($_POST['visitor_card_number'] ?? '') ?>">
+                        <label class="form-label">Tujuan Kunjungan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <input type="text" name="purpose" required class="form-control" placeholder="Jelaskan keperluan/tujuan kunjungan Anda..." value="<?= htmlspecialchars($_POST['purpose'] ?? '') ?>">
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">Tujuan Kunjungan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                    <textarea name="purpose" required class="form-control" placeholder="Jelaskan keperluan/tujuan kunjungan Anda..."><?= htmlspecialchars($_POST['purpose'] ?? '') ?></textarea>
-                </div>
+                <!-- BIDANG OPSIONAL -->
+                <div class="grid-2" style="margin-top: 0.5rem; border-top: 1px dashed var(--border); padding-top: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label">Nomor Kartu Akses Tamu (Visitor Card) (Opsional)</label>
+                        <input type="text" name="visitor_card_number" class="form-control" placeholder="Contoh: V-012 (Opsional)..." value="<?= htmlspecialchars($_POST['visitor_card_number'] ?? '') ?>">
+                    </div>
 
-                <div class="form-group">
-                    <label class="form-label">Upload Foto Dokumen (Opsional)</label>
-                    <input type="file" id="document_file_input" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this)">
-                    <input type="hidden" name="document_photo" id="document_photo_input" value="<?= htmlspecialchars($_POST['document_photo'] ?? '') ?>">
-                    <div id="photo_preview_container" style="display: none; margin-top: 0.5rem; text-align: center;">
-                        <img id="photo_preview_img" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
-                        <div style="font-size: 0.75rem; color: var(--success); font-weight: 600; margin-top: 0.25rem;">✓ Foto dokumen berhasil dikompresi (siap simpan)</div>
+                    <div class="form-group">
+                        <label class="form-label">Upload Foto Dokumen (Opsional)</label>
+                        <input type="file" id="document_file_input" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this)">
+                        <input type="hidden" name="document_photo" id="document_photo_input" value="<?= htmlspecialchars($_POST['document_photo'] ?? '') ?>">
+                        <div id="photo_preview_container" style="display: none; margin-top: 0.5rem; text-align: center;">
+                            <img id="photo_preview_img" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+                            <div style="font-size: 0.75rem; color: var(--success); font-weight: 600; margin-top: 0.25rem;">✓ Foto dokumen berhasil dikompresi (siap simpan)</div>
+                        </div>
                     </div>
                 </div>
 
