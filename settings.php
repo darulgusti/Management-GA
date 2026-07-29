@@ -76,17 +76,17 @@ include __DIR__ . '/includes/header.php';
             <input type="hidden" name="action" value="change_password">
 
             <div class="form-group">
-                <label class="form-label">Password Lama *</label>
+                <label class="form-label">Password Lama <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                 <input type="password" name="old_password" required class="form-control">
             </div>
 
             <div class="form-group">
-                <label class="form-label">Password Baru *</label>
+                <label class="form-label">Password Baru <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                 <input type="password" name="new_password" required class="form-control" placeholder="Minimal 6 karakter">
             </div>
 
             <div class="form-group">
-                <label class="form-label">Konfirmasi Password Baru *</label>
+                <label class="form-label">Konfirmasi Password Baru <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                 <input type="password" name="confirm_password" required class="form-control">
             </div>
 

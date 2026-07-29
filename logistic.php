@@ -738,11 +738,11 @@ include __DIR__ . '/includes/header.php';
             <div class="modal-body">
                 <div class="grid-2">
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Nomor Polisi (Nopol) *</label>
+                        <label class="form-label" style="font-weight: 600;">Nomor Polisi (Nopol) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="nopol" id="edit_gi_nopol" required class="form-control">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Nama Sopir *</label>
+                        <label class="form-label" style="font-weight: 600;">Nama Sopir <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="driver_name" id="edit_gi_driver" required class="form-control">
                     </div>
                 </div>
@@ -762,7 +762,7 @@ include __DIR__ . '/includes/header.php';
                         <input type="text" name="transportir" id="edit_gi_transportir" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Tujuan *</label>
+                        <label class="form-label" style="font-weight: 600;">Tujuan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <select name="destination" id="edit_gi_destination" class="form-select" required>
                             <option value="Kirim">Kirim</option>
                             <option value="Export Ajinex">Export Ajinex</option>
@@ -812,26 +812,26 @@ include __DIR__ . '/includes/header.php';
             <div class="modal-body">
                 <div class="grid-2">
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Nomor Polisi (Nopol) *</label>
+                        <label class="form-label" style="font-weight: 600;">Nomor Polisi (Nopol) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="nopol" id="edit_go_nopol" required class="form-control">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Nama Sopir *</label>
+                        <label class="form-label" style="font-weight: 600;">Nama Sopir <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="driver_name" id="edit_go_driver" required class="form-control">
                     </div>
                 </div>
                 <div class="grid-2">
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Total Nett Weight *</label>
+                        <label class="form-label" style="font-weight: 600;">Total Nett Weight <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="tonnage" id="edit_go_tonnage" required class="form-control">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Nama Transportir *</label>
+                        <label class="form-label" style="font-weight: 600;">Nama Transportir <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="transportir" id="edit_go_transportir" required class="form-control">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-label" style="font-weight: 600;">Alamat Kirim / Tujuan *</label>
+                    <label class="form-label" style="font-weight: 600;">Alamat Kirim / Tujuan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                     <input type="text" name="destination" id="edit_go_destination" required class="form-control">
                 </div>
             </div>
@@ -856,31 +856,31 @@ include __DIR__ . '/includes/header.php';
             <div class="modal-body">
                 <div class="grid-2">
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Nomor NOPOR *</label>
+                        <label class="form-label" style="font-weight: 600;">Nomor NOPOR <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="mopor_number" id="edit_ex_mopor" required class="form-control">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Nomor DO *</label>
+                        <label class="form-label" style="font-weight: 600;">Nomor DO <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="do_number" id="edit_ex_do" required class="form-control">
                     </div>
                 </div>
                 <div class="grid-2">
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">No. Kontainer *</label>
+                        <label class="form-label" style="font-weight: 600;">No. Kontainer <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="container_number" id="edit_ex_container" required class="form-control">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">No. Segel *</label>
+                        <label class="form-label" style="font-weight: 600;">No. Segel <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="seal_number" id="edit_ex_seal" required class="form-control">
                     </div>
                 </div>
                 <div class="grid-2">
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Tonase (Ton) *</label>
+                        <label class="form-label" style="font-weight: 600;">Tonase (Ton) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="tonnage" id="edit_ex_tonnage" required class="form-control">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Tujuan *</label>
+                        <label class="form-label" style="font-weight: 600;">Tujuan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="destination" id="edit_ex_destination" required class="form-control">
                     </div>
                 </div>
