@@ -144,12 +144,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Upload Foto Dokumen (Opsional)</label>
-                        <input type="file" id="document_file_input" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this)">
+                        <label class="form-label">Foto Dokumen <small style="color: var(--text-muted); font-weight: 400;">(Opsional)</small></label>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('camera_file_input').click();">
+                                📷 Ambil Kamera
+                            </button>
+                            <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('gallery_file_input').click();">
+                                📁 Pilih Galeri
+                            </button>
+                        </div>
+                        <input type="file" id="camera_file_input" accept="image/*" capture="environment" style="display:none;" onchange="compressAndPreviewPhoto(this)">
+                        <input type="file" id="gallery_file_input" accept="image/*" style="display:none;" onchange="compressAndPreviewPhoto(this)">
                         <input type="hidden" name="document_photo" id="document_photo_input" value="<?= htmlspecialchars($_POST['document_photo'] ?? '') ?>">
                         <div id="photo_preview_container" style="display: none; margin-top: 0.5rem; text-align: center;">
                             <img id="photo_preview_img" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
                             <div style="font-size: 0.75rem; color: var(--success); font-weight: 600; margin-top: 0.25rem;">✓ Foto dokumen berhasil dikompresi (siap simpan)</div>
+                            <button type="button" class="btn btn-sm btn-danger" style="margin-top: 0.35rem; padding: 0.2rem 0.6rem; font-size: 0.75rem;" onclick="clearPhotoPreview()">Hapus Foto</button>
                         </div>
                     </div>
                 </div>
@@ -176,6 +186,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <script src="js/signature_pad.js"></script>
     <script>
+    function clearPhotoPreview() {
+        document.getElementById('document_photo_input').value = '';
+        document.getElementById('photo_preview_img').src = '';
+        document.getElementById('photo_preview_container').style.display = 'none';
+        const cam = document.getElementById('camera_file_input');
+        const gal = document.getElementById('gallery_file_input');
+        if (cam) cam.value = '';
+        if (gal) gal.value = '';
+    }
+
     function toggleOtherCategory(selectEl) {
         const container = document.getElementById('other_category_container');
         const input = document.getElementById('other_guest_category');
