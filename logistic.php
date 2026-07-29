@@ -295,10 +295,10 @@ include __DIR__ . '/includes/header.php';
             📥 Buku Masuk (Gate In)
         </a>
         <a href="logistic.php?tab=gate_out" class="btn btn-sm <?= $active_tab === 'gate_out' ? 'btn-primary' : 'btn-outline' ?>">
-            📤 Riwayat Export Ajinex
+            📤 Riwayat Keluar EDC
         </a>
         <a href="logistic.php?tab=export_nex" class="btn btn-sm <?= $active_tab === 'export_nex' ? 'btn-primary' : 'btn-outline' ?>">
-            🚢 Riwayat Keluar EDC
+            🚢 Riwayat Export Ajinex
         </a>
     </div>
     <div>
@@ -415,13 +415,13 @@ include __DIR__ . '/includes/header.php';
 <?php endif; ?>
 
 <?php if ($active_tab === 'all' || $active_tab === 'gate_out'): ?>
-<!-- SECTION 2: RIWAYAT KELUAR EXPORT AJINEX -->
+<!-- SECTION 2: RIWAYAT KELUAR EDC -->
 <div id="sec-gateout" class="card" style="border-top: 4px solid var(--primary); margin-top: 2rem;">
     <div class="card-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
         <div>
             <h3 class="card-title">
                 <span class="badge badge-primary" style="font-size: 0.85rem;"><?= number_format($total_out_records) ?> Armada</span>
-                2. Riwayat Keluar Export Ajinex
+                2. Riwayat Keluar EDC
             </h3>
         </div>
     </div>
@@ -495,13 +495,13 @@ include __DIR__ . '/includes/header.php';
 <?php endif; ?>
 
 <?php if ($active_tab === 'all' || $active_tab === 'export_nex'): ?>
-<!-- SECTION 3: RIWAYAT KELUAR EDC -->
+<!-- SECTION 3: RIWAYAT KELUAR EXPORT AJINEX -->
 <div id="sec-export" class="card" style="border-top: 4px solid var(--primary); margin-top: 2rem;">
     <div class="card-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
         <div>
             <h3 class="card-title">
                 <span class="badge badge-primary" style="font-size: 0.85rem;"><?= number_format($total_exp_records) ?> Kontainer</span>
-                3. Riwayat Keluar EDC
+                3. Riwayat Keluar Export Ajinex
             </h3>
         </div>
     </div>
