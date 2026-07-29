@@ -294,7 +294,7 @@ include __DIR__ . '/includes/header.php';
                 <p style="margin-bottom: 1rem;" id="return_info_text"></p>
 
                 <div class="form-group">
-                    <label class="form-label">Kondisi Barang Saat Dikembalikan *</label>
+                    <label class="form-label">Kondisi Barang Saat Dikembalikan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                     <select name="return_condition" class="form-select">
                         <option value="Baik / Sesuai Semula">Baik / Sesuai Semula</option>
                         <option value="Ada Kerusakan">Ada Kerusakan / Cacat Baru</option>
@@ -325,17 +325,17 @@ include __DIR__ . '/includes/header.php';
             <div class="modal-body">
                 <div class="grid-2">
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Nama Peminjam *</label>
+                        <label class="form-label" style="font-weight: 600;">Nama Peminjam <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="borrower_name" id="edit_borrower_name" required class="form-control">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Departemen *</label>
+                        <label class="form-label" style="font-weight: 600;">Departemen <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="department" id="edit_department" required class="form-control">
                     </div>
                 </div>
                 <div class="grid-2">
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Nama Barang / Kunci *</label>
+                        <label class="form-label" style="font-weight: 600;">Nama Barang / Kunci <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="item_name" id="edit_item_name" required class="form-control">
                     </div>
                     <div class="form-group">
@@ -349,7 +349,7 @@ include __DIR__ . '/includes/header.php';
                         <input type="text" name="key_number" id="edit_key_number" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Jumlah (Qty) *</label>
+                        <label class="form-label" style="font-weight: 600;">Jumlah (Qty) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="number" name="quantity" id="edit_quantity" required min="1" class="form-control">
                     </div>
                 </div>

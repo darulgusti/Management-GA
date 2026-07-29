@@ -276,22 +276,22 @@ include __DIR__ . '/includes/header.php';
             <input type="hidden" name="guest_id" id="edit_guest_id">
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="form-label" style="font-weight: 600;">Nama Tamu *</label>
+                    <label class="form-label" style="font-weight: 600;">Nama Tamu <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                     <input type="text" name="name" id="edit_guest_name" required class="form-control">
                 </div>
                 <div class="grid-2">
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Instansi / Perusahaan *</label>
+                        <label class="form-label" style="font-weight: 600;">Instansi / Perusahaan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="institution" id="edit_guest_institution" required class="form-control">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Kategori Tamu *</label>
+                        <label class="form-label" style="font-weight: 600;">Kategori Tamu <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="guest_category" id="edit_guest_category" required class="form-control">
                     </div>
                 </div>
                 <div class="grid-2">
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Karyawan yang Ditemui *</label>
+                        <label class="form-label" style="font-weight: 600;">Karyawan yang Ditemui <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="person_to_meet" id="edit_guest_person" required class="form-control">
                     </div>
                     <div class="form-group">
@@ -300,7 +300,7 @@ include __DIR__ . '/includes/header.php';
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-label" style="font-weight: 600;">Tujuan / Keperluan *</label>
+                    <label class="form-label" style="font-weight: 600;">Tujuan / Keperluan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                     <textarea name="purpose" id="edit_guest_purpose" required class="form-control" rows="3"></textarea>
                 </div>
             </div>
