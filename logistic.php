@@ -141,7 +141,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 set_flash_message('danger', 'Mohon lengkapi Nomor Ekspor, Nomor DO, Segel, Kontainer, dan Tujuan!');
             }
-        } elseif ($action === 'delete_gate_in') {
+        }
+    }
+
+    if ($logged_user['role'] === 'manager') {
+        if ($action === 'delete_gate_in') {
             $id = intval($_POST['id'] ?? 0);
             if ($id > 0) {
                 $stmt = $pdo->prepare("DELETE FROM logistic_gate_ins WHERE id = ?");
@@ -162,11 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute([$id]);
                 set_flash_message('success', 'Data Export NEX / NOPOR berhasil dihapus.');
             }
-        }
-    }
-
-    if ($logged_user['role'] === 'manager') {
-        if ($action === 'edit_gate_in') {
+        } elseif ($action === 'edit_gate_in') {
             $id = intval($_POST['id'] ?? 0);
             $nopol = trim($_POST['nopol'] ?? '');
             $driver_name = trim($_POST['driver_name'] ?? '');
@@ -295,10 +295,10 @@ include __DIR__ . '/includes/header.php';
             📥 Buku Masuk (Gate In)
         </a>
         <a href="logistic.php?tab=gate_out" class="btn btn-sm <?= $active_tab === 'gate_out' ? 'btn-primary' : 'btn-outline' ?>">
-            📤 Keluar EDC
+            📤 Keluar Export Ajinex
         </a>
         <a href="logistic.php?tab=export_nex" class="btn btn-sm <?= $active_tab === 'export_nex' ? 'btn-primary' : 'btn-outline' ?>">
-            🚢 Keluar Export NEX
+            🚢 Keluar EDC
         </a>
     </div>
     <div>
@@ -362,23 +362,23 @@ include __DIR__ . '/includes/header.php';
                     <?php $no = $offset_in + 1; foreach ($gate_ins as $gi): ?>
                         <tr>
                             <td><?= $no++ ?></td>
-                            <td><code><strong><?= htmlspecialchars($gi['nopol']) ?></strong></code></td>
+                            <td style="white-space: nowrap;"><code style="font-size: 0.85rem; font-weight: 700; font-family: monospace; letter-spacing: 0.5px;"><?= htmlspecialchars($gi['nopol']) ?></code></td>
                             <td><?= htmlspecialchars($gi['driver_name']) ?></td>
-                            <td><code><?= htmlspecialchars($gi['visitor_number'] ?: '-') ?></code></td>
-                            <td><code><?= htmlspecialchars($gi['antree_number'] ?: '-') ?></code></td>
+                            <td style="white-space: nowrap;"><code><?= htmlspecialchars($gi['visitor_number'] ?: '-') ?></code></td>
+                            <td style="white-space: nowrap;"><code><?= htmlspecialchars($gi['antree_number'] ?: '-') ?></code></td>
                             <td><?= htmlspecialchars($gi['transportir'] ?: '-') ?></td>
                             <td><span class="badge badge-info"><?= htmlspecialchars($gi['destination']) ?></span></td>
                             <td>
-                                <div style="display: flex; gap: 0.25rem; flex-wrap: wrap;">
-                                    <span class="badge badge-info" title="Jenis SIM"><?= htmlspecialchars($gi['sim_type'] ?? 'SIM B') ?></span>
-                                    <span class="badge <?= $gi['checklist_stnk'] ? 'badge-success' : 'badge-secondary' ?>" title="STNK">STNK <?= $gi['checklist_stnk'] ? '✓' : '✗' ?></span>
-                                    <span class="badge <?= $gi['checklist_kir'] ? 'badge-success' : 'badge-secondary' ?>" title="KIR">KIR <?= $gi['checklist_kir'] ? '✓' : '✗' ?></span>
+                                <div style="display: flex; gap: 0.2rem; flex-wrap: wrap; align-items: center; max-width: 170px;">
+                                    <span class="badge badge-info" style="font-size: 0.7rem; padding: 0.15rem 0.35rem;" title="Jenis SIM"><?= htmlspecialchars($gi['sim_type'] ?? 'SIM B') ?></span>
+                                    <span class="badge <?= $gi['checklist_stnk'] ? 'badge-success' : 'badge-secondary' ?>" style="font-size: 0.7rem; padding: 0.15rem 0.35rem;" title="STNK">STNK <?= $gi['checklist_stnk'] ? '✓' : '✗' ?></span>
+                                    <span class="badge <?= $gi['checklist_kir'] ? 'badge-success' : 'badge-secondary' ?>" style="font-size: 0.7rem; padding: 0.15rem 0.35rem;" title="KIR">KIR <?= $gi['checklist_kir'] ? '✓' : '✗' ?></span>
                                     <?php if (!empty($gi['document_photo'])): ?>
-                                        <button type="button" onclick="showDocumentPhoto('<?= htmlspecialchars($gi['document_photo']) ?>')" class="badge badge-warning" style="border:none; cursor:pointer;" title="Lihat Foto Dokumen">📷 Foto Dokumen</button>
+                                        <button type="button" onclick="showDocumentPhoto('<?= htmlspecialchars($gi['document_photo']) ?>')" class="badge badge-warning" style="font-size: 0.7rem; padding: 0.15rem 0.35rem; border:none; cursor:pointer;" title="Lihat Foto Dokumen">📷 Foto</button>
                                     <?php endif; ?>
                                 </div>
                             </td>
-                            <td><?= date('d/m/Y H:i', strtotime($gi['entry_time'])) ?></td>
+                            <td style="white-space: nowrap;"><?= date('d/m/Y H:i', strtotime($gi['entry_time'])) ?></td>
                             <td>
                                 <?php if ($gi['status'] === 'Checked Out'): ?>
                                     <span class="badge badge-secondary" title="Waktu Keluar: <?= $gi['exit_time'] ? date('d/m/Y H:i', strtotime($gi['exit_time'])) : '-' ?>">Checked Out</span>
@@ -396,13 +396,13 @@ include __DIR__ . '/includes/header.php';
                                                 <button type="button" class="btn btn-warning btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; margin-right: 0.2rem;" onclick='openCheckoutEDC(<?= json_encode($gi) ?>)'>Check-out</button>
                                             <?php endif; ?>
                                         <?php endif; ?>
+                                    <?php endif; ?>
+                                    <?php if ($logged_user['role'] === 'manager'): ?>
                                         <form method="POST" action="logistic.php?tab=<?= urlencode($active_tab) ?>" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');" style="display: inline;">
                                             <input type="hidden" name="action" value="delete_gate_in">
                                             <input type="hidden" name="id" value="<?= $gi['id'] ?>">
                                             <button type="submit" class="btn btn-danger btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Hapus</button>
                                         </form>
-                                    <?php endif; ?>
-                                    <?php if ($logged_user['role'] === 'manager'): ?>
                                         <button type="button" class="btn btn-primary btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" onclick='editGateIn(<?= json_encode($gi) ?>)'>Edit</button>
                                     <?php endif; ?>
                                 </td>
@@ -453,13 +453,13 @@ include __DIR__ . '/includes/header.php';
                     <th>Transportir</th>
                     <th>Waktu Keluar</th>
                     <th>Status</th>
-                    <?php if ($can_input || $logged_user['role'] === 'manager'): ?><th style="text-align: center;">Aksi</th><?php endif; ?>
+                    <?php if ($logged_user['role'] === 'manager'): ?><th style="text-align: center;">Aksi</th><?php endif; ?>
                 </tr>
             </thead>
             <tbody>
                 <?php if (count($gate_outs) === 0): ?>
                     <tr>
-                        <td colspan="<?= ($can_input || $logged_user['role'] === 'manager') ? '9' : '8' ?>" style="text-align: center; color: var(--text-muted); padding: 1.75rem;">Belum ada data Keluar EDC.</td>
+                        <td colspan="<?= ($logged_user['role'] === 'manager') ? '9' : '8' ?>" style="text-align: center; color: var(--text-muted); padding: 1.75rem;">Belum ada data Keluar Export Ajinex.</td>
                     </tr>
                 <?php else: ?>
                     <?php $no = $offset_out + 1; foreach ($gate_outs as $go): ?>
@@ -477,18 +477,14 @@ include __DIR__ . '/includes/header.php';
                             <td><?= htmlspecialchars($go['transportir'] ?: '-') ?></td>
                             <td><?= date('d/m/Y H:i', strtotime($go['exit_time'])) ?></td>
                             <td><span class="badge badge-success"><?= htmlspecialchars($go['status']) ?></span></td>
-                            <?php if ($can_input || $logged_user['role'] === 'manager'): ?>
+                            <?php if ($logged_user['role'] === 'manager'): ?>
                                 <td style="text-align: center; gap: 0.25rem;">
-                                    <?php if ($can_input): ?>
-                                        <form method="POST" action="logistic.php?tab=<?= urlencode($active_tab) ?>" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');" style="display: inline;">
-                                            <input type="hidden" name="action" value="delete_gate_out">
-                                            <input type="hidden" name="id" value="<?= $go['id'] ?>">
-                                            <button type="submit" class="btn btn-danger btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Hapus</button>
-                                        </form>
-                                    <?php endif; ?>
-                                    <?php if ($logged_user['role'] === 'manager'): ?>
-                                        <button type="button" class="btn btn-primary btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" onclick='editGateOut(<?= json_encode($go) ?>)'>Edit</button>
-                                    <?php endif; ?>
+                                    <form method="POST" action="logistic.php?tab=<?= urlencode($active_tab) ?>" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');" style="display: inline;">
+                                        <input type="hidden" name="action" value="delete_gate_out">
+                                        <input type="hidden" name="id" value="<?= $go['id'] ?>">
+                                        <button type="submit" class="btn btn-danger btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Hapus</button>
+                                    </form>
+                                    <button type="button" class="btn btn-primary btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" onclick='editGateOut(<?= json_encode($go) ?>)'>Edit</button>
                                 </td>
                             <?php endif; ?>
                         </tr>
@@ -508,7 +504,7 @@ include __DIR__ . '/includes/header.php';
         <div>
             <h3 class="card-title">
                 <span class="badge badge-primary" style="font-size: 0.85rem;"><?= number_format($total_exp_records) ?> Kontainer</span>
-                3. Keluar EDC (Kontainer Ekspor Pos 4)
+                3. Keluar EDC
             </h3>
         </div>
     </div>
@@ -538,13 +534,13 @@ include __DIR__ . '/includes/header.php';
                     <th>Tonase (Ton)</th>
                     <th>Waktu Keluar</th>
                     <th>Status</th>
-                    <?php if ($can_input || $logged_user['role'] === 'manager'): ?><th style="text-align: center;">Aksi</th><?php endif; ?>
+                    <?php if ($logged_user['role'] === 'manager'): ?><th style="text-align: center;">Aksi</th><?php endif; ?>
                 </tr>
             </thead>
             <tbody>
                 <?php if (count($exports) === 0): ?>
                     <tr>
-                        <td colspan="<?= ($can_input || $logged_user['role'] === 'manager') ? '10' : '9' ?>" style="text-align: center; color: var(--text-muted); padding: 1.75rem;">Belum ada data ekspor kontainer.</td>
+                        <td colspan="<?= ($logged_user['role'] === 'manager') ? '10' : '9' ?>" style="text-align: center; color: var(--text-muted); padding: 1.75rem;">Belum ada data Keluar EDC.</td>
                     </tr>
                 <?php else: ?>
                     <?php $no = $offset_exp + 1; foreach ($exports as $ex): ?>
@@ -563,18 +559,14 @@ include __DIR__ . '/includes/header.php';
                             <td><strong><?= is_numeric($ex['tonnage']) ? number_format((float)$ex['tonnage'], 2) : htmlspecialchars($ex['tonnage']) ?></strong></td>
                             <td><?= date('d/m/Y H:i', strtotime($ex['exit_time'])) ?></td>
                             <td><span class="badge badge-success"><?= htmlspecialchars($ex['status']) ?></span></td>
-                            <?php if ($can_input || $logged_user['role'] === 'manager'): ?>
+                            <?php if ($logged_user['role'] === 'manager'): ?>
                                 <td style="text-align: center; gap: 0.25rem;">
-                                    <?php if ($can_input): ?>
-                                        <form method="POST" action="logistic.php?tab=<?= urlencode($active_tab) ?>" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');" style="display: inline;">
-                                            <input type="hidden" name="action" value="delete_export">
-                                            <input type="hidden" name="id" value="<?= $ex['id'] ?>">
-                                            <button type="submit" class="btn btn-danger btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Hapus</button>
-                                        </form>
-                                    <?php endif; ?>
-                                    <?php if ($logged_user['role'] === 'manager'): ?>
-                                        <button type="button" class="btn btn-primary btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" onclick='editExport(<?= json_encode($ex) ?>)'>Edit</button>
-                                    <?php endif; ?>
+                                    <form method="POST" action="logistic.php?tab=<?= urlencode($active_tab) ?>" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');" style="display: inline;">
+                                        <input type="hidden" name="action" value="delete_export">
+                                        <input type="hidden" name="id" value="<?= $ex['id'] ?>">
+                                        <button type="submit" class="btn btn-danger btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Hapus</button>
+                                    </form>
+                                    <button type="button" class="btn btn-primary btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" onclick='editExport(<?= json_encode($ex) ?>)'>Edit</button>
                                 </td>
                             <?php endif; ?>
                         </tr>
