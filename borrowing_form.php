@@ -58,15 +58,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body class="portal-body">
 
-    <header class="portal-navbar" style="background: #ffffff; padding: 0.9rem 1.5rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-        <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <div class="sidebar-logo-icon" style="background: var(--primary); color: #ffffff;">GA</div>
-            <div>
-                <strong style="font-size: 1.1rem; color: var(--primary);">Form Peminjaman <?= $category === 'SECOM' ? 'Kunci SECOM' : 'Barang GA' ?></strong>
-                <div style="font-size: 0.75rem; color: var(--text-muted);">General Affairs Inventory Request</div>
+    <header class="portal-navbar" style="background: #ffffff; padding: 0.75rem 1.25rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.05); flex-wrap: nowrap; gap: 0.5rem;">
+        <div style="display: flex; align-items: center; gap: 0.6rem; min-width: 0; flex: 1;">
+            <div class="sidebar-logo-icon" style="background: var(--primary); color: #ffffff; flex-shrink: 0;">GA</div>
+            <div style="min-width: 0; overflow: hidden;">
+                <strong style="font-size: 1rem; color: var(--primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;">Form Peminjaman <?= $category === 'SECOM' ? 'Kunci SECOM' : 'Barang GA' ?></strong>
+                <div style="font-size: 0.72rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;">General Affairs Inventory Request</div>
             </div>
         </div>
-        <div>
+        <div style="flex-shrink: 0; margin-left: 0.5rem;">
             <a href="login.php" class="btn btn-sm btn-primary">Login</a>
         </div>
     </header>
