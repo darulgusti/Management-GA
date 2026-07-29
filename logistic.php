@@ -319,9 +319,6 @@ include __DIR__ . '/includes/header.php';
                 1. Buku Masuk Kendaraan (Gate In Pos 4)
             </h3>
         </div>
-        <?php if ($can_input): ?>
-            <button type="button" onclick="openModal('modalGateIn')" class="btn btn-primary btn-sm">+ Input Gate In Baru</button>
-        <?php endif; ?>
     </div>
 
     <!-- Search Bar Gate In -->
@@ -581,91 +578,6 @@ include __DIR__ . '/includes/header.php';
 
 <!-- MODALS UNTUK INPUT DATA (STAF SECOM) -->
 <?php if ($can_input): ?>
-<!-- MODAL GATE IN -->
-<div id="modalGateIn" class="modal-backdrop">
-    <div class="modal-dialog" style="max-width: 760px; width: 95%;">
-        <div class="modal-header">
-            <h3 class="modal-title">Form Input Kendaraan Masuk (Gate In)</h3>
-            <button type="button" class="modal-close" onclick="closeModal('modalGateIn')">&times;</button>
-        </div>
-        <form method="POST" action="logistic.php?tab=<?= urlencode($active_tab) ?>">
-            <input type="hidden" name="action" value="add_gate_in">
-            <div class="modal-body">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
-                    
-                    <div>
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Nomor Polisi (Nopol) *</label>
-                            <input type="text" name="nopol" required class="form-control" placeholder="Masukkan Nopol (e.g. B 1234 XYZ)...">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Visitor Number (Opsional)</label>
-                            <input type="text" name="visitor_number" class="form-control" placeholder="Visitor Card Number (Opsional)...">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Antre Number (Opsional)</label>
-                            <input type="text" name="antree_number" class="form-control" placeholder="Nomor Antre (Opsional)...">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Masuk *</label>
-                            <input type="datetime-local" name="entry_time" required class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Nama Sopir *</label>
-                            <input type="text" name="driver_name" required class="form-control" placeholder="Nama sopir / driver...">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Tujuan *</label>
-                            <select name="destination" class="form-select" required>
-                                <option value="">-- Pilih Tujuan --</option>
-                                <option value="Kirim">Kirim</option>
-                                <option value="Export Ajinex">Export Ajinex</option>
-                                <option value="Transit">Transit</option>
-                                <option value="Muatan Barang">Muatan Barang</option>
-                                <option value="EDC">EDC</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Jenis SIM Driver *</label>
-                            <select name="sim_type" class="form-select" required>
-                                <option value="SIM A">SIM A</option>
-                                <option value="SIM B" selected>SIM B</option>
-                                <option value="SIM B2">SIM B2</option>
-                                <option value="Tidak Ada">Tidak Ada</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Kelengkapan Berkas (STNK &amp; KIR)</label>
-                            <div style="display: flex; gap: 1rem; padding: 0.55rem 0.75rem; background: var(--bg-surface-alt); border-radius: var(--radius-sm); border: 1px solid var(--border);">
-                                <label style="cursor: pointer; display: flex; align-items: center; gap: 0.35rem;"><input type="checkbox" name="checklist_stnk" value="1" checked> STNK</label>
-                                <label style="cursor: pointer; display: flex; align-items: center; gap: 0.35rem;"><input type="checkbox" name="checklist_kir" value="1" checked> KIR</label>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Transportir / Perusahaan</label>
-                            <input type="text" name="transportir" class="form-control" placeholder="Nama Perusahaan / Transportir (Opsional)...">
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="closeModal('modalGateIn')">Batal</button>
-                <button type="submit" class="btn btn-primary">Simpan Gate In</button>
-            </div>
-        </form>
-    </div>
-</div>
 
 <!-- MODAL GATE OUT (KELUAR EDC) -->
 <div id="modalGateOut" class="modal-backdrop">
