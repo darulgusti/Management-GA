@@ -109,15 +109,20 @@ $msg   = $_GET['msg'] ?? ($messages[$type]['msg'] ?? 'Data Anda telah berhasil d
             <div class="info-badge">
                 ✓ Data Terkonfirmasi &amp; Tersimpan
             </div>
+
+            <div style="margin-top: 1.5rem;">
+                <button type="button" onclick="window.close();" class="btn btn-outline btn-sm" style="border-radius: 20px; padding: 0.5rem 1.5rem;">✕ Tutup Halaman</button>
+            </div>
         </div>
     </div>
     <script>
         (function() {
-            // Push dummy history state
             history.pushState(null, null, location.href);
             window.addEventListener('popstate', function() {
-                // Redirect to Portal Index when Back button is pressed
-                window.location.replace('index.php');
+                // Attempt to close tab/window on back button press
+                window.close();
+                // If browser blocks closing, keep user locked on success page
+                history.pushState(null, null, location.href);
             });
         })();
     </script>
