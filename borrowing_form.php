@@ -26,6 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $initial_condition = 'Baik';
     $signature = $_POST['signature'] ?? '';
 
+    if ($category === 'SECOM' && empty($item_name)) {
+        $item_name = 'Kunci';
+    }
+
     if (empty($borrower_name) || empty($department) || empty($item_name) || empty($quantity)) {
         $error_msg = "Mohon lengkapi seluruh kolom wajib formulir peminjaman!";
     } elseif ($category === 'SECOM' && empty($key_number)) {
@@ -111,12 +115,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <?php if ($category === 'SECOM'): ?>
-                    <div class="grid-3">
-                        <div class="form-group">
-                            <label class="form-label">Nama Kunci / Ruangan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                            <input type="text" name="item_name" required class="form-control" placeholder="Contoh: Kunci Server / Ruang Meeting A" value="<?= htmlspecialchars($_POST['item_name'] ?? '') ?>">
-                        </div>
-
+                    <input type="hidden" name="item_name" value="Kunci">
+                    <div class="grid-2">
                         <div class="form-group">
                             <label class="form-label">Nomor Kunci <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                             <input type="text" name="key_number" required class="form-control" placeholder="Contoh: K-01 / KEY-12" value="<?= htmlspecialchars($_POST['key_number'] ?? '') ?>">
