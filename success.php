@@ -109,10 +109,6 @@ $msg   = $_GET['msg'] ?? ($messages[$type]['msg'] ?? 'Data Anda telah berhasil d
             <div class="info-badge">
                 ✓ Data Terkonfirmasi &amp; Tersimpan
             </div>
-
-            <div style="margin-top: 1.5rem;">
-                <button type="button" onclick="window.close();" class="btn btn-outline btn-sm" style="border-radius: 20px; padding: 0.5rem 1.5rem;">✕ Tutup Halaman</button>
-            </div>
         </div>
     </div>
     <script>

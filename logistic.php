@@ -627,7 +627,16 @@ include __DIR__ . '/includes/header.php';
 
                     <div class="form-group" style="grid-column: 1 / -1;">
                         <label class="form-label" style="font-weight: 600;">Upload Foto Surat Jalan / Dokumen <small style="color: var(--text-muted); font-weight: 400;">(Opsional)</small></label>
-                        <input type="file" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this, 'photo_preview_container_edc', 'photo_preview_img_edc', 'document_photo_edc')">
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
+                            <button type="button" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 0.35rem;" onclick="document.getElementById('camera_input_edc').click();">
+                                📷 Ambil dari Kamera
+                            </button>
+                            <button type="button" class="btn btn-outline btn-sm" style="display: inline-flex; align-items: center; gap: 0.35rem;" onclick="document.getElementById('gallery_input_edc').click();">
+                                📁 Pilih dari Galeri
+                            </button>
+                        </div>
+                        <input type="file" id="camera_input_edc" accept="image/*" capture="environment" style="display:none;" onchange="compressAndPreviewPhoto(this, 'photo_preview_container_edc', 'photo_preview_img_edc', 'document_photo_edc')">
+                        <input type="file" id="gallery_input_edc" accept="image/*" style="display:none;" onchange="compressAndPreviewPhoto(this, 'photo_preview_container_edc', 'photo_preview_img_edc', 'document_photo_edc')">
                         <input type="hidden" name="document_photo" id="document_photo_edc" value="">
                         <div id="photo_preview_container_edc" style="display: none; margin-top: 0.5rem; text-align: center;">
                             <img id="photo_preview_img_edc" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
@@ -698,7 +707,16 @@ include __DIR__ . '/includes/header.php';
 
                     <div class="form-group" style="grid-column: 1 / -1;">
                         <label class="form-label" style="font-weight: 600;">Upload Foto Surat Jalan / Dokumen <small style="color: var(--text-muted); font-weight: 400;">(Opsional)</small></label>
-                        <input type="file" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this, 'photo_preview_container_nex', 'photo_preview_img_nex', 'document_photo_nex')">
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
+                            <button type="button" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 0.35rem;" onclick="document.getElementById('camera_input_nex').click();">
+                                📷 Ambil dari Kamera
+                            </button>
+                            <button type="button" class="btn btn-outline btn-sm" style="display: inline-flex; align-items: center; gap: 0.35rem;" onclick="document.getElementById('gallery_input_nex').click();">
+                                📁 Pilih dari Galeri
+                            </button>
+                        </div>
+                        <input type="file" id="camera_input_nex" accept="image/*" capture="environment" style="display:none;" onchange="compressAndPreviewPhoto(this, 'photo_preview_container_nex', 'photo_preview_img_nex', 'document_photo_nex')">
+                        <input type="file" id="gallery_input_nex" accept="image/*" style="display:none;" onchange="compressAndPreviewPhoto(this, 'photo_preview_container_nex', 'photo_preview_img_nex', 'document_photo_nex')">
                         <input type="hidden" name="document_photo" id="document_photo_nex" value="">
                         <div id="photo_preview_container_nex" style="display: none; margin-top: 0.5rem; text-align: center;">
                             <img id="photo_preview_img_nex" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
@@ -943,7 +961,16 @@ include __DIR__ . '/includes/header.php';
                 </div>
                 <div class="form-group">
                     <label class="form-label" style="font-weight: 600;">Upload Foto Surat Jalan <small style="color: var(--text-muted); font-weight: 400;">(Opsional)</small></label>
-                    <input type="file" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this, 'photo_preview_co_ajinex', 'photo_img_co_ajinex', 'photo_input_co_ajinex')">
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
+                        <button type="button" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 0.35rem;" onclick="document.getElementById('camera_input_co_ajinex').click();">
+                            📷 Ambil dari Kamera
+                        </button>
+                        <button type="button" class="btn btn-outline btn-sm" style="display: inline-flex; align-items: center; gap: 0.35rem;" onclick="document.getElementById('gallery_input_co_ajinex').click();">
+                            📁 Pilih dari Galeri
+                        </button>
+                    </div>
+                    <input type="file" id="camera_input_co_ajinex" accept="image/*" capture="environment" style="display:none;" onchange="compressAndPreviewPhoto(this, 'photo_preview_co_ajinex', 'photo_img_co_ajinex', 'photo_input_co_ajinex')">
+                    <input type="file" id="gallery_input_co_ajinex" accept="image/*" style="display:none;" onchange="compressAndPreviewPhoto(this, 'photo_preview_co_ajinex', 'photo_img_co_ajinex', 'photo_input_co_ajinex')">
                     <input type="hidden" name="document_photo" id="photo_input_co_ajinex" value="">
                     <div id="photo_preview_co_ajinex" style="display: none; margin-top: 0.5rem; text-align: center;">
                         <img id="photo_img_co_ajinex" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
@@ -994,7 +1021,16 @@ include __DIR__ . '/includes/header.php';
                 </div>
                 <div class="form-group">
                     <label class="form-label" style="font-weight: 600;">Upload Foto Surat Jalan <small style="color: var(--text-muted); font-weight: 400;">(Opsional)</small></label>
-                    <input type="file" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this, 'photo_preview_co_edc', 'photo_img_co_edc', 'photo_input_co_edc')">
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
+                        <button type="button" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 0.35rem;" onclick="document.getElementById('camera_input_co_edc').click();">
+                            📷 Ambil dari Kamera
+                        </button>
+                        <button type="button" class="btn btn-outline btn-sm" style="display: inline-flex; align-items: center; gap: 0.35rem;" onclick="document.getElementById('gallery_input_co_edc').click();">
+                            📁 Pilih dari Galeri
+                        </button>
+                    </div>
+                    <input type="file" id="camera_input_co_edc" accept="image/*" capture="environment" style="display:none;" onchange="compressAndPreviewPhoto(this, 'photo_preview_co_edc', 'photo_img_co_edc', 'photo_input_co_edc')">
+                    <input type="file" id="gallery_input_co_edc" accept="image/*" style="display:none;" onchange="compressAndPreviewPhoto(this, 'photo_preview_co_edc', 'photo_img_co_edc', 'photo_input_co_edc')">
                     <input type="hidden" name="document_photo" id="photo_input_co_edc" value="">
                     <div id="photo_preview_co_edc" style="display: none; margin-top: 0.5rem; text-align: center;">
                         <img id="photo_img_co_edc" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
