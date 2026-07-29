@@ -225,7 +225,7 @@ $page_in = max(1, intval($_GET['page_in'] ?? 1));
 $count_query_in = "SELECT COUNT(*) FROM logistic_gate_ins WHERE 1=1";
 $params_in = [];
 if (!empty($search_in)) {
-    $count_query_in .= " AND (nopol LIKE ? OR driver_name LIKE ? OR visitor_number LIKE ? OR antree_number LIKE ? OR transportir LIKE ? OR destination LIKE ?)";
+    $count_query_in .= " AND (LOWER(nopol) LIKE LOWER(?) OR LOWER(driver_name) LIKE LOWER(?) OR LOWER(visitor_number) LIKE LOWER(?) OR LOWER(antree_number) LIKE LOWER(?) OR LOWER(transportir) LIKE LOWER(?) OR LOWER(destination) LIKE LOWER(?))";
     $term = "%$search_in%";
     $params_in = [$term, $term, $term, $term, $term, $term];
 }
@@ -246,7 +246,7 @@ $page_out = max(1, intval($_GET['page_out'] ?? 1));
 $count_query_out = "SELECT COUNT(*) FROM logistic_gate_outs WHERE 1=1";
 $params_out = [];
 if (!empty($search_out)) {
-    $count_query_out .= " AND (nopol LIKE ? OR driver_name LIKE ? OR do_number LIKE ? OR destination LIKE ? OR transportir LIKE ?)";
+    $count_query_out .= " AND (LOWER(nopol) LIKE LOWER(?) OR LOWER(driver_name) LIKE LOWER(?) OR LOWER(do_number) LIKE LOWER(?) OR LOWER(destination) LIKE LOWER(?) OR LOWER(transportir) LIKE LOWER(?))";
     $term = "%$search_out%";
     $params_out = [$term, $term, $term, $term, $term];
 }
@@ -267,7 +267,7 @@ $page_exp = max(1, intval($_GET['page_exp'] ?? 1));
 $count_query_exp = "SELECT COUNT(*) FROM logistic_export_nex_mopors WHERE 1=1";
 $params_exp = [];
 if (!empty($search_exp)) {
-    $count_query_exp .= " AND (mopor_number LIKE ? OR driver_name LIKE ? OR container_number LIKE ? OR seal_number LIKE ? OR do_number LIKE ? OR destination LIKE ? OR transportir LIKE ?)";
+    $count_query_exp .= " AND (LOWER(mopor_number) LIKE LOWER(?) OR LOWER(driver_name) LIKE LOWER(?) OR LOWER(container_number) LIKE LOWER(?) OR LOWER(seal_number) LIKE LOWER(?) OR LOWER(do_number) LIKE LOWER(?) OR LOWER(destination) LIKE LOWER(?) OR LOWER(transportir) LIKE LOWER(?))";
     $term = "%$search_exp%";
     $params_exp = [$term, $term, $term, $term, $term, $term, $term];
 }

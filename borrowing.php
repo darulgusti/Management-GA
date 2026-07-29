@@ -58,7 +58,7 @@ $active_count_query = "SELECT COUNT(*) FROM item_borrowings WHERE status = 'borr
 $active_params = $category_filter_params;
 
 if (!empty($active_search)) {
-    $active_count_query .= " AND (borrower_name LIKE ? OR department LIKE ? OR item_name LIKE ? OR item_code LIKE ? OR key_number LIKE ?)";
+    $active_count_query .= " AND (LOWER(borrower_name) LIKE LOWER(?) OR LOWER(department) LIKE LOWER(?) OR LOWER(item_name) LIKE LOWER(?) OR LOWER(item_code) LIKE LOWER(?) OR LOWER(key_number) LIKE LOWER(?))";
     $term = "%$active_search%";
     array_push($active_params, $term, $term, $term, $term, $term);
 }
@@ -82,7 +82,7 @@ $count_query = "SELECT COUNT(*) FROM item_borrowings WHERE status = 'returned' $
 $params = $category_filter_params;
 
 if (!empty($search)) {
-    $count_query .= " AND (borrower_name LIKE ? OR department LIKE ? OR item_name LIKE ? OR item_code LIKE ? OR key_number LIKE ?)";
+    $count_query .= " AND (LOWER(borrower_name) LIKE LOWER(?) OR LOWER(department) LIKE LOWER(?) OR LOWER(item_name) LIKE LOWER(?) OR LOWER(item_code) LIKE LOWER(?) OR LOWER(key_number) LIKE LOWER(?))";
     $searchTerm = "%$search%";
     array_push($params, $searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm);
 }

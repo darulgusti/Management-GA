@@ -47,7 +47,7 @@ $active_count_query = "SELECT COUNT(*) FROM guests WHERE time_out IS NULL";
 $active_params = [];
 
 if (!empty($active_search)) {
-    $active_count_query .= " AND (name LIKE ? OR institution LIKE ? OR person_to_meet LIKE ? OR visitor_card_number LIKE ? OR purpose LIKE ?)";
+    $active_count_query .= " AND (LOWER(name) LIKE LOWER(?) OR LOWER(institution) LIKE LOWER(?) OR LOWER(person_to_meet) LIKE LOWER(?) OR LOWER(visitor_card_number) LIKE LOWER(?) OR LOWER(purpose) LIKE LOWER(?))";
     $term = "%$active_search%";
     $active_params = [$term, $term, $term, $term, $term];
 }
@@ -71,7 +71,7 @@ $count_query = "SELECT COUNT(*) FROM guests WHERE time_out IS NOT NULL";
 $params = [];
 
 if (!empty($search)) {
-    $count_query .= " AND (name LIKE ? OR institution LIKE ? OR person_to_meet LIKE ? OR visitor_card_number LIKE ? OR purpose LIKE ?)";
+    $count_query .= " AND (LOWER(name) LIKE LOWER(?) OR LOWER(institution) LIKE LOWER(?) OR LOWER(person_to_meet) LIKE LOWER(?) OR LOWER(visitor_card_number) LIKE LOWER(?) OR LOWER(purpose) LIKE LOWER(?))";
     $searchTerm = "%$search%";
     $params = [$searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm];
 }
