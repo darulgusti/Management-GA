@@ -32,8 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $kir = isset($_POST['checklist_kir']) ? 1 : 0;
         $entry_time = !empty($_POST['entry_time']) ? date('Y-m-d H:i:s', strtotime($_POST['entry_time'])) : date('Y-m-d H:i:s');
 
-        if (empty($nopol) || empty($driver_name) || empty($transportir) || empty($destination) || empty($sim_type) || empty($sim_number) || empty($document_photo)) {
-            $error_msg = "Mohon lengkapi Nopol, Driver, SIM, Foto, Transportir, dan Tujuan Gate In!";
+        if (empty($nopol) || empty($driver_name) || empty($transportir) || empty($destination) || empty($sim_type) || empty($sim_number)) {
+            $error_msg = "Mohon lengkapi Nopol, Driver, Nomor SIM, Transportir, dan Tujuan Gate In!";
         } else {
             try {
                 $stmt = $pdo->prepare("INSERT INTO logistic_gate_ins (nopol, driver_name, visitor_number, antree_number, transportir, destination, sim_type, sim_number, document_photo, checklist_sim, checklist_stnk, checklist_kir, entry_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
