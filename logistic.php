@@ -295,10 +295,10 @@ include __DIR__ . '/includes/header.php';
             📥 Buku Masuk (Gate In)
         </a>
         <a href="logistic.php?tab=gate_out" class="btn btn-sm <?= $active_tab === 'gate_out' ? 'btn-primary' : 'btn-outline' ?>">
-            📤 Keluar Export Ajinex
+            📤 Riwayat Export Ajinex
         </a>
         <a href="logistic.php?tab=export_nex" class="btn btn-sm <?= $active_tab === 'export_nex' ? 'btn-primary' : 'btn-outline' ?>">
-            🚢 Keluar EDC
+            🚢 Riwayat Keluar EDC
         </a>
     </div>
     <div>
@@ -418,13 +418,13 @@ include __DIR__ . '/includes/header.php';
 <?php endif; ?>
 
 <?php if ($active_tab === 'all' || $active_tab === 'gate_out'): ?>
-<!-- SECTION 2: BUKU KELUAR (GATE OUT EDC) -->
+<!-- SECTION 2: RIWAYAT KELUAR EXPORT AJINEX -->
 <div id="sec-gateout" class="card" style="border-top: 4px solid var(--primary); margin-top: 2rem;">
     <div class="card-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
         <div>
             <h3 class="card-title">
                 <span class="badge badge-primary" style="font-size: 0.85rem;"><?= number_format($total_out_records) ?> Armada</span>
-                2. Keluar Export Ajinex
+                2. Riwayat Keluar Export Ajinex
             </h3>
         </div>
     </div>
@@ -459,7 +459,7 @@ include __DIR__ . '/includes/header.php';
             <tbody>
                 <?php if (count($gate_outs) === 0): ?>
                     <tr>
-                        <td colspan="<?= ($logged_user['role'] === 'manager') ? '9' : '8' ?>" style="text-align: center; color: var(--text-muted); padding: 1.75rem;">Belum ada data Keluar Export Ajinex.</td>
+                        <td colspan="<?= ($logged_user['role'] === 'manager') ? '9' : '8' ?>" style="text-align: center; color: var(--text-muted); padding: 1.75rem;">Belum ada riwayat Keluar Export Ajinex.</td>
                     </tr>
                 <?php else: ?>
                     <?php $no = $offset_out + 1; foreach ($gate_outs as $go): ?>
@@ -498,13 +498,13 @@ include __DIR__ . '/includes/header.php';
 <?php endif; ?>
 
 <?php if ($active_tab === 'all' || $active_tab === 'export_nex'): ?>
-<!-- SECTION 3: EXPORT NEX / NOPOR -->
+<!-- SECTION 3: RIWAYAT KELUAR EDC -->
 <div id="sec-export" class="card" style="border-top: 4px solid var(--primary); margin-top: 2rem;">
     <div class="card-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
         <div>
             <h3 class="card-title">
                 <span class="badge badge-primary" style="font-size: 0.85rem;"><?= number_format($total_exp_records) ?> Kontainer</span>
-                3. Keluar EDC
+                3. Riwayat Keluar EDC
             </h3>
         </div>
     </div>
