@@ -60,7 +60,7 @@ try {
 include __DIR__ . '/includes/header.php';
 ?>
 
-<div class="grid-2">
+<div class="<?= $logged_user['role'] === 'manager' ? 'grid-2' : '' ?>">
     <!-- Change Password Card -->
     <div class="card">
         <div class="card-header">
@@ -94,6 +94,7 @@ include __DIR__ . '/includes/header.php';
         </form>
     </div>
 
+    <?php if ($logged_user['role'] === 'manager'): ?>
     <!-- Archiving Card (Manager Only) -->
     <div class="card">
         <div class="card-header">
@@ -103,19 +104,13 @@ include __DIR__ . '/includes/header.php';
             Sistem secara otomatis mengarsipkan data riwayat yang telah mencapai 3 bulan. Pengarsipan manual dapat dijalankan kapan saja untuk memindahkan seluruh data selesai ke berkas Excel (.xls) dan membersihkan database.
         </p>
 
-        <?php if ($logged_user['role'] === 'manager'): ?>
-            <form action="settings.php" method="POST" onsubmit="return confirm('Jalankan pengarsipan manual? Seluruh data riwayat yang telah selesai akan dipindahkan ke berkas Excel arsip.');">
-                <input type="hidden" name="action" value="run_archive">
-                <button type="submit" class="btn btn-warning btn-block" style="margin-bottom: 1.5rem;">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H7a2 2 0 01-2-2V8zm14 0l-2 10H7L5 8"></path></svg>
-                    Jalankan Pengarsipan Manual Data Selesai
-                </button>
-            </form>
-        <?php else: ?>
-            <div class="alert alert-info">
-                Pengarsipan data hanya dapat dijalankan oleh peranan <strong>Manager</strong>.
-            </div>
-        <?php endif; ?>
+        <form action="settings.php" method="POST" onsubmit="return confirm('Jalankan pengarsipan manual? Seluruh data riwayat yang telah selesai akan dipindahkan ke berkas Excel arsip.');">
+            <input type="hidden" name="action" value="run_archive">
+            <button type="submit" class="btn btn-warning btn-block" style="margin-bottom: 1.5rem;">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H7a2 2 0 01-2-2V8zm14 0l-2 10H7L5 8"></path></svg>
+                Jalankan Pengarsipan Manual Data Selesai
+            </button>
+        </form>
 
         <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem;">Daftar File Arsip Tersimpan</h4>
         <div class="table-responsive">
@@ -151,6 +146,7 @@ include __DIR__ . '/includes/header.php';
             </table>
         </div>
     </div>
+    <?php endif; ?>
 </div>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>
