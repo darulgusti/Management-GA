@@ -112,15 +112,14 @@ $msg   = $_GET['msg'] ?? ($messages[$type]['msg'] ?? 'Data Anda telah berhasil d
         </div>
     </div>
     <script>
-        // Clean URL address bar to remove query parameters
-        if (window.history.replaceState) {
-            window.history.replaceState({}, document.title, "success.php");
-        }
-        // Prevent user from pressing Back button to return to the form page
-        history.pushState(null, null, location.href);
-        window.onpopstate = function () {
-            history.go(1);
-        };
+        (function() {
+            // Push dummy history state
+            history.pushState(null, null, location.href);
+            window.addEventListener('popstate', function() {
+                // Redirect to Portal Index when Back button is pressed
+                window.location.replace('index.php');
+            });
+        })();
     </script>
 </body>
 </html>
