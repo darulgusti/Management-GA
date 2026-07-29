@@ -30,6 +30,7 @@ try {
     try { $pdo->exec("ALTER TABLE `logistic_gate_ins` ADD COLUMN `visitor_number` VARCHAR(100) NULL AFTER `driver_name`"); } catch (Exception $e) {}
     try { $pdo->exec("ALTER TABLE `logistic_gate_ins` ADD COLUMN `antree_number` VARCHAR(100) NULL AFTER `visitor_number`"); } catch (Exception $e) {}
     try { $pdo->exec("ALTER TABLE `logistic_gate_ins` ADD COLUMN `sim_type` VARCHAR(50) DEFAULT 'SIM B' AFTER `destination`"); } catch (Exception $e) {}
+    try { $pdo->exec("ALTER TABLE `logistic_gate_ins` ADD COLUMN `exit_time` DATETIME NULL AFTER `entry_time`"); } catch (Exception $e) {}
 
     $pdo->exec("CREATE TABLE IF NOT EXISTS `logistic_gate_outs` (
       `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -86,11 +87,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $entry_time = !empty($_POST['entry_time']) ? date('Y-m-d H:i:s', strtotime($_POST['entry_time'])) : date('Y-m-d H:i:s');
 
             if (!empty($nopol) && !empty($driver_name)) {
-                $stmt = $pdo->prepare("INSERT INTO logistic_gate_ins (nopol, driver_name, visitor_number, antree_number, transportir, destination, sim_type, checklist_sim, checklist_stnk, checklist_kir, entry_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt = $pdo->prepare("INSERT INTO logistic_gate_ins (nopol, driver_name, visitor_number, antree_number, transportir, destination, sim_type, checklist_sim, checklist_stnk, checklist_kir, entry_time, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Masuk')");
                 $stmt->execute([$nopol, $driver_name, $visitor_number, $antree_number, $transportir, $destination, $sim_type, $sim, $stnk, $kir, $entry_time]);
                 set_flash_message('success', 'Data Kendaraan Masuk (Gate In) berhasil disimpan.');
             } else {
                 set_flash_message('danger', 'Mohon lengkapi field Nopol dan Nama Sopir!');
+            }
+        } elseif ($action === 'checkout_export_ajinex') {
+            // Checkout untuk armada dengan tujuan Export Ajinex
+            $gate_in_id = intval($_POST['gate_in_id'] ?? 0);
+            $nopol = trim($_POST['nopol'] ?? '');
+            $driver_name = trim($_POST['driver_name'] ?? '');
+            $transportir = trim($_POST['transportir'] ?? '-');
+            $tonnage = trim($_POST['tonnage'] ?? '');
+            $destination = trim($_POST['destination'] ?? '');
+            $document_photo = $_POST['document_photo'] ?? '';
+            $exit_time = !empty($_POST['exit_time']) ? date('Y-m-d H:i:s', strtotime($_POST['exit_time'])) : date('Y-m-d H:i:s');
+
+            if ($gate_in_id > 0 && !empty($nopol) && !empty($destination) && !empty($tonnage)) {
+                $stmt = $pdo->prepare("INSERT INTO logistic_gate_outs (nopol, driver_name, do_number, destination, tonnage, transportir, document_photo, exit_time) VALUES (?, ?, '-', ?, ?, ?, ?, ?)");
+                $stmt->execute([$nopol, $driver_name, $destination, $tonnage, $transportir, $document_photo, $exit_time]);
+
+                $stmt = $pdo->prepare("UPDATE logistic_gate_ins SET status = 'Checked Out', exit_time = ? WHERE id = ?");
+                $stmt->execute([$exit_time, $gate_in_id]);
+
+                set_flash_message('success', 'Check-out armada Export Ajinex berhasil diproses.');
+            } else {
+                set_flash_message('danger', 'Mohon isi Total Nett Weight dan Alamat Kirim / Tujuan!');
+            }
+        } elseif ($action === 'checkout_edc') {
+            // Checkout untuk armada dengan tujuan EDC
+            $gate_in_id = intval($_POST['gate_in_id'] ?? 0);
+            $nopol = trim($_POST['nopol'] ?? '');
+            $driver_name = trim($_POST['driver_name'] ?? '');
+            $transportir = trim($_POST['transportir'] ?? '-');
+            $mopor_number = trim($_POST['mopor_number'] ?? '');
+            $do_number = trim($_POST['do_number'] ?? '');
+            $seal_number = trim($_POST['seal_number'] ?? '');
+            $tonnage = trim($_POST['tonnage'] ?? '');
+            $container_number = trim($_POST['container_number'] ?? '');
+            $destination = trim($_POST['destination'] ?? '');
+            $document_photo = $_POST['document_photo'] ?? '';
+            $exit_time = !empty($_POST['exit_time']) ? date('Y-m-d H:i:s', strtotime($_POST['exit_time'])) : date('Y-m-d H:i:s');
+
+            if ($gate_in_id > 0 && !empty($mopor_number) && !empty($do_number) && !empty($seal_number) && !empty($container_number) && !empty($destination)) {
+                $stmt = $pdo->prepare("INSERT INTO logistic_export_nex_mopors (mopor_number, driver_name, do_number, container_number, seal_number, destination, tonnage, transportir, document_photo, exit_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt->execute([$mopor_number, $driver_name, $do_number, $container_number, $seal_number, $destination, $tonnage, $transportir, $document_photo, $exit_time]);
+
+                $stmt = $pdo->prepare("UPDATE logistic_gate_ins SET status = 'Checked Out', exit_time = ? WHERE id = ?");
+                $stmt->execute([$exit_time, $gate_in_id]);
+
+                set_flash_message('success', 'Check-out armada EDC berhasil diproses.');
+            } else {
+                set_flash_message('danger', 'Mohon lengkapi Nomor Ekspor, Nomor DO, Segel, Kontainer, dan Tujuan!');
             }
         } elseif ($action === 'delete_gate_in') {
             $id = intval($_POST['id'] ?? 0);
@@ -99,48 +148,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute([$id]);
                 set_flash_message('success', 'Data Gate In berhasil dihapus.');
             }
-        } elseif ($action === 'add_gate_out') {
-            $nopol = trim($_POST['nopol'] ?? '');
-            $driver_name = trim($_POST['driver_name'] ?? '');
-            $do_number = '-';
-            $destination = trim($_POST['destination'] ?? '');
-            $tonnage = trim($_POST['tonnage'] ?? '');
-            $transportir = trim($_POST['transportir'] ?? '');
-            $document_photo = $_POST['document_photo'] ?? '';
-            $exit_time = !empty($_POST['exit_time']) ? date('Y-m-d H:i:s', strtotime($_POST['exit_time'])) : date('Y-m-d H:i:s');
-
-            if (!empty($nopol) && !empty($driver_name) && !empty($destination) && !empty($transportir)) {
-                $stmt = $pdo->prepare("INSERT INTO logistic_gate_outs (nopol, driver_name, do_number, destination, tonnage, transportir, document_photo, exit_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$nopol, $driver_name, $do_number, $destination, $tonnage, $transportir, $document_photo, $exit_time]);
-                set_flash_message('success', 'Data Keluar EDC berhasil disimpan.');
-            } else {
-                set_flash_message('danger', 'Mohon lengkapi Nopol, Sopir, Total Nett Weight, Transportir, dan Alamat Kirim/Tujuan!');
-            }
         } elseif ($action === 'delete_gate_out') {
             $id = intval($_POST['id'] ?? 0);
             if ($id > 0) {
                 $stmt = $pdo->prepare("DELETE FROM logistic_gate_outs WHERE id = ?");
                 $stmt->execute([$id]);
                 set_flash_message('success', 'Data Gate Out berhasil dihapus.');
-            }
-        } elseif ($action === 'add_export') {
-            $mopor_number = trim($_POST['mopor_number'] ?? '');
-            $driver_name = '-';
-            $do_number = trim($_POST['do_number'] ?? '');
-            $container_number = trim($_POST['container_number'] ?? '');
-            $seal_number = trim($_POST['seal_number'] ?? '');
-            $destination = trim($_POST['destination'] ?? '');
-            $tonnage = trim($_POST['tonnage'] ?? '');
-            $transportir = '-';
-            $document_photo = $_POST['document_photo'] ?? '';
-            $exit_time = !empty($_POST['exit_time']) ? date('Y-m-d H:i:s', strtotime($_POST['exit_time'])) : date('Y-m-d H:i:s');
-
-            if (!empty($mopor_number) && !empty($container_number) && !empty($do_number) && !empty($seal_number)) {
-                $stmt = $pdo->prepare("INSERT INTO logistic_export_nex_mopors (mopor_number, driver_name, do_number, container_number, seal_number, destination, tonnage, transportir, document_photo, exit_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$mopor_number, $driver_name, $do_number, $container_number, $seal_number, $destination, $tonnage, $transportir, $document_photo, $exit_time]);
-                set_flash_message('success', 'Data Export NEX / NOPOR berhasil disimpan.');
-            } else {
-                set_flash_message('danger', 'Mohon lengkapi No. NOPOR, No. DO, Segel, dan No. Kontainer!');
             }
         } elseif ($action === 'delete_export') {
             $id = intval($_POST['id'] ?? 0);
@@ -366,10 +379,23 @@ include __DIR__ . '/includes/header.php';
                                 </div>
                             </td>
                             <td><?= date('d/m/Y H:i', strtotime($gi['entry_time'])) ?></td>
-                            <td><span class="badge badge-success"><?= htmlspecialchars($gi['status']) ?></span></td>
+                            <td>
+                                <?php if ($gi['status'] === 'Checked Out'): ?>
+                                    <span class="badge badge-secondary" title="Waktu Keluar: <?= $gi['exit_time'] ? date('d/m/Y H:i', strtotime($gi['exit_time'])) : '-' ?>">Checked Out</span>
+                                <?php else: ?>
+                                    <span class="badge badge-success">Masih Masuk</span>
+                                <?php endif; ?>
+                            </td>
                             <?php if ($can_input || $logged_user['role'] === 'manager'): ?>
                                 <td style="text-align: center; gap: 0.25rem;">
                                     <?php if ($can_input): ?>
+                                        <?php if ($gi['status'] !== 'Checked Out' && ($gi['destination'] === 'Export Ajinex' || $gi['destination'] === 'EDC')): ?>
+                                            <?php if ($gi['destination'] === 'Export Ajinex'): ?>
+                                                <button type="button" class="btn btn-warning btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; margin-right: 0.2rem;" onclick='openCheckoutExportAjinex(<?= json_encode($gi) ?>)'>Check-out</button>
+                                            <?php elseif ($gi['destination'] === 'EDC'): ?>
+                                                <button type="button" class="btn btn-warning btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; margin-right: 0.2rem;" onclick='openCheckoutEDC(<?= json_encode($gi) ?>)'>Check-out</button>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
                                         <form method="POST" action="logistic.php?tab=<?= urlencode($active_tab) ?>" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');" style="display: inline;">
                                             <input type="hidden" name="action" value="delete_gate_in">
                                             <input type="hidden" name="id" value="<?= $gi['id'] ?>">
@@ -398,12 +424,9 @@ include __DIR__ . '/includes/header.php';
         <div>
             <h3 class="card-title">
                 <span class="badge badge-primary" style="font-size: 0.85rem;"><?= number_format($total_out_records) ?> Armada</span>
-                2. Keluar EDC
+                2. Keluar Export Ajinex
             </h3>
         </div>
-        <?php if ($can_input): ?>
-            <button type="button" onclick="openModal('modalGateOut')" class="btn btn-primary btn-sm">+ Input Keluar EDC</button>
-        <?php endif; ?>
     </div>
 
     <!-- Search Bar Gate Out -->
@@ -485,12 +508,9 @@ include __DIR__ . '/includes/header.php';
         <div>
             <h3 class="card-title">
                 <span class="badge badge-primary" style="font-size: 0.85rem;"><?= number_format($total_exp_records) ?> Kontainer</span>
-                3. Keluar Export NEX (Kontainer Pos 4 Ekspor)
+                3. Keluar EDC (Kontainer Ekspor Pos 4)
             </h3>
         </div>
-        <?php if ($can_input): ?>
-            <button type="button" onclick="openModal('modalExport')" class="btn btn-primary btn-sm">+ Input Keluar Export NEX</button>
-        <?php endif; ?>
     </div>
 
     <!-- Search Bar Export NEX -->
@@ -964,6 +984,129 @@ include __DIR__ . '/includes/header.php';
 </div>
 <?php endif; ?>
 
+<!-- MODALS CHECKOUT UNTUK SECOM -->
+<?php if ($can_input): ?>
+<!-- MODAL CHECKOUT EXPORT AJINEX -->
+<div id="modalCheckoutExportAjinex" class="modal-backdrop">
+    <div class="modal-dialog" style="max-width: 650px; width: 95%;">
+        <div class="modal-header">
+            <h3 class="modal-title">Form Check-out Keluar (Export Ajinex)</h3>
+            <button type="button" class="modal-close" onclick="closeModal('modalCheckoutExportAjinex')">&times;</button>
+        </div>
+        <form method="POST" action="logistic.php?tab=<?= urlencode($active_tab) ?>">
+            <input type="hidden" name="action" value="checkout_export_ajinex">
+            <input type="hidden" name="gate_in_id" id="co_ajinex_gi_id">
+            <input type="hidden" name="nopol" id="co_ajinex_nopol">
+            <input type="hidden" name="transportir" id="co_ajinex_transportir">
+            <div class="modal-body">
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Nama Sopir</label>
+                        <input type="text" name="driver_name" id="co_ajinex_driver_name" readonly class="form-control" style="background-color: var(--bg-surface-alt); cursor: not-allowed; font-weight: 600;">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Keluar *</label>
+                        <input type="datetime-local" name="exit_time" id="co_ajinex_exit_time" required class="form-control">
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Total Nett Weight (Kg / Ton) *</label>
+                        <input type="text" name="tonnage" id="co_ajinex_tonnage" required class="form-control" placeholder="Masukkan total net weight...">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Alamat Kirim / Tujuan *</label>
+                        <input type="text" name="destination" id="co_ajinex_destination" required class="form-control" placeholder="Masukkan alamat kirim / tujuan...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="font-weight: 600;">Upload Foto Surat Jalan (Opsional)</label>
+                    <input type="file" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this, 'photo_preview_co_ajinex', 'photo_img_co_ajinex', 'photo_input_co_ajinex')">
+                    <input type="hidden" name="document_photo" id="photo_input_co_ajinex" value="">
+                    <div id="photo_preview_co_ajinex" style="display: none; margin-top: 0.5rem; text-align: center;">
+                        <img id="photo_img_co_ajinex" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                        <div style="font-size: 0.75rem; color: var(--success); font-weight: 600; margin-top: 0.25rem;">✓ Foto surat jalan berhasil dikompresi</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('modalCheckoutExportAjinex')">Batal</button>
+                <button type="submit" class="btn btn-warning">Proses Check-out</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL CHECKOUT EDC -->
+<div id="modalCheckoutEDC" class="modal-backdrop">
+    <div class="modal-dialog" style="max-width: 720px; width: 95%;">
+        <div class="modal-header">
+            <h3 class="modal-title">Form Check-out Keluar (EDC)</h3>
+            <button type="button" class="modal-close" onclick="closeModal('modalCheckoutEDC')">&times;</button>
+        </div>
+        <form method="POST" action="logistic.php?tab=<?= urlencode($active_tab) ?>">
+            <input type="hidden" name="action" value="checkout_edc">
+            <input type="hidden" name="gate_in_id" id="co_edc_gi_id">
+            <input type="hidden" name="nopol" id="co_edc_nopol">
+            <input type="hidden" name="transportir" id="co_edc_transportir">
+            <div class="modal-body">
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Nama Sopir</label>
+                        <input type="text" name="driver_name" id="co_edc_driver_name" readonly class="form-control" style="background-color: var(--bg-surface-alt); cursor: not-allowed; font-weight: 600;">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Keluar *</label>
+                        <input type="datetime-local" name="exit_time" id="co_edc_exit_time" required class="form-control">
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Nomor Ekspor (NOPOR) *</label>
+                        <input type="text" name="mopor_number" id="co_edc_mopor" required class="form-control" placeholder="Masukkan Nomor Ekspor (NOPOR)...">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Nomor DO *</label>
+                        <input type="text" name="do_number" id="co_edc_do" required class="form-control" placeholder="Masukkan Nomor DO...">
+                    </div>
+                </div>
+                <div class="grid-3">
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Segel *</label>
+                        <input type="text" name="seal_number" id="co_edc_seal" required class="form-control" placeholder="Nomor Segel...">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Tonase (Ton) *</label>
+                        <input type="text" name="tonnage" id="co_edc_tonnage" required class="form-control" placeholder="Jumlah Tonase...">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Kontainer *</label>
+                        <input type="text" name="container_number" id="co_edc_container" required class="form-control" placeholder="Nomor Kontainer...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="font-weight: 600;">Alamat Kirim / Tujuan *</label>
+                    <input type="text" name="destination" id="co_edc_destination" required class="form-control" placeholder="Alamat Kirim / Tujuan...">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="font-weight: 600;">Upload Foto Surat Jalan (Opsional)</label>
+                    <input type="file" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this, 'photo_preview_co_edc', 'photo_img_co_edc', 'photo_input_co_edc')">
+                    <input type="hidden" name="document_photo" id="photo_input_co_edc" value="">
+                    <div id="photo_preview_co_edc" style="display: none; margin-top: 0.5rem; text-align: center;">
+                        <img id="photo_img_co_edc" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                        <div style="font-size: 0.75rem; color: var(--success); font-weight: 600; margin-top: 0.25rem;">✓ Foto surat jalan berhasil dikompresi</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('modalCheckoutEDC')">Batal</button>
+                <button type="submit" class="btn btn-warning">Proses Check-out</button>
+            </div>
+        </form>
+    </div>
+</div>
+<?php endif; ?>
+
 <!-- MODAL DOCUMENT PHOTO PREVIEW -->
 <div id="modalDocumentPhoto" class="modal-backdrop">
     <div class="modal-dialog" style="max-width: 520px; width: 92%;">
@@ -990,6 +1133,42 @@ function closeModal(id) {
 function showDocumentPhoto(src) {
     document.getElementById('doc_photo_preview_src').src = src;
     openModal('modalDocumentPhoto');
+}
+
+function getNowDatetimeLocal() {
+    const d = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+function openCheckoutExportAjinex(data) {
+    document.getElementById('co_ajinex_gi_id').value = data.id;
+    document.getElementById('co_ajinex_nopol').value = data.nopol || '';
+    document.getElementById('co_ajinex_driver_name').value = data.driver_name || '';
+    document.getElementById('co_ajinex_transportir').value = data.transportir || '';
+    document.getElementById('co_ajinex_exit_time').value = getNowDatetimeLocal();
+    document.getElementById('co_ajinex_tonnage').value = '';
+    document.getElementById('co_ajinex_destination').value = '';
+    document.getElementById('photo_input_co_ajinex').value = '';
+    document.getElementById('photo_preview_co_ajinex').style.display = 'none';
+    openModal('modalCheckoutExportAjinex');
+}
+
+function openCheckoutEDC(data) {
+    document.getElementById('co_edc_gi_id').value = data.id;
+    document.getElementById('co_edc_nopol').value = data.nopol || '';
+    document.getElementById('co_edc_driver_name').value = data.driver_name || '';
+    document.getElementById('co_edc_transportir').value = data.transportir || '';
+    document.getElementById('co_edc_exit_time').value = getNowDatetimeLocal();
+    document.getElementById('co_edc_mopor').value = '';
+    document.getElementById('co_edc_do').value = '';
+    document.getElementById('co_edc_seal').value = '';
+    document.getElementById('co_edc_tonnage').value = '';
+    document.getElementById('co_edc_container').value = '';
+    document.getElementById('co_edc_destination').value = '';
+    document.getElementById('photo_input_co_edc').value = '';
+    document.getElementById('photo_preview_co_edc').style.display = 'none';
+    openModal('modalCheckoutEDC');
 }
 
 function compressAndPreviewPhoto(input, containerId, imgId, inputId) {
@@ -1064,5 +1243,4 @@ function editExport(data) {
 }
 </script>
 <?php include __DIR__ . '/includes/footer.php'; ?>
-cludes/footer.php'; ?>
 

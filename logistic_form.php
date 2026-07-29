@@ -44,52 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error_msg = "Gagal menyimpan data Gate In: " . $e->getMessage();
             }
         }
-    } elseif ($action === 'add_gate_out') {
-        $nopol = trim($_POST['nopol'] ?? '');
-        $driver_name = trim($_POST['driver_name'] ?? '');
-        $do_number = '-';
-        $destination = trim($_POST['destination'] ?? '');
-        $tonnage = trim($_POST['tonnage'] ?? '');
-        $transportir = trim($_POST['transportir'] ?? '');
-        $document_photo = $_POST['document_photo'] ?? '';
-        $exit_time = !empty($_POST['exit_time']) ? date('Y-m-d H:i:s', strtotime($_POST['exit_time'])) : date('Y-m-d H:i:s');
-
-        if (empty($nopol) || empty($driver_name) || empty($destination) || empty($tonnage) || empty($transportir)) {
-            $error_msg = "Mohon lengkapi Nopol, Sopir, Total Nett Weight, Transportir, dan Alamat Kirim/Tujuan!";
-        } else {
-            try {
-                $stmt = $pdo->prepare("INSERT INTO logistic_gate_outs (nopol, driver_name, do_number, destination, tonnage, transportir, document_photo, exit_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$nopol, $driver_name, $do_number, $destination, $tonnage, $transportir, $document_photo, $exit_time]);
-                header("Location: success.php?type=gate_out");
-                exit();
-            } catch (Exception $e) {
-                $error_msg = "Gagal menyimpan data Keluar EDC: " . $e->getMessage();
-            }
-        }
-    } elseif ($action === 'add_export') {
-        $mopor_number = trim($_POST['mopor_number'] ?? '');
-        $driver_name = '-';
-        $do_number = trim($_POST['do_number'] ?? '');
-        $container_number = trim($_POST['container_number'] ?? '');
-        $seal_number = trim($_POST['seal_number'] ?? '');
-        $destination = trim($_POST['destination'] ?? '');
-        $tonnage = trim($_POST['tonnage'] ?? '');
-        $transportir = '-';
-        $document_photo = $_POST['document_photo'] ?? '';
-        $exit_time = !empty($_POST['exit_time']) ? date('Y-m-d H:i:s', strtotime($_POST['exit_time'])) : date('Y-m-d H:i:s');
-
-        if (empty($mopor_number) || empty($container_number) || empty($do_number) || empty($seal_number) || empty($tonnage) || empty($destination)) {
-            $error_msg = "Mohon lengkapi No. NOPOR, No. DO, No. Segel, Tonase, No. Kontainer, dan Tujuan!";
-        } else {
-            try {
-                $stmt = $pdo->prepare("INSERT INTO logistic_export_nex_mopors (mopor_number, driver_name, do_number, container_number, seal_number, destination, tonnage, transportir, document_photo, exit_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$mopor_number, $driver_name, $do_number, $container_number, $seal_number, $destination, $tonnage, $transportir, $document_photo, $exit_time]);
-                header("Location: success.php?type=export");
-                exit();
-            } catch (Exception $e) {
-                $error_msg = "Gagal menyimpan data Export NEX: " . $e->getMessage();
-            }
-        }
     }
 }
 ?>
@@ -134,251 +88,102 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="card" style="border-top: 4px solid var(--primary);">
             
-            <!-- FORM TYPE SWITCHER BUTTONS AT THE TOP -->
-            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
-                <a href="logistic_form.php?type=gate_in" class="btn btn-sm <?= $type === 'gate_in' ? 'btn-primary' : 'btn-outline' ?>" style="font-weight: 600;">
-                    📥 Buku Masuk (Gate In)
-                </a>
-                <a href="logistic_form.php?type=gate_out" class="btn btn-sm <?= $type === 'gate_out' ? 'btn-primary' : 'btn-outline' ?>" style="font-weight: 600;">
-                    📤 Keluar EDC
-                </a>
-                <a href="logistic_form.php?type=export_nex" class="btn btn-sm <?= $type === 'export_nex' ? 'btn-primary' : 'btn-outline' ?>" style="font-weight: 600;">
-                    🚢 Keluar Export NEX
-                </a>
+            <div style="margin-bottom: 1rem;">
+                <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 0.25rem;">Form Buku Masuk Kendaraan (Gate In)</h2>
             </div>
 
-            <!-- FORM 1: BUKU MASUK (GATE IN) -->
-            <?php if ($type === 'gate_in'): ?>
-                <div style="margin-bottom: 1rem;">
-                    <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 0.25rem;">Form Buku Masuk Kendaraan (Gate In)</h2>
-                </div>
-
-                <form method="POST" action="logistic_form.php?type=gate_in">
-                    <input type="hidden" name="action" value="add_gate_in">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
-                        
-                        <!-- LEFT COLUMN -->
-                        <div>
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Nomor Polisi (Nopol) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="nopol" required class="form-control" placeholder="Masukkan Nopol (e.g. B 1234 XYZ)...">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Visitor Number (Opsional)</label>
-                                <input type="text" name="visitor_number" class="form-control" placeholder="Visitor Card Number (Opsional)...">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Antre Number (Opsional)</label>
-                                <input type="text" name="antree_number" class="form-control" placeholder="Nomor Antre (Opsional)...">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Masuk</label>
-                                <input type="datetime-local" name="entry_time" class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Nomor SIM Driver <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="sim_number" required class="form-control" placeholder="Nomor SIM Driver...">
-                            </div>
+            <form method="POST" action="logistic_form.php?type=gate_in">
+                <input type="hidden" name="action" value="add_gate_in">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+                    
+                    <!-- LEFT COLUMN -->
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Nomor Polisi (Nopol) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                            <input type="text" name="nopol" required class="form-control" placeholder="Masukkan Nopol (e.g. B 1234 XYZ)...">
                         </div>
 
-                        <!-- RIGHT COLUMN -->
-                        <div>
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Nama Sopir <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="driver_name" required class="form-control" placeholder="Nama sopir / driver...">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Tujuan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <select name="destination" class="form-select" required>
-                                    <option value="">-- Pilih Tujuan --</option>
-                                    <option value="Kirim">Kirim</option>
-                                    <option value="Export Ajinex">Export Ajinex</option>
-                                    <option value="Transit">Transit</option>
-                                    <option value="Muatan Barang">Muatan Barang</option>
-                                    <option value="EDC">EDC</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Jenis SIM Driver <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <select name="sim_type" class="form-select" required>
-                                    <option value="SIM A">SIM A</option>
-                                    <option value="SIM B" selected>SIM B</option>
-                                    <option value="SIM B2">SIM B2</option>
-                                    <option value="Tidak Ada">Tidak Ada</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Kelengkapan Berkas (STNK &amp; KIR) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <div style="display: flex; gap: 1rem; padding: 0.55rem 0.75rem; background: var(--bg-surface-alt); border-radius: var(--radius-sm); border: 1px solid var(--border);">
-                                    <label style="cursor: pointer; display: flex; align-items: center; gap: 0.35rem;"><input type="checkbox" name="checklist_stnk" value="1" checked> STNK</label>
-                                    <label style="cursor: pointer; display: flex; align-items: center; gap: 0.35rem;"><input type="checkbox" name="checklist_kir" value="1" checked> KIR</label>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Transportir / Perusahaan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="transportir" required class="form-control" placeholder="Nama Perusahaan / Transportir...">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Upload Foto Dokumen <small style="color: var(--text-muted); font-weight: 400;">(Opsional)</small></label>
-                                <input type="file" id="document_file_input" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this)">
-                                <input type="hidden" name="document_photo" id="document_photo_input">
-                                <div id="photo_preview_container" style="display: none; margin-top: 0.5rem; text-align: center;">
-                                    <img id="photo_preview_img" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
-                                    <div style="font-size: 0.75rem; color: var(--success); font-weight: 600; margin-top: 0.25rem;">✓ Foto berhasil dikompresi (siap simpan)</div>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Visitor Number (Opsional)</label>
+                            <input type="text" name="visitor_number" class="form-control" placeholder="Visitor Card Number (Opsional)...">
                         </div>
 
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Antre Number (Opsional)</label>
+                            <input type="text" name="antree_number" class="form-control" placeholder="Nomor Antre (Opsional)...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Masuk</label>
+                            <input type="datetime-local" name="entry_time" class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Nomor SIM Driver <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                            <input type="text" name="sim_number" required class="form-control" placeholder="Nomor SIM Driver...">
+                        </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top: 1.5rem;">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        Simpan Data Gate In
-                    </button>
-                </form>
+                    <!-- RIGHT COLUMN -->
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Nama Sopir <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                            <input type="text" name="driver_name" required class="form-control" placeholder="Nama sopir / driver...">
+                        </div>
 
-            <!-- FORM 2: KELUAR EDC -->
-            <?php elseif ($type === 'gate_out'): ?>
-                <div style="margin-bottom: 1rem;">
-                    <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 0.25rem;">Form Input Keluar EDC</h2>
-                </div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Tujuan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                            <select name="destination" class="form-select" required>
+                                <option value="">-- Pilih Tujuan --</option>
+                                <option value="Kirim">Kirim</option>
+                                <option value="Export Ajinex">Export Ajinex</option>
+                                <option value="Transit">Transit</option>
+                                <option value="Muatan Barang">Muatan Barang</option>
+                                <option value="EDC">EDC</option>
+                            </select>
+                        </div>
 
-                <form method="POST" action="logistic_form.php?type=gate_out">
-                    <input type="hidden" name="action" value="add_gate_out">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
-                        
-                        <!-- LEFT COLUMN -->
-                        <div>
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Nomor Polisi (Nopol) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="nopol" required class="form-control" placeholder="Masukkan Nopol (e.g. B 1234 XYZ)...">
-                            </div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Jenis SIM Driver <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                            <select name="sim_type" class="form-select" required>
+                                <option value="SIM A">SIM A</option>
+                                <option value="SIM B" selected>SIM B</option>
+                                <option value="SIM B2">SIM B2</option>
+                                <option value="Tidak Ada">Tidak Ada</option>
+                            </select>
+                        </div>
 
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Total Nett Weight (Kg / Ton) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="tonnage" required class="form-control" placeholder="Total Nett Weight diisi manual...">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Nama Transportir <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="transportir" required class="form-control" placeholder="Nama Perusahaan / Transportir...">
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Kelengkapan Berkas (STNK &amp; KIR) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                            <div style="display: flex; gap: 1rem; padding: 0.55rem 0.75rem; background: var(--bg-surface-alt); border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                                <label style="cursor: pointer; display: flex; align-items: center; gap: 0.35rem;"><input type="checkbox" name="checklist_stnk" value="1" checked> STNK</label>
+                                <label style="cursor: pointer; display: flex; align-items: center; gap: 0.35rem;"><input type="checkbox" name="checklist_kir" value="1" checked> KIR</label>
                             </div>
                         </div>
 
-                        <!-- RIGHT COLUMN -->
-                        <div>
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Nama Sopir <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="driver_name" required class="form-control" placeholder="Nama sopir...">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Alamat Kirim / Tujuan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="destination" required class="form-control" placeholder="Alamat Kirim / Tujuan...">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Keluar</label>
-                                <input type="datetime-local" name="exit_time" class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
-                            </div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Transportir / Perusahaan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                            <input type="text" name="transportir" required class="form-control" placeholder="Nama Perusahaan / Transportir...">
                         </div>
 
-                        <div class="form-group" style="grid-column: 1 / -1;">
-                            <label class="form-label" style="font-weight: 600;">Upload Foto Surat Jalan / Dokumen (Opsional)</label>
-                            <input type="file" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this, 'photo_preview_container_edc', 'photo_preview_img_edc', 'document_photo_edc')">
-                            <input type="hidden" name="document_photo" id="document_photo_edc" value="">
-                            <div id="photo_preview_container_edc" style="display: none; margin-top: 0.5rem; text-align: center;">
-                                <img id="photo_preview_img_edc" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
-                                <div style="font-size: 0.75rem; color: var(--success); font-weight: 600; margin-top: 0.25rem;">✓ Foto surat jalan berhasil dikompresi</div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Upload Foto Dokumen <small style="color: var(--text-muted); font-weight: 400;">(Opsional)</small></label>
+                            <input type="file" id="document_file_input" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this)">
+                            <input type="hidden" name="document_photo" id="document_photo_input">
+                            <div id="photo_preview_container" style="display: none; margin-top: 0.5rem; text-align: center;">
+                                <img id="photo_preview_img" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+                                <div style="font-size: 0.75rem; color: var(--success); font-weight: 600; margin-top: 0.25rem;">✓ Foto berhasil dikompresi (siap simpan)</div>
                             </div>
                         </div>
-
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top: 1.5rem;">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        Simpan Data Keluar EDC
-                    </button>
-                </form>
-
-            <!-- FORM 3: KELUAR EXPORT NEX -->
-            <?php elseif ($type === 'export_nex'): ?>
-                <div style="margin-bottom: 1rem;">
-                    <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 0.25rem;">Form Input Keluar Export NEX</h2>
                 </div>
 
-                <form method="POST" action="logistic_form.php?type=export_nex">
-                    <input type="hidden" name="action" value="add_export">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
-                        
-                        <!-- LEFT COLUMN -->
-                        <div>
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Nomor NOPOR (Nomor Ekspor) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="mopor_number" required class="form-control" placeholder="Masukkan NOPOR...">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Nomor DO <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="do_number" required class="form-control" placeholder="Nomor DO...">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Segel <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="seal_number" required class="form-control" placeholder="Nomor Segel (Seal)...">
-                            </div>
-                        </div>
-
-                        <!-- RIGHT COLUMN -->
-                        <div>
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Tonase (Ton) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="tonnage" required class="form-control" placeholder="Jumlah Tonase diisi manual...">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Kontainer <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="container_number" required class="form-control" placeholder="Nomor Kontainer...">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Tujuan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="destination" required class="form-control" placeholder="Pelabuhan / Negara Tujuan...">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Keluar</label>
-                                <input type="datetime-local" name="exit_time" class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
-                            </div>
-                        </div>
-
-                        <div class="form-group" style="grid-column: 1 / -1;">
-                            <label class="form-label" style="font-weight: 600;">Upload Foto Surat Jalan / Dokumen (Opsional)</label>
-                            <input type="file" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this, 'photo_preview_container_nex', 'photo_preview_img_nex', 'document_photo_nex')">
-                            <input type="hidden" name="document_photo" id="document_photo_nex" value="">
-                            <div id="photo_preview_container_nex" style="display: none; margin-top: 0.5rem; text-align: center;">
-                                <img id="photo_preview_img_nex" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
-                                <div style="font-size: 0.75rem; color: var(--success); font-weight: 600; margin-top: 0.25rem;">✓ Foto surat jalan berhasil dikompresi</div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top: 1.5rem;">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        Simpan Data Keluar Export NEX
-                    </button>
-                </form>
-            <?php endif; ?>
+                <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top: 1.5rem;">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    Simpan Data Gate In
+                </button>
+            </form>
 
         </div>
 
