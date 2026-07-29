@@ -260,7 +260,7 @@ include __DIR__ . '/includes/header.php';
                     <th>No</th>
                     <th>Peminjam</th>
                     <th>Dept</th>
-                    <th>Nama & Kode Barang</th>
+                    <th>Nama & Kode / No. Kunci</th>
                     <th>Qty</th>
                     <th>Waktu Pinjam</th>
                     <th>Waktu Kembali</th>
@@ -276,7 +276,14 @@ include __DIR__ . '/includes/header.php';
                             <td><?= $no++ ?></td>
                             <td class="col-name"><strong><?= htmlspecialchars($b['borrower_name']) ?></strong></td>
                             <td class="col-nowrap"><?= htmlspecialchars($b['department']) ?></td>
-                            <td class="col-nowrap"><?= htmlspecialchars($b['item_name']) ?> <?= $b['item_code'] ? "({$b['item_code']})" : '' ?></td>
+                            <td class="col-nowrap">
+                                <strong><?= htmlspecialchars($b['item_name']) ?></strong>
+                                <?php if (!empty($b['key_number'])): ?>
+                                    <span class="badge badge-info">🔑 No Kunci: <?= htmlspecialchars($b['key_number']) ?></span>
+                                <?php elseif (!empty($b['item_code'])): ?>
+                                    <code>(<?= htmlspecialchars($b['item_code']) ?>)</code>
+                                <?php endif; ?>
+                            </td>
                             <td class="col-nowrap"><?= $b['quantity'] ?></td>
                             <td class="col-date"><?= date('d/m/Y H:i', strtotime($b['borrow_time'])) ?></td>
                             <td class="col-date"><?= $b['return_time'] ? date('d/m/Y H:i', strtotime($b['return_time'])) : '-' ?></td>
@@ -363,7 +370,12 @@ include __DIR__ . '/includes/header.php';
                     <?php $no = $gout_offset + 1; foreach ($gate_outs as $go): ?>
                         <tr>
                             <td><?= $no++ ?></td>
-                            <td><code><strong><?= htmlspecialchars($go['nopol']) ?></strong></code></td>
+                            <td>
+                                <code><strong><?= htmlspecialchars($go['nopol']) ?></strong></code>
+                                <?php if (!empty($go['document_photo'])): ?>
+                                    <br><button type="button" onclick="showDocumentPhoto('<?= htmlspecialchars($go['document_photo']) ?>')" class="badge badge-warning" style="border:none; cursor:pointer; margin-top:0.25rem;" title="Lihat Foto Dokumen">📷 Foto Dokumen</button>
+                                <?php endif; ?>
+                            </td>
                             <td><?= htmlspecialchars($go['driver_name']) ?></td>
                             <td><?= is_numeric($go['tonnage']) ? number_format((float)$go['tonnage'], 2) : htmlspecialchars($go['tonnage']) ?></td>
                             <td><?= htmlspecialchars($go['destination']) ?></td>
@@ -390,7 +402,6 @@ include __DIR__ . '/includes/header.php';
                 <tr>
                     <th>No</th>
                     <th>No. NOPOR</th>
-                    <th>Sopir</th>
                     <th>No. DO</th>
                     <th>No. Kontainer</th>
                     <th>No. Segel</th>
@@ -401,13 +412,17 @@ include __DIR__ . '/includes/header.php';
             </thead>
             <tbody>
                 <?php if (count($exports) === 0): ?>
-                    <tr><td colspan="9" style="text-align: center; color: var(--text-muted); padding: 2rem;">Tidak ada data Export NEX di rentang tanggal ini.</td></tr>
+                    <tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2rem;">Tidak ada data Export NEX di rentang tanggal ini.</td></tr>
                 <?php else: ?>
                     <?php $no = $exp_offset + 1; foreach ($exports as $ex): ?>
                         <tr>
                             <td><?= $no++ ?></td>
-                            <td><code><strong><?= htmlspecialchars($ex['mopor_number']) ?></strong></code></td>
-                            <td><?= htmlspecialchars($ex['driver_name']) ?></td>
+                            <td>
+                                <code><strong><?= htmlspecialchars($ex['mopor_number']) ?></strong></code>
+                                <?php if (!empty($ex['document_photo'])): ?>
+                                    <br><button type="button" onclick="showDocumentPhoto('<?= htmlspecialchars($ex['document_photo']) ?>')" class="badge badge-warning" style="border:none; cursor:pointer; margin-top:0.25rem;" title="Lihat Foto Dokumen">📷 Foto Dokumen</button>
+                                <?php endif; ?>
+                            </td>
                             <td><code><?= htmlspecialchars($ex['do_number']) ?></code></td>
                             <td><code><?= htmlspecialchars($ex['container_number']) ?></code></td>
                             <td><code><?= htmlspecialchars($ex['seal_number']) ?></code></td>
@@ -423,5 +438,34 @@ include __DIR__ . '/includes/header.php';
     <?= render_pagination($exp_page, $exp_total_pages, ['start_date' => $start_date, 'end_date' => $end_date, 'type' => $type], 'exp_page') ?>
 </div>
 <?php endif; ?>
+
+<!-- MODAL DOCUMENT PHOTO PREVIEW -->
+<div id="modalDocumentPhoto" class="modal-backdrop">
+    <div class="modal-dialog" style="max-width: 520px; width: 92%;">
+        <div class="modal-header">
+            <h3 class="modal-title">Foto Dokumen Lampiran</h3>
+            <button type="button" class="modal-close" onclick="closeModal('modalDocumentPhoto')">&times;</button>
+        </div>
+        <div class="modal-body" style="padding: 1.25rem; text-align: center;">
+            <img id="doc_photo_preview_src" src="" style="max-width: 100%; max-height: 70vh; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modalDocumentPhoto')">Tutup</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function openModal(id) {
+    document.getElementById(id).classList.add('show');
+}
+function closeModal(id) {
+    document.getElementById(id).classList.remove('show');
+}
+function showDocumentPhoto(src) {
+    document.getElementById('doc_photo_preview_src').src = src;
+    openModal('modalDocumentPhoto');
+}
+</script>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>

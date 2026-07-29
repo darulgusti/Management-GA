@@ -51,14 +51,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $destination = trim($_POST['destination'] ?? '');
         $tonnage = trim($_POST['tonnage'] ?? '');
         $transportir = trim($_POST['transportir'] ?? '');
+        $document_photo = $_POST['document_photo'] ?? '';
         $exit_time = !empty($_POST['exit_time']) ? date('Y-m-d H:i:s', strtotime($_POST['exit_time'])) : date('Y-m-d H:i:s');
 
         if (empty($nopol) || empty($driver_name) || empty($destination) || empty($tonnage) || empty($transportir)) {
             $error_msg = "Mohon lengkapi Nopol, Sopir, Total Nett Weight, Transportir, dan Alamat Kirim/Tujuan!";
         } else {
             try {
-                $stmt = $pdo->prepare("INSERT INTO logistic_gate_outs (nopol, driver_name, do_number, destination, tonnage, transportir, exit_time) VALUES (?, ?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$nopol, $driver_name, $do_number, $destination, $tonnage, $transportir, $exit_time]);
+                $stmt = $pdo->prepare("INSERT INTO logistic_gate_outs (nopol, driver_name, do_number, destination, tonnage, transportir, document_photo, exit_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt->execute([$nopol, $driver_name, $do_number, $destination, $tonnage, $transportir, $document_photo, $exit_time]);
                 header("Location: success.php?type=gate_out");
                 exit();
             } catch (Exception $e) {
@@ -67,21 +68,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif ($action === 'add_export') {
         $mopor_number = trim($_POST['mopor_number'] ?? '');
-        $driver_name = trim($_POST['driver_name'] ?? '');
+        $driver_name = '-';
         $do_number = trim($_POST['do_number'] ?? '');
         $container_number = trim($_POST['container_number'] ?? '');
         $seal_number = trim($_POST['seal_number'] ?? '');
         $destination = trim($_POST['destination'] ?? '');
         $tonnage = trim($_POST['tonnage'] ?? '');
-        $transportir = trim($_POST['transportir'] ?? '');
+        $transportir = '-';
+        $document_photo = $_POST['document_photo'] ?? '';
         $exit_time = !empty($_POST['exit_time']) ? date('Y-m-d H:i:s', strtotime($_POST['exit_time'])) : date('Y-m-d H:i:s');
 
-        if (empty($mopor_number) || empty($driver_name) || empty($container_number) || empty($do_number) || empty($seal_number) || empty($tonnage) || empty($transportir) || empty($destination)) {
-            $error_msg = "Seluruh kolom formulir Export NEX (NOPOR) wajib diisi!";
+        if (empty($mopor_number) || empty($container_number) || empty($do_number) || empty($seal_number) || empty($tonnage) || empty($destination)) {
+            $error_msg = "Mohon lengkapi No. NOPOR, No. DO, No. Segel, Tonase, No. Kontainer, dan Tujuan!";
         } else {
             try {
-                $stmt = $pdo->prepare("INSERT INTO logistic_export_nex_mopors (mopor_number, driver_name, do_number, container_number, seal_number, destination, tonnage, transportir, exit_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$mopor_number, $driver_name, $do_number, $container_number, $seal_number, $destination, $tonnage, $transportir, $exit_time]);
+                $stmt = $pdo->prepare("INSERT INTO logistic_export_nex_mopors (mopor_number, driver_name, do_number, container_number, seal_number, destination, tonnage, transportir, document_photo, exit_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt->execute([$mopor_number, $driver_name, $do_number, $container_number, $seal_number, $destination, $tonnage, $transportir, $document_photo, $exit_time]);
                 header("Location: success.php?type=export");
                 exit();
             } catch (Exception $e) {
@@ -290,6 +292,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
 
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label class="form-label" style="font-weight: 600;">Upload Foto Surat Jalan / Dokumen (Opsional)</label>
+                            <input type="file" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this, 'photo_preview_container_edc', 'photo_preview_img_edc', 'document_photo_edc')">
+                            <input type="hidden" name="document_photo" id="document_photo_edc" value="">
+                            <div id="photo_preview_container_edc" style="display: none; margin-top: 0.5rem; text-align: center;">
+                                <img id="photo_preview_img_edc" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                                <div style="font-size: 0.75rem; color: var(--success); font-weight: 600; margin-top: 0.25rem;">✓ Foto surat jalan berhasil dikompresi</div>
+                            </div>
+                        </div>
+
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top: 1.5rem;">
@@ -324,23 +336,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <label class="form-label" style="font-weight: 600;">Segel <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                                 <input type="text" name="seal_number" required class="form-control" placeholder="Nomor Segel (Seal)...">
                             </div>
-
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Tonase (Ton) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="tonnage" required class="form-control" placeholder="Jumlah Tonase diisi manual...">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Transportir <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="transportir" required class="form-control" placeholder="Transportir / Ekspedisi...">
-                            </div>
                         </div>
 
                         <!-- RIGHT COLUMN -->
                         <div>
                             <div class="form-group">
-                                <label class="form-label" style="font-weight: 600;">Sopir <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                                <input type="text" name="driver_name" required class="form-control" placeholder="Nama sopir...">
+                                <label class="form-label" style="font-weight: 600;">Tonase (Ton) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                                <input type="text" name="tonnage" required class="form-control" placeholder="Jumlah Tonase diisi manual...">
                             </div>
 
                             <div class="form-group">
@@ -359,6 +361,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
 
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label class="form-label" style="font-weight: 600;">Upload Foto Surat Jalan / Dokumen (Opsional)</label>
+                            <input type="file" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this, 'photo_preview_container_nex', 'photo_preview_img_nex', 'document_photo_nex')">
+                            <input type="hidden" name="document_photo" id="document_photo_nex" value="">
+                            <div id="photo_preview_container_nex" style="display: none; margin-top: 0.5rem; text-align: center;">
+                                <img id="photo_preview_img_nex" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                                <div style="font-size: 0.75rem; color: var(--success); font-weight: 600; margin-top: 0.25rem;">✓ Foto surat jalan berhasil dikompresi</div>
+                            </div>
+                        </div>
+
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top: 1.5rem;">
@@ -373,7 +385,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script>
-    function compressAndPreviewPhoto(input) {
+    function compressAndPreviewPhoto(input, containerId = 'photo_preview_container', imgId = 'photo_preview_img', inputId = 'document_photo_input') {
         if (!input.files || !input.files[0]) return;
         const file = input.files[0];
         const reader = new FileReader();
@@ -400,9 +412,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, width, height);
                 const compressedBase64 = canvas.toDataURL('image/jpeg', 0.75);
-                document.getElementById('document_photo_input').value = compressedBase64;
-                document.getElementById('photo_preview_img').src = compressedBase64;
-                document.getElementById('photo_preview_container').style.display = 'block';
+                if (document.getElementById(inputId)) document.getElementById(inputId).value = compressedBase64;
+                if (document.getElementById(imgId)) document.getElementById(imgId).src = compressedBase64;
+                if (document.getElementById(containerId)) document.getElementById(containerId).style.display = 'block';
             };
             img.src = e.target.result;
         };

@@ -6,17 +6,31 @@ require_once __DIR__ . '/includes/auth_check.php';
 check_role(['manager', 'secom']);
 $logged_user = get_logged_user();
 
-// Handle POST actions (Check-out Tamu hanya oleh Staf Secom)
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $logged_user['role'] === 'secom') {
+// Handle POST actions
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
-    if ($action === 'checkout') {
+    if ($action === 'checkout' && $logged_user['role'] === 'secom') {
         $guest_id = intval($_POST['guest_id'] ?? 0);
         if ($guest_id > 0) {
             $now = date('Y-m-d H:i:s');
             $stmt = $pdo->prepare("UPDATE guests SET time_out = ? WHERE id = ? AND time_out IS NULL");
             $stmt->execute([$now, $guest_id]);
             set_flash_message('success', 'Tamu berhasil di-checkout.');
+        }
+    } elseif ($action === 'edit_guest' && $logged_user['role'] === 'manager') {
+        $guest_id = intval($_POST['guest_id'] ?? 0);
+        $name = trim($_POST['name'] ?? '');
+        $institution = trim($_POST['institution'] ?? '');
+        $guest_category = trim($_POST['guest_category'] ?? '');
+        $purpose = trim($_POST['purpose'] ?? '');
+        $person_to_meet = trim($_POST['person_to_meet'] ?? '');
+        $visitor_card_number = trim($_POST['visitor_card_number'] ?? '');
+
+        if ($guest_id > 0 && !empty($name)) {
+            $stmt = $pdo->prepare("UPDATE guests SET name = ?, institution = ?, guest_category = ?, purpose = ?, person_to_meet = ?, visitor_card_number = ? WHERE id = ?");
+            $stmt->execute([$name, $institution, $guest_category, $purpose, $person_to_meet, $visitor_card_number, $guest_id]);
+            set_flash_message('success', 'Data tamu berhasil diperbarui oleh Manager.');
         }
     }
     header("Location: guest.php");
@@ -25,18 +39,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $logged_user['role'] === 'secom') {
 
 $per_page = 5;
 
-// 1. QUERY TABEL ATAS: Tamu Aktif (Masih di Lokasi) dengan Pagination 5 Data
+// 1. QUERY TABEL ATAS: Tamu Aktif (Masih di Lokasi) dengan Search & Pagination
+$active_search = trim($_GET['active_search'] ?? '');
 $active_page = max(1, intval($_GET['active_page'] ?? 1));
-$stmt = $pdo->query("SELECT COUNT(*) FROM guests WHERE time_out IS NULL");
+
+$active_count_query = "SELECT COUNT(*) FROM guests WHERE time_out IS NULL";
+$active_params = [];
+
+if (!empty($active_search)) {
+    $active_count_query .= " AND (name LIKE ? OR institution LIKE ? OR person_to_meet LIKE ? OR visitor_card_number LIKE ? OR purpose LIKE ?)";
+    $term = "%$active_search%";
+    $active_params = [$term, $term, $term, $term, $term];
+}
+
+$stmt = $pdo->prepare($active_count_query);
+$stmt->execute($active_params);
 $total_active_records = $stmt->fetchColumn();
 $total_active_pages = ceil($total_active_records / $per_page);
 $active_offset = ($active_page - 1) * $per_page;
 
-$stmt = $pdo->prepare("SELECT id, name, institution, guest_category, purpose, person_to_meet, visitor_card_number, time_in, time_out, signature FROM guests WHERE time_out IS NULL ORDER BY time_in DESC LIMIT $per_page OFFSET $active_offset");
-$stmt->execute();
+$active_data_query = str_replace("SELECT COUNT(*)", "SELECT id, name, institution, guest_category, purpose, person_to_meet, visitor_card_number, time_in, time_out, signature, document_photo", $active_count_query) . " ORDER BY time_in DESC LIMIT $per_page OFFSET $active_offset";
+$stmt = $pdo->prepare($active_data_query);
+$stmt->execute($active_params);
 $active_guests = $stmt->fetchAll();
 
-// 2. QUERY TABEL BAWAH: Riwayat Tamu (Sudah Keluar) dengan Pagination 5 Data
+// 2. QUERY TABEL BAWAH: Riwayat Tamu (Sudah Keluar) dengan Search & Pagination
 $search = trim($_GET['search'] ?? '');
 $history_page = max(1, intval($_GET['history_page'] ?? 1));
 
@@ -44,9 +71,9 @@ $count_query = "SELECT COUNT(*) FROM guests WHERE time_out IS NOT NULL";
 $params = [];
 
 if (!empty($search)) {
-    $count_query .= " AND (name LIKE ? OR institution LIKE ? OR person_to_meet LIKE ? OR visitor_card_number LIKE ?)";
+    $count_query .= " AND (name LIKE ? OR institution LIKE ? OR person_to_meet LIKE ? OR visitor_card_number LIKE ? OR purpose LIKE ?)";
     $searchTerm = "%$search%";
-    $params = [$searchTerm, $searchTerm, $searchTerm, $searchTerm];
+    $params = [$searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm];
 }
 
 $stmt = $pdo->prepare($count_query);
@@ -55,7 +82,7 @@ $total_history_records = $stmt->fetchColumn();
 $total_history_pages = ceil($total_history_records / $per_page);
 $history_offset = ($history_page - 1) * $per_page;
 
-$data_query = str_replace("SELECT COUNT(*)", "SELECT id, name, institution, guest_category, purpose, person_to_meet, visitor_card_number, time_in, time_out, signature", $count_query) . " ORDER BY time_out DESC LIMIT $per_page OFFSET $history_offset";
+$data_query = str_replace("SELECT COUNT(*)", "SELECT id, name, institution, guest_category, purpose, person_to_meet, visitor_card_number, time_in, time_out, signature, document_photo", $count_query) . " ORDER BY time_out DESC LIMIT $per_page OFFSET $history_offset";
 $stmt = $pdo->prepare($data_query);
 $stmt->execute($params);
 $history_guests = $stmt->fetchAll();
@@ -81,6 +108,15 @@ include __DIR__ . '/includes/header.php';
         </div>
     </div>
 
+    <!-- Search Bar khusus Tamu Aktif -->
+    <form method="GET" action="guest.php" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+        <input type="text" name="active_search" class="form-control" placeholder="Cari nama, instansi, atau kartu tamu aktif..." value="<?= htmlspecialchars($active_search) ?>" style="flex: 1; min-width: 220px; margin: 0;">
+        <button type="submit" class="btn btn-primary" style="margin: 0;">Cari</button>
+        <?php if (!empty($active_search)): ?>
+            <a href="guest.php" class="btn btn-outline" style="margin: 0;">Reset</a>
+        <?php endif; ?>
+    </form>
+
     <div class="table-responsive">
         <table class="table">
             <thead>
@@ -93,7 +129,7 @@ include __DIR__ . '/includes/header.php';
                     <th class="col-nowrap">No. Kartu</th>
                     <th class="col-nowrap">Waktu Masuk</th>
                     <th class="col-nowrap">Status</th>
-                    <?php if ($logged_user['role'] === 'secom'): ?>
+                    <?php if ($logged_user['role'] === 'secom' || $logged_user['role'] === 'manager'): ?>
                         <th class="col-nowrap" style="text-align: center;">Aksi</th>
                     <?php endif; ?>
                 </tr>
@@ -101,7 +137,7 @@ include __DIR__ . '/includes/header.php';
             <tbody>
                 <?php if (count($active_guests) === 0): ?>
                     <tr>
-                        <td colspan="<?= $logged_user['role'] === 'secom' ? '9' : '8' ?>" style="text-align: center; color: var(--text-muted); padding: 1.75rem;">Saat ini tidak ada tamu aktif di dalam lokasi.</td>
+                        <td colspan="<?= ($logged_user['role'] === 'secom' || $logged_user['role'] === 'manager') ? '9' : '8' ?>" style="text-align: center; color: var(--text-muted); padding: 1.75rem;">Saat ini tidak ada data tamu aktif yang sesuai.</td>
                     </tr>
                 <?php else: ?>
                     <?php $no = $active_offset + 1; foreach ($active_guests as $g): ?>
@@ -125,13 +161,18 @@ include __DIR__ . '/includes/header.php';
                             <td class="col-nowrap"><code><?= htmlspecialchars($g['visitor_card_number'] ?: '-') ?></code></td>
                             <td class="col-date"><?= date('d/m/Y H:i', strtotime($g['time_in'])) ?></td>
                             <td class="col-nowrap"><span class="badge badge-success">Masih di Lokasi</span></td>
-                            <?php if ($logged_user['role'] === 'secom'): ?>
-                                <td class="col-nowrap" style="text-align: center;">
-                                    <form action="guest.php" method="POST" style="display: inline;" onsubmit="return confirm('Proses check-out untuk tamu <?= htmlspecialchars($g['name']) ?>?');">
-                                        <input type="hidden" name="action" value="checkout">
-                                        <input type="hidden" name="guest_id" value="<?= $g['id'] ?>">
-                                        <button type="submit" class="btn btn-sm btn-danger">Check-out</button>
-                                    </form>
+                            <?php if ($logged_user['role'] === 'secom' || $logged_user['role'] === 'manager'): ?>
+                                <td class="col-nowrap" style="text-align: center; gap: 0.25rem;">
+                                    <?php if ($logged_user['role'] === 'secom'): ?>
+                                        <form action="guest.php" method="POST" style="display: inline;" onsubmit="return confirm('Proses check-out untuk tamu <?= htmlspecialchars($g['name']) ?>?');">
+                                            <input type="hidden" name="action" value="checkout">
+                                            <input type="hidden" name="guest_id" value="<?= $g['id'] ?>">
+                                            <button type="submit" class="btn btn-sm btn-danger">Check-out</button>
+                                        </form>
+                                    <?php endif; ?>
+                                    <?php if ($logged_user['role'] === 'manager'): ?>
+                                        <button type="button" class="btn btn-sm btn-primary" onclick='editGuest(<?= json_encode($g) ?>)'>Edit</button>
+                                    <?php endif; ?>
                                 </td>
                             <?php endif; ?>
                         </tr>
@@ -142,7 +183,7 @@ include __DIR__ . '/includes/header.php';
     </div>
 
     <!-- Pagination Tabel Tamu Aktif (5 Data Per Halaman) -->
-    <?= render_pagination($active_page, $total_active_pages, [], 'active_page') ?>
+    <?= render_pagination($active_page, $total_active_pages, ['active_search' => $active_search], 'active_page') ?>
 </div>
 
 <!-- TABEL 2: RIWAYAT BUKU TAMU (SUDAH KELUAR) -->
@@ -176,12 +217,15 @@ include __DIR__ . '/includes/header.php';
                     <th class="col-nowrap">Waktu Masuk</th>
                     <th class="col-nowrap">Waktu Keluar</th>
                     <th class="col-nowrap">Status</th>
+                    <?php if ($logged_user['role'] === 'manager'): ?>
+                        <th class="col-nowrap" style="text-align: center;">Aksi</th>
+                    <?php endif; ?>
                 </tr>
             </thead>
             <tbody>
                 <?php if (count($history_guests) === 0): ?>
                     <tr>
-                        <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 1.75rem;">Belum ada data riwayat kunjungan tamu.</td>
+                        <td colspan="<?= $logged_user['role'] === 'manager' ? '10' : '9' ?>" style="text-align: center; color: var(--text-muted); padding: 1.75rem;">Belum ada data riwayat kunjungan tamu yang sesuai.</td>
                     </tr>
                 <?php else: ?>
                     <?php $no = $history_offset + 1; foreach ($history_guests as $g): ?>
@@ -203,6 +247,11 @@ include __DIR__ . '/includes/header.php';
                             <td class="col-date"><?= date('d/m/Y H:i', strtotime($g['time_in'])) ?></td>
                             <td class="col-date"><?= date('d/m/Y H:i', strtotime($g['time_out'])) ?></td>
                             <td class="col-nowrap"><span class="badge badge-secondary">Sudah Keluar</span></td>
+                            <?php if ($logged_user['role'] === 'manager'): ?>
+                                <td class="col-nowrap" style="text-align: center;">
+                                    <button type="button" class="btn btn-sm btn-primary" onclick='editGuest(<?= json_encode($g) ?>)'>Edit</button>
+                                </td>
+                            <?php endif; ?>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -213,6 +262,56 @@ include __DIR__ . '/includes/header.php';
     <!-- Pagination Tabel Riwayat Tamu (5 Data Per Halaman) -->
     <?= render_pagination($history_page, $total_history_pages, ['search' => $search], 'history_page') ?>
 </div>
+
+<!-- MODAL EDIT DATA TAMU (MANAGER ONLY) -->
+<?php if ($logged_user['role'] === 'manager'): ?>
+<div id="modalEditGuest" class="modal-backdrop">
+    <div class="modal-dialog" style="max-width: 600px; width: 95%;">
+        <div class="modal-header">
+            <h3 class="modal-title">Edit Data Tamu</h3>
+            <button type="button" class="modal-close" onclick="closeModal('modalEditGuest')">&times;</button>
+        </div>
+        <form method="POST" action="guest.php">
+            <input type="hidden" name="action" value="edit_guest">
+            <input type="hidden" name="guest_id" id="edit_guest_id">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" style="font-weight: 600;">Nama Tamu *</label>
+                    <input type="text" name="name" id="edit_guest_name" required class="form-control">
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Instansi / Perusahaan *</label>
+                        <input type="text" name="institution" id="edit_guest_institution" required class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Kategori Tamu *</label>
+                        <input type="text" name="guest_category" id="edit_guest_category" required class="form-control">
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Karyawan yang Ditemui *</label>
+                        <input type="text" name="person_to_meet" id="edit_guest_person" required class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">No. Kartu Visitor</label>
+                        <input type="text" name="visitor_card_number" id="edit_guest_card" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="font-weight: 600;">Tujuan / Keperluan *</label>
+                    <textarea name="purpose" id="edit_guest_purpose" required class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('modalEditGuest')">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
+</div>
+<?php endif; ?>
 
 <!-- MODAL DOCUMENT PHOTO PREVIEW -->
 <div id="modalDocumentPhoto" class="modal-backdrop">
@@ -240,6 +339,16 @@ function closeModal(id) {
 function showDocumentPhoto(src) {
     document.getElementById('doc_photo_preview_src').src = src;
     openModal('modalDocumentPhoto');
+}
+function editGuest(data) {
+    document.getElementById('edit_guest_id').value = data.id;
+    document.getElementById('edit_guest_name').value = data.name || '';
+    document.getElementById('edit_guest_institution').value = data.institution || '';
+    document.getElementById('edit_guest_category').value = data.guest_category || '';
+    document.getElementById('edit_guest_person').value = data.person_to_meet || '';
+    document.getElementById('edit_guest_card').value = data.visitor_card_number || '';
+    document.getElementById('edit_guest_purpose').value = data.purpose || '';
+    openModal('modalEditGuest');
 }
 </script>
 

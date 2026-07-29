@@ -21,17 +21,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $department = trim($_POST['department'] ?? '');
     $item_name = trim($_POST['item_name'] ?? '');
     $item_code = trim($_POST['item_code'] ?? '');
+    $key_number = trim($_POST['key_number'] ?? '');
     $quantity = intval($_POST['quantity'] ?? 1);
-    $initial_condition = trim($_POST['initial_condition'] ?? 'Baik');
+    $initial_condition = 'Baik';
     $signature = $_POST['signature'] ?? '';
 
     if (empty($borrower_name) || empty($department) || empty($item_name) || empty($quantity)) {
         $error_msg = "Mohon lengkapi seluruh kolom wajib formulir peminjaman!";
+    } elseif ($category === 'SECOM' && empty($key_number)) {
+        $error_msg = "Mohon isi Nomor Kunci untuk peminjaman Kunci SECOM!";
     } else {
         try {
             $now = date('Y-m-d H:i:s');
-            $stmt = $pdo->prepare("INSERT INTO item_borrowings (borrower_name, category, department, item_name, item_code, quantity, borrow_time, initial_condition, signature, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'borrowed')");
-            $stmt->execute([$borrower_name, $category, $department, $item_name, $item_code, $quantity, $now, $initial_condition, $signature]);
+            $stmt = $pdo->prepare("INSERT INTO item_borrowings (borrower_name, category, department, item_name, item_code, key_number, quantity, borrow_time, initial_condition, signature, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'borrowed')");
+            $stmt->execute([$borrower_name, $category, $department, $item_name, $item_code, $key_number, $quantity, $now, $initial_condition, $signature]);
             
             header("Location: success.php?type=borrowing");
             exit();
@@ -46,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Peminjaman Barang & Kunci - GA Management</title>
+    <title>Form Peminjaman <?= $category === 'SECOM' ? 'Kunci SECOM' : 'Barang GA' ?> - GA Management</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="portal-body">
@@ -55,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div style="display: flex; align-items: center; gap: 0.75rem;">
             <div class="sidebar-logo-icon" style="background: var(--primary); color: #ffffff;">GA</div>
             <div>
-                <strong style="font-size: 1.1rem; color: var(--primary);">Form Peminjaman Barang & Kunci</strong>
+                <strong style="font-size: 1.1rem; color: var(--primary);">Form Peminjaman <?= $category === 'SECOM' ? 'Kunci SECOM' : 'Barang GA' ?></strong>
                 <div style="font-size: 0.75rem; color: var(--text-muted);">General Affairs Inventory Request</div>
             </div>
         </div>
@@ -78,16 +81,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <!-- TAB SWITCHER GA / SECOM -->
             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
                 <a href="borrowing_form.php?category=GA" class="btn btn-sm <?= $category === 'GA' ? 'btn-primary' : 'btn-outline' ?>" style="font-weight: 600;">
-                    🏢 Peminjaman GA (General Affairs)
+                    🏢 Peminjaman Barang GA
                 </a>
                 <a href="borrowing_form.php?category=SECOM" class="btn btn-sm <?= $category === 'SECOM' ? 'btn-primary' : 'btn-outline' ?>" style="font-weight: 600;">
-                    🛡️ Peminjaman SECOM (Security)
+                    🔑 Peminjaman Kunci SECOM
                 </a>
             </div>
 
             <div class="card-header">
                 <div>
-                    <h2 class="card-title">Form Peminjaman Barang / Kunci (<?= $category === 'SECOM' ? 'Inventaris SECOM' : 'Inventaris GA' ?>)</h2>
+                    <h2 class="card-title">Form Peminjaman <?= $category === 'SECOM' ? 'Kunci SECOM (Security)' : 'Barang GA (General Affairs)' ?></h2>
                 </div>
             </div>
 
@@ -107,31 +110,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </div>
 
-                <div class="grid-3">
-                    <div class="form-group">
-                        <label class="form-label">Nama Barang / Kunci <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                        <input type="text" name="item_name" required class="form-control" placeholder="Kunci Ruang Meeting A / Proyektor" value="<?= htmlspecialchars($_POST['item_name'] ?? '') ?>">
-                    </div>
+                <?php if ($category === 'SECOM'): ?>
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label class="form-label">Nama Kunci / Ruangan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                            <input type="text" name="item_name" required class="form-control" placeholder="Contoh: Kunci Server / Ruang Meeting A" value="<?= htmlspecialchars($_POST['item_name'] ?? '') ?>">
+                        </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Kode / Nomor Barang (Opsional)</label>
-                        <input type="text" name="item_code" class="form-control" placeholder="Contoh: K-05 / PRJ-01 (Opsional)" value="<?= htmlspecialchars($_POST['item_code'] ?? '') ?>">
-                    </div>
+                        <div class="form-group">
+                            <label class="form-label">Nomor Kunci <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                            <input type="text" name="key_number" required class="form-control" placeholder="Contoh: K-01 / KEY-12" value="<?= htmlspecialchars($_POST['key_number'] ?? '') ?>">
+                        </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Jumlah (Qty) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                        <input type="number" name="quantity" required value="<?= intval($_POST['quantity'] ?? 1) ?>" min="1" class="form-control">
+                        <div class="form-group">
+                            <label class="form-label">Jumlah (Qty) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                            <input type="number" name="quantity" required value="<?= intval($_POST['quantity'] ?? 1) ?>" min="1" class="form-control">
+                        </div>
                     </div>
-                </div>
+                <?php else: ?>
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label class="form-label">Nama Barang GA <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                            <input type="text" name="item_name" required class="form-control" placeholder="Contoh: Proyektor / Mobil GA" value="<?= htmlspecialchars($_POST['item_name'] ?? '') ?>">
+                        </div>
 
-                <div class="form-group">
-                    <label class="form-label">Kondisi Awal Barang <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                    <select name="initial_condition" class="form-select" required>
-                        <option value="Baik">Baik & Berfungsi Normal</option>
-                        <option value="Cacat Fisik Ringan">Cacat Fisik Ringan (Goresan)</option>
-                        <option value="Kondisi Khusus">Kondisi Khusus / Catatan</option>
-                    </select>
-                </div>
+                        <div class="form-group">
+                            <label class="form-label">Kode / Identitas Barang (Opsional)</label>
+                            <input type="text" name="item_code" class="form-control" placeholder="Contoh: PRJ-01 (Opsional)" value="<?= htmlspecialchars($_POST['item_code'] ?? '') ?>">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Jumlah (Qty) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                            <input type="number" name="quantity" required value="<?= intval($_POST['quantity'] ?? 1) ?>" min="1" class="form-control">
+                        </div>
+                    </div>
+                <?php endif; ?>
 
                 <div class="form-group">
                     <label class="form-label">Tanda Tangan Digital Peminjam <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>

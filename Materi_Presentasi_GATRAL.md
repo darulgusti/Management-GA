@@ -48,7 +48,7 @@ Berikut adalah gambaran skenario berjalannya sistem di pos gerbang sehari-hari:
 2. **Pengisian Mandiri (Self-Service):** 
    Setelah melakukan scan QR, *smartphone* pengguna akan **langsung diarahkan masuk ke halaman formulir spesifik**. Tamu tinggal mengisi data diri, menjepret foto dokumen, membubuhkan Tanda Tangan Digital, lalu menekan *Submit*.
 3. **Input Kartu Mandiri & Monitoring Real-Time:** 
-   Saat mengisi formulir, tamu/sopir akan menerima Kartu Visitor fisik dari petugas dan langsung menginputkan nomor kartu tersebut (misal: V-012) ke dalam form. Setelah tamu menekan *Submit*, data seketika terdaftar secara *real-time* di **Dashboard Petugas (SECOM)** dan pengunjung dipersilakan masuk.
+   Saat mengisi formulir, tamu/sopir akan menerima Kartu Visitor fisik dari petugas dan langsung menginputkan nomor kartu tersebut ke dalam form. Setelah tamu menekan *Submit*, data seketika terdaftar secara *real-time* di **Dashboard Petugas (SECOM)** dan pengunjung dipersilakan masuk.
 4. **Saat Tamu Pulang (Check-out):** 
    Tamu mengembalikan Kartu Visitor. Petugas cukup melihat Dashboard *Tamu Masih di Lokasi*, mencari nama tamu tersebut, dan menekan tombol merah **Check-out**. Sistem otomatis mencatat jam kepulangan tamu dan memindahkannya ke tabel Riwayat.
 
@@ -60,16 +60,25 @@ Sistem memisahkan alur pengguna dengan sangat tegas agar prosesnya jauh lebih in
 
 ### A. Akses Tamu Publik (Direct QR Code)
 Untuk mempermudah dan mempercepat akses bagi orang awam (tamu, kurir, sopir), sistem murni menggunakan jalur akses instan berupa **3 QR Code Spesifik** agar pengunjung tidak perlu bingung mencari menu. Sistem ini tidak memerlukan Login:
+
 1. **Form Buku Tamu Digital (Guest Book):** Diakses via QR Tamu.
+   > Form ini dirancang super simpel agar tamu (seperti tamu dinas, vendor, atau pelamar) dapat mengisi data dirinya secara mandiri, termasuk kolom unggah foto ID (KTP/SIM). Tidak ada navigasi "Kembali ke Portal" agar mereka 100% fokus menyelesaikan form.
+   ![SS Form Tamu](file:///C:/Users/Gusti/.gemini/antigravity-ide/brain/05f6876d-f4e5-4fe8-bf0e-d48b554c95bc/guest_form_top_1785220111928.png)
+
 2. **Form Peminjaman (Borrowing):** Diakses via QR Peminjaman.
+   > Khusus digunakan untuk mendata peminjaman inventaris seperti kendaraan GA, proyektor, atau peminjaman kunci. Peminjam juga diwajibkan mencatat kondisi awal barang yang diserah-terimakan.
+   ![SS Form Peminjaman](file:///C:/Users/Gusti/.gemini/antigravity-ide/brain/05f6876d-f4e5-4fe8-bf0e-d48b554c95bc/borrowing_form_initial_1785220174036.png)
+
 3. **Form Pos 4 (Gate Pass System):** Diakses via QR Logistik.
-*(Catatan: Tombol "Kembali ke Portal" telah dihapus dari seluruh form agar pengunjung terfokus 100% pada pengisian data saja).*
+   > Menjadi digitalisasi dari surat jalan/Gate Pass. Sangat membantu menelusuri armada pengangkutan material besar yang *loading/unloading* (Gate In/Keluar).
+   ![SS Form Logistik](file:///C:/Users/Gusti/.gemini/antigravity-ide/brain/05f6876d-f4e5-4fe8-bf0e-d48b554c95bc/logistic_form_top_1785220470997.png)
 
 ### B. Portal Utama (Single Login Gateway)
-*(Catatan: Begitu petugas SECOM berhasil login, sistem akan langsung mengarahkan mereka secara otomatis (direct-redirect) ke halaman Dashboard Monitoring).*
+Halaman awal URL utama kini disulap secara radikal menjadi *Landing Page* tunggal yang bersih tanpa tumpang-tindih menu publik. Halaman eksklusif ini berfungsi sebagai *Gateway* petugas keamanan (SECOM) dan Manager. Begitu *Login* divalidasi, sistem akan melakukan *Direct-Redirect* ke layar *Dashboard Monitoring*.
+![SS Portal Login](file:///C:/Users/Gusti/.gemini/antigravity-ide/brain/05f6876d-f4e5-4fe8-bf0e-d48b554c95bc/login_portal_page_1785220520232.png)
 
 ### C. Dashboard Monitoring (SECOM & Manager)
-Ini adalah "Dapur" dari sistem yang hanya bisa diakses menggunakan kata sandi (Login). Didesain secara *Mobile-Responsive* (tampil rapi 2 kolom bersampingan saat dibuka via layar *smartphone*) untuk **Monitoring dan Aksi Cepat**:
+Ini adalah "Dapur" dari sistem yang hanya bisa diakses menggunakan kata sandi (Login). Didesain secara *Mobile-Responsive* untuk Monitoring dan Aksi Cepat:
 1. **Statistik Kartu (Atas):** Menampilkan jumlah total tamu aktif, armada logistik, dan peminjaman hari ini secara instan (Angka besar).
 2. **Tabel "Masih di Lokasi" (Tengah):** Hanya menampilkan orang/kendaraan yang statusnya masih *Aktif* di dalam pabrik. Terdapat tombol aksi **[Check-out]**.
 3. **Menu Navigasi (Samping/Atas):** Terdapat tab terpisah untuk melihat *Riwayat* (data masa lalu), serta *Laporan* untuk keperluan mencetak/mem-filter data berdasarkan tanggal tertentu.

@@ -202,12 +202,14 @@ function generate_borrowings_xml_worksheet($borrowings, $sheet_title = "Data Pem
         $status = $b['status'] === 'borrowed' ? 'Sedang Dipinjam' : 'Dikembalikan';
         $statusStyle = $b['status'] === 'borrowed' ? 'BadgeWarning' : 'BadgeSuccess';
 
+        $item_identifier = !empty($b['key_number']) ? 'No Kunci: ' . $b['key_number'] : ($b['item_code'] ?: '-');
+
         $xml .= '   <Row ss:Height="20">' . "\n";
         $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="Number">' . $no++ . '</Data></Cell>' . "\n";
         $xml .= '    <Cell ss:StyleID="CellData"><Data ss:Type="String">' . htmlspecialchars($b['borrower_name']) . '</Data></Cell>' . "\n";
         $xml .= '    <Cell ss:StyleID="CellData"><Data ss:Type="String">' . htmlspecialchars($b['department']) . '</Data></Cell>' . "\n";
         $xml .= '    <Cell ss:StyleID="CellData"><Data ss:Type="String">' . htmlspecialchars($b['item_name']) . '</Data></Cell>' . "\n";
-        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . htmlspecialchars($b['item_code'] ?: '-') . '</Data></Cell>' . "\n";
+        $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . htmlspecialchars($item_identifier) . '</Data></Cell>' . "\n";
         $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="Number">' . $b['quantity'] . '</Data></Cell>' . "\n";
         $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . format_excel_date($b['borrow_time']) . '</Data></Cell>' . "\n";
         $xml .= '    <Cell ss:StyleID="CellCenter"><Data ss:Type="String">' . format_excel_time($b['borrow_time']) . '</Data></Cell>' . "\n";
