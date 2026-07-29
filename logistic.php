@@ -93,8 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 set_flash_message('danger', 'Mohon lengkapi field Nopol dan Nama Sopir!');
             }
-        } elseif ($action === 'checkout_export_ajinex') {
-            // Checkout untuk armada dengan tujuan Export Ajinex
+        } elseif ($action === 'checkout_edc') {
+            // Checkout untuk armada dengan tujuan EDC
             $gate_in_id = intval($_POST['gate_in_id'] ?? 0);
             $nopol = trim($_POST['nopol'] ?? '');
             $driver_name = trim($_POST['driver_name'] ?? '');
@@ -111,12 +111,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $pdo->prepare("UPDATE logistic_gate_ins SET status = 'Checked Out', exit_time = ? WHERE id = ?");
                 $stmt->execute([$exit_time, $gate_in_id]);
 
-                set_flash_message('success', 'Check-out armada Export Ajinex berhasil diproses.');
+                set_flash_message('success', 'Check-out armada EDC berhasil diproses.');
             } else {
                 set_flash_message('danger', 'Mohon isi Total Nett Weight dan Alamat Kirim / Tujuan!');
             }
-        } elseif ($action === 'checkout_edc') {
-            // Checkout untuk armada dengan tujuan EDC
+        } elseif ($action === 'checkout_export_ajinex') {
+            // Checkout untuk armada dengan tujuan Export Ajinex
             $gate_in_id = intval($_POST['gate_in_id'] ?? 0);
             $nopol = trim($_POST['nopol'] ?? '');
             $driver_name = trim($_POST['driver_name'] ?? '');
@@ -137,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $pdo->prepare("UPDATE logistic_gate_ins SET status = 'Checked Out', exit_time = ? WHERE id = ?");
                 $stmt->execute([$exit_time, $gate_in_id]);
 
-                set_flash_message('success', 'Check-out armada EDC berhasil diproses.');
+                set_flash_message('success', 'Check-out armada Export Ajinex berhasil diproses.');
             } else {
                 set_flash_message('danger', 'Mohon lengkapi Nomor Ekspor, Nomor DO, Segel, Kontainer, dan Tujuan!');
             }
@@ -892,7 +892,7 @@ include __DIR__ . '/includes/header.php';
 <?php if ($can_input): ?>
 <!-- MODAL CHECKOUT EXPORT AJINEX -->
 <div id="modalCheckoutExportAjinex" class="modal-backdrop">
-    <div class="modal-dialog" style="max-width: 650px; width: 95%;">
+    <div class="modal-dialog" style="max-width: 720px; width: 95%;">
         <div class="modal-header">
             <h3 class="modal-title">Form Check-out Keluar (Export Ajinex)</h3>
             <button type="button" class="modal-close" onclick="closeModal('modalCheckoutExportAjinex')">&times;</button>
@@ -915,13 +915,31 @@ include __DIR__ . '/includes/header.php';
                 </div>
                 <div class="grid-2">
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Total Nett Weight (Kg / Ton) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                        <input type="text" name="tonnage" id="co_ajinex_tonnage" required class="form-control" placeholder="Masukkan total net weight...">
+                        <label class="form-label" style="font-weight: 600;">Nomor Ekspor (NOPOR) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <input type="text" name="mopor_number" id="co_ajinex_mopor" required class="form-control" placeholder="Masukkan Nomor Ekspor (NOPOR)...">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Alamat Kirim / Tujuan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                        <input type="text" name="destination" id="co_ajinex_destination" required class="form-control" placeholder="Masukkan alamat kirim / tujuan...">
+                        <label class="form-label" style="font-weight: 600;">Nomor DO <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <input type="text" name="do_number" id="co_ajinex_do" required class="form-control" placeholder="Masukkan Nomor DO...">
                     </div>
+                </div>
+                <div class="grid-3">
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Segel <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <input type="text" name="seal_number" id="co_ajinex_seal" required class="form-control" placeholder="Nomor Segel...">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Tonase (Ton) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <input type="text" name="tonnage" id="co_ajinex_tonnage" required class="form-control" placeholder="Jumlah Tonase...">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Kontainer <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <input type="text" name="container_number" id="co_ajinex_container" required class="form-control" placeholder="Nomor Kontainer...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="font-weight: 600;">Alamat Kirim / Tujuan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                    <input type="text" name="destination" id="co_ajinex_destination" required class="form-control" placeholder="Alamat Kirim / Tujuan...">
                 </div>
                 <div class="form-group">
                     <label class="form-label" style="font-weight: 600;">Upload Foto Surat Jalan <small style="color: var(--text-muted); font-weight: 400;">(Opsional)</small></label>
@@ -943,7 +961,7 @@ include __DIR__ . '/includes/header.php';
 
 <!-- MODAL CHECKOUT EDC -->
 <div id="modalCheckoutEDC" class="modal-backdrop">
-    <div class="modal-dialog" style="max-width: 720px; width: 95%;">
+    <div class="modal-dialog" style="max-width: 650px; width: 95%;">
         <div class="modal-header">
             <h3 class="modal-title">Form Check-out Keluar (EDC)</h3>
             <button type="button" class="modal-close" onclick="closeModal('modalCheckoutEDC')">&times;</button>
@@ -966,31 +984,13 @@ include __DIR__ . '/includes/header.php';
                 </div>
                 <div class="grid-2">
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Nomor Ekspor (NOPOR) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                        <input type="text" name="mopor_number" id="co_edc_mopor" required class="form-control" placeholder="Masukkan Nomor Ekspor (NOPOR)...">
+                        <label class="form-label" style="font-weight: 600;">Total Nett Weight (Kg / Ton) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <input type="text" name="tonnage" id="co_edc_tonnage" required class="form-control" placeholder="Masukkan total net weight...">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Nomor DO <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                        <input type="text" name="do_number" id="co_edc_do" required class="form-control" placeholder="Masukkan Nomor DO...">
+                        <label class="form-label" style="font-weight: 600;">Alamat Kirim / Tujuan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <input type="text" name="destination" id="co_edc_destination" required class="form-control" placeholder="Masukkan alamat kirim / tujuan...">
                     </div>
-                </div>
-                <div class="grid-3">
-                    <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Segel <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                        <input type="text" name="seal_number" id="co_edc_seal" required class="form-control" placeholder="Nomor Segel...">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Tonase (Ton) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                        <input type="text" name="tonnage" id="co_edc_tonnage" required class="form-control" placeholder="Jumlah Tonase...">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Kontainer <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                        <input type="text" name="container_number" id="co_edc_container" required class="form-control" placeholder="Nomor Kontainer...">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" style="font-weight: 600;">Alamat Kirim / Tujuan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                    <input type="text" name="destination" id="co_edc_destination" required class="form-control" placeholder="Alamat Kirim / Tujuan...">
                 </div>
                 <div class="form-group">
                     <label class="form-label" style="font-weight: 600;">Upload Foto Surat Jalan <small style="color: var(--text-muted); font-weight: 400;">(Opsional)</small></label>
@@ -1051,7 +1051,11 @@ function openCheckoutExportAjinex(data) {
     document.getElementById('co_ajinex_driver_name').value = data.driver_name || '';
     document.getElementById('co_ajinex_transportir').value = data.transportir || '';
     document.getElementById('co_ajinex_exit_time').value = getNowDatetimeLocal();
+    document.getElementById('co_ajinex_mopor').value = '';
+    document.getElementById('co_ajinex_do').value = '';
+    document.getElementById('co_ajinex_seal').value = '';
     document.getElementById('co_ajinex_tonnage').value = '';
+    document.getElementById('co_ajinex_container').value = '';
     document.getElementById('co_ajinex_destination').value = '';
     document.getElementById('photo_input_co_ajinex').value = '';
     document.getElementById('photo_preview_co_ajinex').style.display = 'none';
@@ -1064,11 +1068,7 @@ function openCheckoutEDC(data) {
     document.getElementById('co_edc_driver_name').value = data.driver_name || '';
     document.getElementById('co_edc_transportir').value = data.transportir || '';
     document.getElementById('co_edc_exit_time').value = getNowDatetimeLocal();
-    document.getElementById('co_edc_mopor').value = '';
-    document.getElementById('co_edc_do').value = '';
-    document.getElementById('co_edc_seal').value = '';
     document.getElementById('co_edc_tonnage').value = '';
-    document.getElementById('co_edc_container').value = '';
     document.getElementById('co_edc_destination').value = '';
     document.getElementById('photo_input_co_edc').value = '';
     document.getElementById('photo_preview_co_edc').style.display = 'none';
