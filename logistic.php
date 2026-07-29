@@ -593,40 +593,40 @@ include __DIR__ . '/includes/header.php';
                     
                     <div>
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Nomor Polisi (Nopol) *</label>
+                            <label class="form-label" style="font-weight: 600;">Nomor Polisi (Nopol) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                             <input type="text" name="nopol" required class="form-control" placeholder="Masukkan Nopol (e.g. B 1234 XYZ)...">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Total Nett Weight (Kg / Ton) *</label>
+                            <label class="form-label" style="font-weight: 600;">Total Nett Weight (Kg / Ton) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                             <input type="text" name="tonnage" required class="form-control" placeholder="Total Nett Weight diisi manual...">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Nama Transportir *</label>
+                            <label class="form-label" style="font-weight: 600;">Nama Transportir <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                             <input type="text" name="transportir" required class="form-control" placeholder="Nama Perusahaan / Transportir...">
                         </div>
                     </div>
 
                     <div>
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Nama Sopir *</label>
+                            <label class="form-label" style="font-weight: 600;">Nama Sopir <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                             <input type="text" name="driver_name" required class="form-control" placeholder="Nama sopir...">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Alamat Kirim / Tujuan *</label>
+                            <label class="form-label" style="font-weight: 600;">Alamat Kirim / Tujuan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                             <input type="text" name="destination" required class="form-control" placeholder="Alamat Kirim / Tujuan...">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Keluar *</label>
+                            <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Keluar <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                             <input type="datetime-local" name="exit_time" required class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
                         </div>
                     </div>
 
                     <div class="form-group" style="grid-column: 1 / -1;">
-                        <label class="form-label" style="font-weight: 600;">Upload Foto Surat Jalan / Dokumen (Opsional)</label>
+                        <label class="form-label" style="font-weight: 600;">Upload Foto Surat Jalan / Dokumen <small style="color: var(--text-muted); font-weight: 400;">(Opsional)</small></label>
                         <input type="file" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this, 'photo_preview_container_edc', 'photo_preview_img_edc', 'document_photo_edc')">
                         <input type="hidden" name="document_photo" id="document_photo_edc" value="">
                         <div id="photo_preview_container_edc" style="display: none; margin-top: 0.5rem; text-align: center;">
@@ -659,45 +659,45 @@ include __DIR__ . '/includes/header.php';
                     
                     <div>
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Nomor NOPOR *</label>
+                            <label class="form-label" style="font-weight: 600;">Nomor NOPOR <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                             <input type="text" name="mopor_number" required class="form-control" placeholder="Masukkan NOPOR...">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Nomor DO *</label>
+                            <label class="form-label" style="font-weight: 600;">Nomor DO <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                             <input type="text" name="do_number" required class="form-control" placeholder="Nomor DO...">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Segel *</label>
+                            <label class="form-label" style="font-weight: 600;">Segel <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                             <input type="text" name="seal_number" required class="form-control" placeholder="Nomor Segel (Seal)...">
                         </div>
                     </div>
 
                     <div>
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Tonase (Ton) *</label>
+                            <label class="form-label" style="font-weight: 600;">Tonase (Ton) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                             <input type="text" name="tonnage" required class="form-control" placeholder="Jumlah Tonase diisi manual...">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Kontainer *</label>
+                            <label class="form-label" style="font-weight: 600;">Kontainer <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                             <input type="text" name="container_number" required class="form-control" placeholder="Nomor Kontainer...">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Tujuan *</label>
+                            <label class="form-label" style="font-weight: 600;">Tujuan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                             <input type="text" name="destination" required class="form-control" placeholder="Pelabuhan / Negara Tujuan...">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Keluar *</label>
+                            <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Keluar <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                             <input type="datetime-local" name="exit_time" required class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
                         </div>
                     </div>
 
                     <div class="form-group" style="grid-column: 1 / -1;">
-                        <label class="form-label" style="font-weight: 600;">Upload Foto Surat Jalan / Dokumen (Opsional)</label>
+                        <label class="form-label" style="font-weight: 600;">Upload Foto Surat Jalan / Dokumen <small style="color: var(--text-muted); font-weight: 400;">(Opsional)</small></label>
                         <input type="file" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this, 'photo_preview_container_nex', 'photo_preview_img_nex', 'document_photo_nex')">
                         <input type="hidden" name="document_photo" id="document_photo_nex" value="">
                         <div id="photo_preview_container_nex" style="display: none; margin-top: 0.5rem; text-align: center;">
@@ -909,22 +909,22 @@ include __DIR__ . '/includes/header.php';
                         <input type="text" name="driver_name" id="co_ajinex_driver_name" readonly class="form-control" style="background-color: var(--bg-surface-alt); cursor: not-allowed; font-weight: 600;">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Keluar *</label>
+                        <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Keluar <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="datetime-local" name="exit_time" id="co_ajinex_exit_time" required class="form-control">
                     </div>
                 </div>
                 <div class="grid-2">
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Total Nett Weight (Kg / Ton) *</label>
+                        <label class="form-label" style="font-weight: 600;">Total Nett Weight (Kg / Ton) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="tonnage" id="co_ajinex_tonnage" required class="form-control" placeholder="Masukkan total net weight...">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Alamat Kirim / Tujuan *</label>
+                        <label class="form-label" style="font-weight: 600;">Alamat Kirim / Tujuan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="destination" id="co_ajinex_destination" required class="form-control" placeholder="Masukkan alamat kirim / tujuan...">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-label" style="font-weight: 600;">Upload Foto Surat Jalan (Opsional)</label>
+                    <label class="form-label" style="font-weight: 600;">Upload Foto Surat Jalan <small style="color: var(--text-muted); font-weight: 400;">(Opsional)</small></label>
                     <input type="file" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this, 'photo_preview_co_ajinex', 'photo_img_co_ajinex', 'photo_input_co_ajinex')">
                     <input type="hidden" name="document_photo" id="photo_input_co_ajinex" value="">
                     <div id="photo_preview_co_ajinex" style="display: none; margin-top: 0.5rem; text-align: center;">
@@ -960,40 +960,40 @@ include __DIR__ . '/includes/header.php';
                         <input type="text" name="driver_name" id="co_edc_driver_name" readonly class="form-control" style="background-color: var(--bg-surface-alt); cursor: not-allowed; font-weight: 600;">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Keluar *</label>
+                        <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Keluar <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="datetime-local" name="exit_time" id="co_edc_exit_time" required class="form-control">
                     </div>
                 </div>
                 <div class="grid-2">
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Nomor Ekspor (NOPOR) *</label>
+                        <label class="form-label" style="font-weight: 600;">Nomor Ekspor (NOPOR) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="mopor_number" id="co_edc_mopor" required class="form-control" placeholder="Masukkan Nomor Ekspor (NOPOR)...">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Nomor DO *</label>
+                        <label class="form-label" style="font-weight: 600;">Nomor DO <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="do_number" id="co_edc_do" required class="form-control" placeholder="Masukkan Nomor DO...">
                     </div>
                 </div>
                 <div class="grid-3">
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Segel *</label>
+                        <label class="form-label" style="font-weight: 600;">Segel <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="seal_number" id="co_edc_seal" required class="form-control" placeholder="Nomor Segel...">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Tonase (Ton) *</label>
+                        <label class="form-label" style="font-weight: 600;">Tonase (Ton) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="tonnage" id="co_edc_tonnage" required class="form-control" placeholder="Jumlah Tonase...">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="font-weight: 600;">Kontainer *</label>
+                        <label class="form-label" style="font-weight: 600;">Kontainer <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="container_number" id="co_edc_container" required class="form-control" placeholder="Nomor Kontainer...">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-label" style="font-weight: 600;">Alamat Kirim / Tujuan *</label>
+                    <label class="form-label" style="font-weight: 600;">Alamat Kirim / Tujuan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                     <input type="text" name="destination" id="co_edc_destination" required class="form-control" placeholder="Alamat Kirim / Tujuan...">
                 </div>
                 <div class="form-group">
-                    <label class="form-label" style="font-weight: 600;">Upload Foto Surat Jalan (Opsional)</label>
+                    <label class="form-label" style="font-weight: 600;">Upload Foto Surat Jalan <small style="color: var(--text-muted); font-weight: 400;">(Opsional)</small></label>
                     <input type="file" accept="image/*" class="form-control" onchange="compressAndPreviewPhoto(this, 'photo_preview_co_edc', 'photo_img_co_edc', 'photo_input_co_edc')">
                     <input type="hidden" name="document_photo" id="photo_input_co_edc" value="">
                     <div id="photo_preview_co_edc" style="display: none; margin-top: 0.5rem; text-align: center;">
