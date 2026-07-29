@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="grid-2">
                     <div class="form-group">
-                        <label class="form-label">Nama Peminjam (Karyawan / Staf) <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <label class="form-label">Nama Karyawan / Staf <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                         <input type="text" name="borrower_name" required class="form-control" placeholder="Nama Lengkap" value="<?= htmlspecialchars($_POST['borrower_name'] ?? '') ?>">
                     </div>
 
