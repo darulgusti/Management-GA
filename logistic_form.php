@@ -121,7 +121,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <option value="Kirim" <?= ($_POST['destination'] ?? '') === 'Kirim' ? 'selected' : '' ?>>Kirim</option>
                             <option value="Export Ajinex" <?= ($_POST['destination'] ?? '') === 'Export Ajinex' ? 'selected' : '' ?>>Export Ajinex</option>
                             <option value="Transit" <?= ($_POST['destination'] ?? '') === 'Transit' ? 'selected' : '' ?>>Transit</option>
-                            <option value="Muatan Barang" <?= ($_POST['destination'] ?? '') === 'Muatan Barang' ? 'selected' : '' ?>>Muatan Barang</option>
                             <option value="EDC" <?= ($_POST['destination'] ?? '') === 'EDC' ? 'selected' : '' ?>>EDC</option>
                         </select>
                     </div>

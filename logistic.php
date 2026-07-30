@@ -929,7 +929,6 @@ include __DIR__ . '/includes/header.php';
                             <option value="Kirim">Kirim</option>
                             <option value="Export Ajinex">Export Ajinex</option>
                             <option value="Transit">Transit</option>
-                            <option value="Muatan Barang">Muatan Barang</option>
                             <option value="EDC">EDC</option>
                         </select>
                     </div>
