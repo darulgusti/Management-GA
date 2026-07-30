@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error_msg = "Mohon lengkapi Nopol, Driver, Nomor SIM, Transportir, dan Tujuan Gate In!";
         } else {
             try {
-                $stmt = $pdo->prepare("INSERT INTO logistic_gate_ins (nopol, driver_name, visitor_number, antree_number, transportir, destination, sim_type, sim_number, document_photo, checklist_sim, checklist_stnk, checklist_kir, entry_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt = $pdo->prepare("INSERT INTO logistic_gate_ins (nopol, driver_name, visitor_number, antree_number, transportir, destination, sim_type, sim_number, document_photo, checklist_sim, checklist_stnk, checklist_kir, entry_time, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Masuk')");
                 $stmt->execute([$nopol, $driver_name, $visitor_number, $antree_number, $transportir, $destination, $sim_type, $sim_number, $document_photo, $sim, $stnk, $kir, $entry_time]);
                 header("Location: success.php?type=gate_in");
                 exit();

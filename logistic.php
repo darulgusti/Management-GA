@@ -24,9 +24,11 @@ try {
       `checklist_stnk` TINYINT(1) DEFAULT 0,
       `checklist_kir` TINYINT(1) DEFAULT 0,
       `entry_time` DATETIME NOT NULL,
-      `status` VARCHAR(50) NOT NULL DEFAULT 'Done',
+      `status` VARCHAR(50) NOT NULL DEFAULT 'Masuk',
       `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
     )");
+    try { $pdo->exec("ALTER TABLE `logistic_gate_ins` ALTER COLUMN `status` SET DEFAULT 'Masuk'"); } catch (Exception $e) {}
+    try { $pdo->exec("UPDATE `logistic_gate_ins` SET `status` = 'Masuk' WHERE `status` = 'Done' OR `status` IS NULL OR `status` = ''"); } catch (Exception $e) {}
     try { $pdo->exec("ALTER TABLE `logistic_gate_ins` ADD COLUMN `visitor_number` VARCHAR(100) NULL AFTER `driver_name`"); } catch (Exception $e) {}
     try { $pdo->exec("ALTER TABLE `logistic_gate_ins` ADD COLUMN `antree_number` VARCHAR(100) NULL AFTER `visitor_number`"); } catch (Exception $e) {}
     try { $pdo->exec("ALTER TABLE `logistic_gate_ins` ADD COLUMN `sim_type` VARCHAR(50) DEFAULT 'SIM B' AFTER `destination`"); } catch (Exception $e) {}
