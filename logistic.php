@@ -141,6 +141,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 set_flash_message('danger', 'Mohon lengkapi Nomor Ekspor, Nomor DO, Segel, Kontainer, dan Tujuan!');
             }
+        } elseif ($action === 'checkout_transit') {
+            // Checkout langsung untuk armada dengan tujuan Transit
+            $gate_in_id = intval($_POST['gate_in_id'] ?? 0);
+            $exit_time = date('Y-m-d H:i:s');
+            if ($gate_in_id > 0) {
+                $stmt = $pdo->prepare("UPDATE logistic_gate_ins SET status = 'Checked Out', exit_time = ? WHERE id = ?");
+                $stmt->execute([$exit_time, $gate_in_id]);
+                set_flash_message('success', 'Check-out armada Transit berhasil diproses.');
+            }
+        } elseif ($action === 'checkout_kirim_muat') {
+            // Checkout Muat Barang untuk armada dengan tujuan Kirim
+            $gate_in_id = intval($_POST['gate_in_id'] ?? 0);
+            $nopol      = trim($_POST['nopol'] ?? '');
+            $driver_name = trim($_POST['driver_name'] ?? '');
+            $transportir = trim($_POST['transportir'] ?? '-');
+            $tonnage    = trim($_POST['tonnage'] ?? '');
+            $destination = trim($_POST['destination'] ?? '');
+            $document_photo = $_POST['document_photo'] ?? '';
+            $exit_time  = !empty($_POST['exit_time']) ? date('Y-m-d H:i:s', strtotime($_POST['exit_time'])) : date('Y-m-d H:i:s');
+
+            if ($gate_in_id > 0 && !empty($nopol) && !empty($destination) && !empty($tonnage)) {
+                $stmt = $pdo->prepare("INSERT INTO logistic_gate_outs (nopol, driver_name, do_number, destination, tonnage, transportir, document_photo, exit_time) VALUES (?, ?, '-', ?, ?, ?, ?, ?)");
+                $stmt->execute([$nopol, $driver_name, $destination, $tonnage, $transportir, $document_photo, $exit_time]);
+
+                $stmt = $pdo->prepare("UPDATE logistic_gate_ins SET status = 'Checked Out', exit_time = ? WHERE id = ?");
+                $stmt->execute([$exit_time, $gate_in_id]);
+
+                set_flash_message('success', 'Check-out Muat Barang armada Kirim berhasil diproses.');
+            } else {
+                set_flash_message('danger', 'Mohon isi Total Nett Weight dan Alamat Kirim / Tujuan!');
+            }
         }
     }
 
@@ -386,11 +417,15 @@ include __DIR__ . '/includes/header.php';
                             <?php if ($can_input || $logged_user['role'] === 'manager'): ?>
                                 <td style="text-align: center; gap: 0.25rem;">
                                     <?php if ($can_input): ?>
-                                        <?php if ($gi['status'] !== 'Checked Out' && ($gi['destination'] === 'Export Ajinex' || $gi['destination'] === 'EDC')): ?>
+                                        <?php if ($gi['status'] !== 'Checked Out'): ?>
                                             <?php if ($gi['destination'] === 'Export Ajinex'): ?>
                                                 <button type="button" class="btn btn-warning btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; margin-right: 0.2rem;" onclick='openCheckoutExportAjinex(<?= json_encode($gi) ?>)'>Check-out</button>
                                             <?php elseif ($gi['destination'] === 'EDC'): ?>
                                                 <button type="button" class="btn btn-warning btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; margin-right: 0.2rem;" onclick='openCheckoutEDC(<?= json_encode($gi) ?>)'>Check-out</button>
+                                            <?php elseif ($gi['destination'] === 'Kirim'): ?>
+                                                <button type="button" class="btn btn-warning btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; margin-right: 0.2rem;" onclick='openCheckoutKirim(<?= json_encode($gi) ?>)'>Check-out</button>
+                                            <?php elseif ($gi['destination'] === 'Transit'): ?>
+                                                <button type="button" class="btn btn-warning btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; margin-right: 0.2rem;" onclick='openCheckoutTransit(<?= json_encode($gi) ?>)'>Check-out</button>
                                             <?php endif; ?>
                                         <?php endif; ?>
                                     <?php endif; ?>
@@ -719,6 +754,133 @@ include __DIR__ . '/includes/header.php';
                 <button type="submit" class="btn btn-primary">Simpan Export</button>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- MODAL CHECKOUT TRANSIT (Langsung Checkout) -->
+<div id="modalCheckoutTransit" class="modal-backdrop">
+    <div class="modal-dialog" style="max-width: 440px; width: 95%;">
+        <div class="modal-header">
+            <h3 class="modal-title">⚡ Check-out Transit</h3>
+            <button type="button" class="modal-close" onclick="closeModal('modalCheckoutTransit')">&times;</button>
+        </div>
+        <form method="POST" action="logistic.php?tab=<?= urlencode($active_tab) ?>">
+            <input type="hidden" name="action" value="checkout_transit">
+            <input type="hidden" name="gate_in_id" id="co_transit_gi_id">
+            <div class="modal-body">
+                <div style="background: var(--bg-surface-alt); border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1rem; border-left: 4px solid var(--warning);">
+                    <div style="font-weight: 700; font-size: 1rem;" id="co_transit_info_nopol"></div>
+                    <div style="color: var(--text-muted); font-size: 0.875rem;" id="co_transit_info_driver"></div>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center;">
+                    Kendaraan <strong>Transit</strong> akan langsung di-check-out sekarang. Tidak ada data tambahan yang perlu diisi.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('modalCheckoutTransit')">Batal</button>
+                <button type="submit" class="btn btn-warning">✓ Konfirmasi Check-out</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL CHECKOUT KIRIM (Pilihan: Keluar / Muat Barang) -->
+<div id="modalCheckoutKirim" class="modal-backdrop">
+    <div class="modal-dialog" style="max-width: 580px; width: 95%;">
+        <div class="modal-header">
+            <h3 class="modal-title">📦 Check-out Kirim</h3>
+            <button type="button" class="modal-close" onclick="closeModal('modalCheckoutKirim')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div style="background: var(--bg-surface-alt); border-radius: var(--radius-sm); padding: 0.85rem 1rem; margin-bottom: 1.25rem; border-left: 4px solid var(--warning);">
+                <div style="font-weight: 700; font-size: 1rem;" id="co_kirim_info_nopol"></div>
+                <div style="color: var(--text-muted); font-size: 0.875rem;" id="co_kirim_info_driver"></div>
+            </div>
+
+            <!-- Step 1: Pilihan Tipe Check-out -->
+            <div id="co_kirim_step1">
+                <p style="font-weight: 600; margin-bottom: 1rem; text-align: center;">Pilih tipe check-out:</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <button type="button" class="btn btn-outline" style="padding: 1.25rem 0.75rem; font-size: 0.875rem; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; border-width: 2px;" onclick="showKirimStep2('keluar')">
+                        🚪
+                        <span>Check-out Keluar</span>
+                        <small style="font-weight: 400; color: var(--text-muted); font-size: 0.75rem;">Kendaraan langsung keluar</small>
+                    </button>
+                    <button type="button" class="btn btn-outline" style="padding: 1.25rem 0.75rem; font-size: 0.875rem; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; border-width: 2px;" onclick="showKirimStep2('muat')">
+                        📋
+                        <span>Check-out Muat Barang</span>
+                        <small style="font-weight: 400; color: var(--text-muted); font-size: 0.75rem;">Isi data pengiriman</small>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2a: Keluar Langsung -->
+            <div id="co_kirim_step2_keluar" style="display: none;">
+                <form method="POST" action="logistic.php?tab=<?= urlencode($active_tab) ?>">
+                    <input type="hidden" name="action" value="checkout_transit">
+                    <input type="hidden" name="gate_in_id" id="co_kirim_keluar_gi_id">
+                    <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; margin-bottom: 1.25rem;">
+                        Kendaraan akan langsung di-check-out keluar tanpa data pengiriman tambahan.
+                    </p>
+                    <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                        <button type="button" class="btn btn-secondary" onclick="backKirimStep1()">← Kembali</button>
+                        <button type="submit" class="btn btn-warning">✓ Konfirmasi Keluar</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 2b: Muat Barang (form seperti EDC) -->
+            <div id="co_kirim_step2_muat" style="display: none;">
+                <form method="POST" action="logistic.php?tab=<?= urlencode($active_tab) ?>">
+                    <input type="hidden" name="action" value="checkout_kirim_muat">
+                    <input type="hidden" name="gate_in_id" id="co_kirim_muat_gi_id">
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Nopol <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                            <input type="text" name="nopol" id="co_kirim_muat_nopol" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Nama Sopir <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                            <input type="text" name="driver_name" id="co_kirim_muat_driver" required class="form-control">
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Total Nett Weight <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                            <input type="text" name="tonnage" id="co_kirim_muat_tonnage" required class="form-control" placeholder="e.g. 18.5 Ton...">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-weight: 600;">Nama Transportir</label>
+                            <input type="text" name="transportir" id="co_kirim_muat_transportir" class="form-control" placeholder="Nama Transportir...">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Alamat Kirim / Tujuan <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <input type="text" name="destination" id="co_kirim_muat_destination" required class="form-control" placeholder="Alamat tujuan pengiriman...">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Tanggal &amp; Waktu Keluar <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
+                        <input type="datetime-local" name="exit_time" id="co_kirim_muat_exit_time" required class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="font-weight: 600;">Upload Foto Surat Jalan <small style="color: var(--text-muted); font-weight: 400;">(Opsional)</small></label>
+                        <button type="button" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; width: 100%; padding: 0.6rem; font-weight: 600;" onclick="document.getElementById('camera_input_co_kirim').click();">
+                            📷 Ambil Foto dari Kamera
+                        </button>
+                        <input type="file" id="camera_input_co_kirim" accept="image/*" capture="environment" style="display:none;" onchange="compressAndPreviewPhoto(this, 'photo_preview_co_kirim', 'photo_img_co_kirim', 'photo_input_co_kirim')">
+                        <input type="hidden" name="document_photo" id="photo_input_co_kirim" value="">
+                        <div id="photo_preview_co_kirim" style="display: none; margin-top: 0.5rem; text-align: center;">
+                            <img id="photo_img_co_kirim" src="" style="max-height: 130px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                            <div style="font-size: 0.75rem; color: var(--success); font-weight: 600; margin-top: 0.25rem;">✓ Foto berhasil dikompresi</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 0.5rem;">
+                        <button type="button" class="btn btn-secondary" onclick="backKirimStep1()">← Kembali</button>
+                        <button type="submit" class="btn btn-warning">Proses Check-out Muat Barang</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 <?php endif; ?>
@@ -1156,6 +1318,54 @@ function editExport(data) {
     document.getElementById('edit_ex_tonnage').value = data.tonnage || '';
     document.getElementById('edit_ex_destination').value = data.destination || '';
     openModal('modalEditExport');
+}
+
+function openCheckoutTransit(data) {
+    document.getElementById('co_transit_gi_id').value = data.id;
+    document.getElementById('co_transit_info_nopol').textContent = '🚛 ' + (data.nopol || '');
+    document.getElementById('co_transit_info_driver').textContent = 'Sopir: ' + (data.driver_name || '') + ' | Tujuan: Transit';
+    openModal('modalCheckoutTransit');
+}
+
+function openCheckoutKirim(data) {
+    // Isi info header
+    document.getElementById('co_kirim_info_nopol').textContent = '🚛 ' + (data.nopol || '');
+    document.getElementById('co_kirim_info_driver').textContent = 'Sopir: ' + (data.driver_name || '') + ' | Tujuan: Kirim';
+
+    // Simpan ID di hidden inputs
+    document.getElementById('co_kirim_keluar_gi_id').value = data.id;
+    document.getElementById('co_kirim_muat_gi_id').value = data.id;
+
+    // Prefill form muat barang
+    document.getElementById('co_kirim_muat_nopol').value = data.nopol || '';
+    document.getElementById('co_kirim_muat_driver').value = data.driver_name || '';
+    document.getElementById('co_kirim_muat_transportir').value = data.transportir || '';
+    document.getElementById('co_kirim_muat_tonnage').value = '';
+    document.getElementById('co_kirim_muat_destination').value = '';
+    document.getElementById('co_kirim_muat_exit_time').value = getNowDatetimeLocal();
+    document.getElementById('photo_input_co_kirim').value = '';
+    document.getElementById('photo_preview_co_kirim').style.display = 'none';
+
+    // Reset ke step 1
+    backKirimStep1();
+    openModal('modalCheckoutKirim');
+}
+
+function showKirimStep2(type) {
+    document.getElementById('co_kirim_step1').style.display = 'none';
+    document.getElementById('co_kirim_step2_keluar').style.display = 'none';
+    document.getElementById('co_kirim_step2_muat').style.display = 'none';
+    if (type === 'keluar') {
+        document.getElementById('co_kirim_step2_keluar').style.display = 'block';
+    } else {
+        document.getElementById('co_kirim_step2_muat').style.display = 'block';
+    }
+}
+
+function backKirimStep1() {
+    document.getElementById('co_kirim_step1').style.display = 'block';
+    document.getElementById('co_kirim_step2_keluar').style.display = 'none';
+    document.getElementById('co_kirim_step2_muat').style.display = 'none';
 }
 </script>
 <?php include __DIR__ . '/includes/footer.php'; ?>
