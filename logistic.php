@@ -153,15 +153,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($action === 'checkout_kirim_muat') {
             // Checkout Muat Barang untuk armada dengan tujuan Kirim
             $gate_in_id = intval($_POST['gate_in_id'] ?? 0);
-            $nopol      = trim($_POST['nopol'] ?? '');
-            $driver_name = trim($_POST['driver_name'] ?? '');
-            $transportir = trim($_POST['transportir'] ?? '-');
             $tonnage    = trim($_POST['tonnage'] ?? '');
             $destination = trim($_POST['destination'] ?? '');
             $document_photo = $_POST['document_photo'] ?? '';
             $exit_time  = !empty($_POST['exit_time']) ? date('Y-m-d H:i:s', strtotime($_POST['exit_time'])) : date('Y-m-d H:i:s');
 
-            if ($gate_in_id > 0 && !empty($nopol) && !empty($destination) && !empty($tonnage)) {
+            if ($gate_in_id > 0 && !empty($destination) && !empty($tonnage)) {
+                // Ambil nopol, driver_name, transportir dari gate_in
+                $gi_stmt = $pdo->prepare("SELECT nopol, driver_name, transportir FROM logistic_gate_ins WHERE id = ?");
+                $gi_stmt->execute([$gate_in_id]);
+                $gi_row = $gi_stmt->fetch();
+                $nopol      = $gi_row ? $gi_row['nopol'] : '-';
+                $driver_name = $gi_row ? $gi_row['driver_name'] : '-';
+                $transportir = $gi_row ? $gi_row['transportir'] : '-';
+
                 $stmt = $pdo->prepare("INSERT INTO logistic_gate_outs (nopol, driver_name, do_number, destination, tonnage, transportir, document_photo, exit_time) VALUES (?, ?, '-', ?, ?, ?, ?, ?)");
                 $stmt->execute([$nopol, $driver_name, $destination, $tonnage, $transportir, $document_photo, $exit_time]);
 
@@ -836,22 +841,12 @@ include __DIR__ . '/includes/header.php';
                     <input type="hidden" name="gate_in_id" id="co_kirim_muat_gi_id">
                     <div class="grid-2">
                         <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Nopol <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                            <input type="text" name="nopol" id="co_kirim_muat_nopol" required class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" style="font-weight: 600;">Nama Sopir <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
-                            <input type="text" name="driver_name" id="co_kirim_muat_driver" required class="form-control">
-                        </div>
-                    </div>
-                    <div class="grid-2">
-                        <div class="form-group">
                             <label class="form-label" style="font-weight: 600;">Total Nett Weight <small style="color: var(--primary); font-weight: 600;">(wajib diisi)</small></label>
                             <input type="text" name="tonnage" id="co_kirim_muat_tonnage" required class="form-control" placeholder="e.g. 18.5 Ton...">
                         </div>
                         <div class="form-group">
                             <label class="form-label" style="font-weight: 600;">Nama Transportir</label>
-                            <input type="text" name="transportir" id="co_kirim_muat_transportir" class="form-control" placeholder="Nama Transportir...">
+                            <input type="text" name="transportir_display" id="co_kirim_muat_transportir" class="form-control" readonly style="background: var(--bg-surface-alt); color: var(--text-muted); cursor: not-allowed;">
                         </div>
                     </div>
                     <div class="form-group">
@@ -1336,8 +1331,6 @@ function openCheckoutKirim(data) {
     document.getElementById('co_kirim_muat_gi_id').value = data.id;
 
     // Prefill form muat barang
-    document.getElementById('co_kirim_muat_nopol').value = data.nopol || '';
-    document.getElementById('co_kirim_muat_driver').value = data.driver_name || '';
     document.getElementById('co_kirim_muat_transportir').value = data.transportir || '';
     document.getElementById('co_kirim_muat_tonnage').value = '';
     document.getElementById('co_kirim_muat_destination').value = '';
