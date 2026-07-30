@@ -13,8 +13,6 @@ $active_tab = $_GET['tab'] ?? 'all';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
-    $action = $_POST['action'] ?? '';
-
     if ($can_input) {
         if ($action === 'add_gate_in') {
             $nopol = trim($_POST['nopol'] ?? '');
