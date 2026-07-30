@@ -255,10 +255,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $per_page = 10;
 
-// Search & Pagination Gate In
+// Search & Pagination Gate In — hanya yang masih aktif (belum checkout)
 $search_in = trim($_GET['search_in'] ?? '');
 $page_in = max(1, intval($_GET['page_in'] ?? 1));
-$count_query_in = "SELECT COUNT(*) FROM logistic_gate_ins WHERE 1=1";
+$count_query_in = "SELECT COUNT(*) FROM logistic_gate_ins WHERE status = 'Masuk'";
 $params_in = [];
 if (!empty($search_in)) {
     $count_query_in .= " AND (LOWER(nopol) LIKE LOWER(?) OR LOWER(driver_name) LIKE LOWER(?) OR LOWER(visitor_number) LIKE LOWER(?) OR LOWER(antree_number) LIKE LOWER(?) OR LOWER(transportir) LIKE LOWER(?) OR LOWER(destination) LIKE LOWER(?))";
@@ -268,13 +268,34 @@ if (!empty($search_in)) {
 $stmt = $pdo->prepare($count_query_in);
 $stmt->execute($params_in);
 $total_in_records = $stmt->fetchColumn();
-$total_in_pages = ceil($total_in_records / $per_page);
+$total_in_pages = max(1, ceil($total_in_records / $per_page));
 $offset_in = ($page_in - 1) * $per_page;
 
 $data_query_in = str_replace("SELECT COUNT(*)", "SELECT *", $count_query_in) . " ORDER BY entry_time DESC LIMIT $per_page OFFSET $offset_in";
 $stmt = $pdo->prepare($data_query_in);
 $stmt->execute($params_in);
 $gate_ins = $stmt->fetchAll();
+
+// Search & Pagination Riwayat Kirim (checked out, destination = Kirim)
+$search_kirim = trim($_GET['search_kirim'] ?? '');
+$page_kirim = max(1, intval($_GET['page_kirim'] ?? 1));
+$count_query_kirim = "SELECT COUNT(*) FROM logistic_gate_ins WHERE status = 'Checked Out' AND destination = 'Kirim'";
+$params_kirim = [];
+if (!empty($search_kirim)) {
+    $count_query_kirim .= " AND (LOWER(nopol) LIKE LOWER(?) OR LOWER(driver_name) LIKE LOWER(?) OR LOWER(transportir) LIKE LOWER(?))";
+    $term = "%$search_kirim%";
+    $params_kirim = [$term, $term, $term];
+}
+$stmt = $pdo->prepare($count_query_kirim);
+$stmt->execute($params_kirim);
+$total_kirim_records = $stmt->fetchColumn();
+$total_kirim_pages = max(1, ceil($total_kirim_records / $per_page));
+$offset_kirim = ($page_kirim - 1) * $per_page;
+
+$data_query_kirim = str_replace("SELECT COUNT(*)", "SELECT *", $count_query_kirim) . " ORDER BY exit_time DESC LIMIT $per_page OFFSET $offset_kirim";
+$stmt = $pdo->prepare($data_query_kirim);
+$stmt->execute($params_kirim);
+$kirim_history = $stmt->fetchAll();
 
 // Search & Pagination Gate Out
 $search_out = trim($_GET['search_out'] ?? '');
@@ -329,6 +350,9 @@ include __DIR__ . '/includes/header.php';
         </a>
         <a href="logistic.php?tab=gate_in" class="btn btn-sm <?= $active_tab === 'gate_in' ? 'btn-primary' : 'btn-outline' ?>">
             📥 Buku Masuk (Gate In)
+        </a>
+        <a href="logistic.php?tab=kirim_history" class="btn btn-sm <?= $active_tab === 'kirim_history' ? 'btn-primary' : 'btn-outline' ?>">
+            🚛 Riwayat Kirim
         </a>
         <a href="logistic.php?tab=gate_out" class="btn btn-sm <?= $active_tab === 'gate_out' ? 'btn-primary' : 'btn-outline' ?>">
             📤 Riwayat Keluar EDC
@@ -451,6 +475,78 @@ include __DIR__ . '/includes/header.php';
         </table>
     </div>
     <?= render_pagination($page_in, $total_in_pages, ['tab' => $active_tab, 'search_in' => $search_in], 'page_in') ?>
+</div>
+<?php endif; ?>
+
+<?php if ($active_tab === 'all' || $active_tab === 'kirim_history'): ?>
+<!-- SECTION: RIWAYAT KIRIM -->
+<div id="sec-kirim-history" class="card" style="border-top: 4px solid #7c3aed; margin-top: 2rem;">
+    <div class="card-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <h3 class="card-title">
+                <span class="badge" style="background: #7c3aed; color: #fff; font-size: 0.85rem;"><?= number_format($total_kirim_records) ?> Armada</span>
+                Riwayat Kirim
+            </h3>
+            <small style="color: var(--text-muted);">Armada dengan tujuan Kirim yang sudah check-out</small>
+        </div>
+    </div>
+
+    <!-- Search Bar -->
+    <form method="GET" action="logistic.php" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
+        <input type="hidden" name="tab" value="<?= htmlspecialchars($active_tab) ?>">
+        <input type="text" name="search_kirim" class="form-control" placeholder="Cari nopol, sopir, transportir..." value="<?= htmlspecialchars($search_kirim) ?>" style="flex: 1; min-width: 220px; margin: 0;">
+        <button type="submit" class="btn btn-primary" style="margin: 0;">Cari</button>
+        <?php if (!empty($search_kirim)): ?>
+            <a href="logistic.php?tab=<?= urlencode($active_tab) ?>" class="btn btn-outline" style="margin: 0;">Reset</a>
+        <?php endif; ?>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nopol</th>
+                    <th>Nama Sopir</th>
+                    <th>Transportir</th>
+                    <th>Tujuan</th>
+                    <th>Waktu Masuk</th>
+                    <th>Waktu Keluar</th>
+                    <?php if ($logged_user['role'] === 'manager'): ?><th style="text-align: center;">Aksi</th><?php endif; ?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (count($kirim_history) === 0): ?>
+                    <tr>
+                        <td colspan="<?= $logged_user['role'] === 'manager' ? '8' : '7' ?>" style="text-align: center; color: var(--text-muted); padding: 1.75rem;">Belum ada riwayat armada Kirim yang check-out.</td>
+                    </tr>
+                <?php else: ?>
+                    <?php $no_k = $offset_kirim + 1; foreach ($kirim_history as $kh): ?>
+                        <tr>
+                            <td><?= $no_k++ ?></td>
+                            <td class="col-nowrap"><strong><?= htmlspecialchars($kh['nopol']) ?></strong></td>
+                            <td class="col-name"><?= htmlspecialchars($kh['driver_name']) ?></td>
+                            <td class="col-nowrap"><?= htmlspecialchars($kh['transportir']) ?></td>
+                            <td class="col-nowrap"><?= htmlspecialchars($kh['destination']) ?></td>
+                            <td class="col-date"><?= date('d/m/Y H:i', strtotime($kh['entry_time'])) ?></td>
+                            <td class="col-date"><?= $kh['exit_time'] ? date('d/m/Y H:i', strtotime($kh['exit_time'])) : '-' ?></td>
+                            <?php if ($logged_user['role'] === 'manager'): ?>
+                                <td style="text-align: center;">
+                                    <form method="POST" action="logistic.php?tab=<?= urlencode($active_tab) ?>" onsubmit="return confirm('Hapus data ini?');" style="display: inline;">
+                                        <input type="hidden" name="action" value="delete_gate_in">
+                                        <input type="hidden" name="id" value="<?= $kh['id'] ?>">
+                                        <button type="submit" class="btn btn-danger btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Hapus</button>
+                                    </form>
+                                    <button type="button" class="btn btn-primary btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" onclick='editGateIn(<?= json_encode($kh) ?>)'>Edit</button>
+                                </td>
+                            <?php endif; ?>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+    <?= render_pagination($page_kirim, $total_kirim_pages, ['tab' => $active_tab, 'search_kirim' => $search_kirim], 'page_kirim') ?>
 </div>
 <?php endif; ?>
 
