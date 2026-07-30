@@ -48,15 +48,6 @@ try {
     }
 }
 
-// Auto-migration: Pastikan kolom baru ada di tabel (untuk Cloud DB / Vercel)
-try { $pdo->exec("ALTER TABLE item_borrowings ADD COLUMN category VARCHAR(50) NOT NULL DEFAULT 'GA' AFTER borrower_name"); } catch (\Throwable $t) {}
-try { $pdo->exec("ALTER TABLE logistic_gate_ins ADD COLUMN sim_number VARCHAR(100) NULL AFTER destination"); } catch (\Throwable $t) {}
-try { $pdo->exec("ALTER TABLE logistic_gate_ins ADD COLUMN document_photo LONGTEXT NULL AFTER sim_number"); } catch (\Throwable $t) {}
-try { $pdo->exec("ALTER TABLE guests ADD COLUMN sim_number VARCHAR(100) NULL AFTER visitor_card_number"); } catch (\Throwable $t) {}
-try { $pdo->exec("ALTER TABLE guests ADD COLUMN document_photo LONGTEXT NULL AFTER sim_number"); } catch (\Throwable $t) {}
-try { $pdo->exec("ALTER TABLE logistic_gate_outs MODIFY COLUMN tonnage VARCHAR(100) NOT NULL DEFAULT '-'"); } catch (\Throwable $t) {}
-try { $pdo->exec("ALTER TABLE logistic_export_nex_mopors MODIFY COLUMN tonnage VARCHAR(100) NOT NULL DEFAULT '-'"); } catch (\Throwable $t) {}
-try { $pdo->exec("ALTER TABLE logistic_gate_outs ADD COLUMN document_photo LONGTEXT NULL AFTER transportir"); } catch (\Throwable $t) {}
-try { $pdo->exec("ALTER TABLE logistic_export_nex_mopors ADD COLUMN document_photo LONGTEXT NULL AFTER transportir"); } catch (\Throwable $t) {}
-try { $pdo->exec("ALTER TABLE item_borrowings ADD COLUMN key_number VARCHAR(100) NULL AFTER item_code"); } catch (\Throwable $t) {}
+// Include File Terpisah Auto-Migration Database & Tabel
+require_once __DIR__ . '/migrate.php';
 

@@ -9,69 +9,9 @@ $can_input = ($logged_user['role'] === 'secom');
 
 $active_tab = $_GET['tab'] ?? 'all';
 
-// Auto Ensure Tables Exist & Schema Migrated
-try {
-    $pdo->exec("CREATE TABLE IF NOT EXISTS `logistic_gate_ins` (
-      `id` INT AUTO_INCREMENT PRIMARY KEY,
-      `nopol` VARCHAR(50) NOT NULL,
-      `driver_name` VARCHAR(255) NOT NULL,
-      `visitor_number` VARCHAR(100) NULL,
-      `antree_number` VARCHAR(100) NULL,
-      `transportir` VARCHAR(255) NOT NULL,
-      `destination` VARCHAR(100) NOT NULL DEFAULT 'Kirim',
-      `sim_type` VARCHAR(50) DEFAULT 'SIM B',
-      `checklist_sim` TINYINT(1) DEFAULT 0,
-      `checklist_stnk` TINYINT(1) DEFAULT 0,
-      `checklist_kir` TINYINT(1) DEFAULT 0,
-      `entry_time` DATETIME NOT NULL,
-      `status` VARCHAR(50) NOT NULL DEFAULT 'Masuk',
-      `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
-    )");
-    try { $pdo->exec("ALTER TABLE `logistic_gate_ins` ALTER COLUMN `status` SET DEFAULT 'Masuk'"); } catch (Exception $e) {}
-    try { $pdo->exec("UPDATE `logistic_gate_ins` SET `status` = 'Masuk' WHERE `status` = 'Done' OR `status` IS NULL OR `status` = ''"); } catch (Exception $e) {}
-    try { $pdo->exec("ALTER TABLE `logistic_gate_ins` ADD COLUMN `visitor_number` VARCHAR(100) NULL AFTER `driver_name`"); } catch (Exception $e) {}
-    try { $pdo->exec("ALTER TABLE `logistic_gate_ins` ADD COLUMN `antree_number` VARCHAR(100) NULL AFTER `visitor_number`"); } catch (Exception $e) {}
-    try { $pdo->exec("ALTER TABLE `logistic_gate_ins` ADD COLUMN `sim_type` VARCHAR(50) DEFAULT 'SIM B' AFTER `destination`"); } catch (Exception $e) {}
-    try { $pdo->exec("ALTER TABLE `logistic_gate_ins` ADD COLUMN `tonnage` VARCHAR(100) NULL AFTER `transportir`"); } catch (Exception $e) {}
-    try { $pdo->exec("ALTER TABLE `logistic_gate_ins` ADD COLUMN `exit_time` DATETIME NULL AFTER `entry_time`"); } catch (Exception $e) {}
-
-    $pdo->exec("CREATE TABLE IF NOT EXISTS `logistic_gate_outs` (
-      `id` INT AUTO_INCREMENT PRIMARY KEY,
-      `nopol` VARCHAR(50) NOT NULL,
-      `driver_name` VARCHAR(255) NOT NULL,
-      `do_number` VARCHAR(100) NOT NULL,
-      `destination` VARCHAR(255) NOT NULL,
-      `tonnage` VARCHAR(100) NOT NULL DEFAULT '-',
-      `transportir` VARCHAR(255) NOT NULL,
-      `document_photo` LONGTEXT NULL,
-      `exit_time` DATETIME NOT NULL,
-      `status` VARCHAR(50) NOT NULL DEFAULT 'Done',
-      `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
-    )");
-    try { $pdo->exec("ALTER TABLE `logistic_gate_outs` ADD COLUMN `document_photo` LONGTEXT NULL AFTER `transportir`"); } catch (Exception $e) {}
-
-    $pdo->exec("CREATE TABLE IF NOT EXISTS `logistic_export_nex_mopors` (
-      `id` INT AUTO_INCREMENT PRIMARY KEY,
-      `mopor_number` VARCHAR(100) NOT NULL,
-      `driver_name` VARCHAR(255) NOT NULL DEFAULT '-',
-      `do_number` VARCHAR(100) NOT NULL,
-      `container_number` VARCHAR(100) NOT NULL,
-      `seal_number` VARCHAR(100) NOT NULL,
-      `destination` VARCHAR(255) NOT NULL,
-      `tonnage` VARCHAR(100) NOT NULL DEFAULT '-',
-      `transportir` VARCHAR(255) NOT NULL DEFAULT '-',
-      `document_photo` LONGTEXT NULL,
-      `exit_time` DATETIME NOT NULL,
-      `status` VARCHAR(50) NOT NULL DEFAULT 'Done',
-      `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
-    )");
-    try { $pdo->exec("ALTER TABLE `logistic_export_nex_mopors` ADD COLUMN `document_photo` LONGTEXT NULL AFTER `transportir`"); } catch (Exception $e) {}
-} catch (Exception $e) {}
-
 // Handle POST Actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    try { $pdo->exec("ALTER TABLE `logistic_gate_outs` MODIFY COLUMN `tonnage` VARCHAR(100) NOT NULL DEFAULT '-'"); } catch (Exception $e) {}
-    try { $pdo->exec("ALTER TABLE `logistic_export_nex_mopors` MODIFY COLUMN `tonnage` VARCHAR(100) NOT NULL DEFAULT '-'"); } catch (Exception $e) {}
+    $action = $_POST['action'] ?? '';
 
     $action = $_POST['action'] ?? '';
 
