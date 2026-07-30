@@ -32,6 +32,7 @@ try {
     try { $pdo->exec("ALTER TABLE `logistic_gate_ins` ADD COLUMN `visitor_number` VARCHAR(100) NULL AFTER `driver_name`"); } catch (Exception $e) {}
     try { $pdo->exec("ALTER TABLE `logistic_gate_ins` ADD COLUMN `antree_number` VARCHAR(100) NULL AFTER `visitor_number`"); } catch (Exception $e) {}
     try { $pdo->exec("ALTER TABLE `logistic_gate_ins` ADD COLUMN `sim_type` VARCHAR(50) DEFAULT 'SIM B' AFTER `destination`"); } catch (Exception $e) {}
+    try { $pdo->exec("ALTER TABLE `logistic_gate_ins` ADD COLUMN `tonnage` VARCHAR(100) NULL AFTER `transportir`"); } catch (Exception $e) {}
     try { $pdo->exec("ALTER TABLE `logistic_gate_ins` ADD COLUMN `exit_time` DATETIME NULL AFTER `entry_time`"); } catch (Exception $e) {}
 
     $pdo->exec("CREATE TABLE IF NOT EXISTS `logistic_gate_outs` (
@@ -172,8 +173,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $pdo->prepare("INSERT INTO logistic_gate_outs (nopol, driver_name, do_number, destination, tonnage, transportir, document_photo, exit_time) VALUES (?, ?, '-', ?, ?, ?, ?, ?)");
                 $stmt->execute([$nopol, $driver_name, $destination, $tonnage, $transportir, $document_photo, $exit_time]);
 
-                $stmt = $pdo->prepare("UPDATE logistic_gate_ins SET status = 'Checked Out', exit_time = ? WHERE id = ?");
-                $stmt->execute([$exit_time, $gate_in_id]);
+                $stmt = $pdo->prepare("UPDATE logistic_gate_ins SET status = 'Checked Out', exit_time = ?, tonnage = ? WHERE id = ?");
+                $stmt->execute([$exit_time, $tonnage, $gate_in_id]);
 
                 set_flash_message('success', 'Check-out Muat Barang armada Kirim berhasil diproses.');
             } else {
@@ -284,9 +285,9 @@ $page_kirim = max(1, intval($_GET['page_kirim'] ?? 1));
 $count_query_kirim = "SELECT COUNT(*) FROM logistic_gate_ins WHERE status = 'Checked Out' AND destination = 'Kirim'";
 $params_kirim = [];
 if (!empty($search_kirim)) {
-    $count_query_kirim .= " AND (LOWER(nopol) LIKE LOWER(?) OR LOWER(driver_name) LIKE LOWER(?) OR LOWER(transportir) LIKE LOWER(?))";
+    $count_query_kirim .= " AND (LOWER(nopol) LIKE LOWER(?) OR LOWER(driver_name) LIKE LOWER(?) OR LOWER(transportir) LIKE LOWER(?) OR LOWER(tonnage) LIKE LOWER(?))";
     $term = "%$search_kirim%";
-    $params_kirim = [$term, $term, $term];
+    $params_kirim = [$term, $term, $term, $term];
 }
 $stmt = $pdo->prepare($count_query_kirim);
 $stmt->execute($params_kirim);
@@ -511,6 +512,7 @@ include __DIR__ . '/includes/header.php';
                     <th>Nopol</th>
                     <th>Nama Sopir</th>
                     <th>Transportir</th>
+                    <th>Total Nett Weight</th>
                     <th>Tujuan</th>
                     <th>Waktu Masuk</th>
                     <th>Waktu Keluar</th>
@@ -520,7 +522,7 @@ include __DIR__ . '/includes/header.php';
             <tbody>
                 <?php if (count($kirim_history) === 0): ?>
                     <tr>
-                        <td colspan="<?= $logged_user['role'] === 'manager' ? '8' : '7' ?>" style="text-align: center; color: var(--text-muted); padding: 1.75rem;">Belum ada riwayat armada Kirim yang check-out.</td>
+                        <td colspan="<?= $logged_user['role'] === 'manager' ? '9' : '8' ?>" style="text-align: center; color: var(--text-muted); padding: 1.75rem;">Belum ada riwayat armada Kirim yang check-out.</td>
                     </tr>
                 <?php else: ?>
                     <?php $no_k = $offset_kirim + 1; foreach ($kirim_history as $kh): ?>
@@ -529,6 +531,7 @@ include __DIR__ . '/includes/header.php';
                             <td class="col-nowrap"><strong><?= htmlspecialchars($kh['nopol']) ?></strong></td>
                             <td class="col-name"><?= htmlspecialchars($kh['driver_name']) ?></td>
                             <td class="col-nowrap"><?= htmlspecialchars($kh['transportir']) ?></td>
+                            <td class="col-nowrap"><strong><?= !empty($kh['tonnage']) ? htmlspecialchars($kh['tonnage']) : '-' ?></strong></td>
                             <td class="col-nowrap"><?= htmlspecialchars($kh['destination']) ?></td>
                             <td class="col-date"><?= date('d/m/Y H:i', strtotime($kh['entry_time'])) ?></td>
                             <td class="col-date"><?= $kh['exit_time'] ? date('d/m/Y H:i', strtotime($kh['exit_time'])) : '-' ?></td>
