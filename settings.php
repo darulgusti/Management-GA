@@ -47,6 +47,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         header("Location: settings.php");
         exit();
+    } elseif ($action === 'delete_archive' && $logged_user['role'] === 'manager') {
+        $archive_id = intval($_POST['archive_id'] ?? 0);
+        if ($archive_id > 0) {
+            $stmt = $pdo->prepare("DELETE FROM archives WHERE id = ?");
+            $stmt->execute([$archive_id]);
+            set_flash_message('success', 'Arsip berhasil dihapus.');
+        }
+        header("Location: settings.php");
+        exit();
     }
 }
 
@@ -125,6 +134,7 @@ include __DIR__ . '/includes/header.php';
                         <th>Jumlah Record</th>
                         <th>Waktu Arsip</th>
                         <th>Download</th>
+                        <?php if ($logged_user['role'] === 'manager'): ?><th style="text-align:center;">Aksi</th><?php endif; ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -143,6 +153,15 @@ include __DIR__ . '/includes/header.php';
                                         <span style="color: var(--danger); font-size: 0.8rem; font-style: italic;">Tidak tersedia <small>(arsip lama)</small></span>
                                     <?php endif; ?>
                                 </td>
+                                <?php if ($logged_user['role'] === 'manager'): ?>
+                                <td style="text-align:center;">
+                                    <form method="POST" action="settings.php" onsubmit="return confirm('Hapus arsip ini secara permanen?')" style="display:inline;">
+                                        <input type="hidden" name="action" value="delete_archive">
+                                        <input type="hidden" name="archive_id" value="<?= $arc['id'] ?>">
+                                        <button type="submit" class="btn btn-danger btn-sm" style="padding:0.2rem 0.6rem; font-size:0.75rem;">Hapus</button>
+                                    </form>
+                                </td>
+                                <?php endif; ?>
                             </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>
