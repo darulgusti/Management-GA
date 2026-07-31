@@ -474,29 +474,14 @@ function run_archive_process($pdo, $is_manual = false) {
     $stmt->execute([$filename, $archive_type_label, $total_records]);
 
     // Clean up / Delete archived history records from active database tables
-    if ($is_manual) {
-        $pdo->exec("DELETE FROM guests WHERE time_out IS NOT NULL");
-        $pdo->exec("DELETE FROM item_borrowings WHERE status = 'returned'");
-        try {
-            $pdo->exec("DELETE FROM logistic_gate_ins");
-            $pdo->exec("DELETE FROM logistic_gate_outs");
-            $pdo->exec("DELETE FROM logistic_export_nex_mopors");
-        } catch (Exception $e) {}
-    } else {
-        $cutoff_date = date('Y-m-d H:i:s', strtotime('-3 months'));
-        $stmt = $pdo->prepare("DELETE FROM guests WHERE time_out IS NOT NULL AND time_out <= ?");
-        $stmt->execute([$cutoff_date]);
-        $stmt = $pdo->prepare("DELETE FROM item_borrowings WHERE status = 'returned' AND return_time <= ?");
-        $stmt->execute([$cutoff_date]);
-        try {
-            $stmt = $pdo->prepare("DELETE FROM logistic_gate_ins WHERE entry_time <= ?");
-            $stmt->execute([$cutoff_date]);
-            $stmt = $pdo->prepare("DELETE FROM logistic_gate_outs WHERE exit_time <= ?");
-            $stmt->execute([$cutoff_date]);
-            $stmt = $pdo->prepare("DELETE FROM logistic_export_nex_mopors WHERE exit_time <= ?");
-            $stmt->execute([$cutoff_date]);
-        } catch (Exception $e) {}
-    }
+    // Manual & Otomatis: Hanya hapus data yang sudah selesai (returned/checked out), BUKAN semua data
+    $pdo->exec("DELETE FROM guests WHERE time_out IS NOT NULL");
+    $pdo->exec("DELETE FROM item_borrowings WHERE status = 'returned'");
+    try {
+        $pdo->exec("DELETE FROM logistic_gate_ins WHERE status = 'Checked Out'");
+        $pdo->exec("DELETE FROM logistic_gate_outs");
+        $pdo->exec("DELETE FROM logistic_export_nex_mopors");
+    } catch (Exception $e) {}
 
     return [
         'success' => true,

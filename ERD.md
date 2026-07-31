@@ -4,9 +4,9 @@ Dokumen ini berisi rancangan **Entity Relationship Diagram (ERD)** dan **Kamus D
 
 ---
 
-## 1. Diagram ERD Modul Pos 4 & Logistik (Gate Pass & Buku Tamu)
+## 1. Diagram ERD - Modul Logistik Armada Pos 4 & Pengarsipan
 
-Diagram ini menggambarkan alur pergerakan kendaraan (Gate In, Keluar EDC, Export Ajinex) serta pencatatan kunjungan tamu di Pos 4.
+Diagram ini menggambarkan alur pendaftaran kendaraan masuk (Gate In), checkout transaksi armada keluar EDC, checkout ekspor Ajinex (NOPOR), dan fitur pengarsipan data.
 
 ```mermaid
 erDiagram
@@ -16,21 +16,6 @@ erDiagram
         string email
         string password
         enum role "manager | secom"
-        datetime created_at
-    }
-
-    GUESTS {
-        int id PK
-        string guest_name
-        string agency_company
-        string destination_person_dept
-        string purpose
-        string visitor_card_number
-        string sim_number
-        longtext document_photo
-        datetime entry_time
-        datetime exit_time
-        enum status "Inside | Checked Out"
         datetime created_at
     }
 
@@ -85,17 +70,25 @@ erDiagram
         datetime created_at
     }
 
-    USERS ||--o{ LOGISTIC_GATE_INS : "mengawasi_dan_mengelola"
-    USERS ||--o{ GUESTS : "memproses_checkout_tamu"
+    ARCHIVES {
+        int id PK
+        string filename
+        int records_count
+        string archived_by
+        datetime created_at
+    }
+
+    USERS ||--o{ LOGISTIC_GATE_INS : "mengelola_monitoring"
+    USERS ||--o{ ARCHIVES : "menjalankan_pengarsipan"
     LOGISTIC_GATE_INS ||--o| LOGISTIC_GATE_OUTS : "checkout_edc_atau_kirim_muat"
     LOGISTIC_GATE_INS ||--o| LOGISTIC_EXPORT_NEX_MOPORS : "checkout_export_ajinex"
 ```
 
 ---
 
-## 2. Diagram ERD Modul Inventaris, Peminjaman & Pengarsipan
+## 2. Diagram ERD - Modul Buku Tamu & Peminjaman Barang / Kunci
 
-Diagram ini menggambarkan pengelolaan peminjaman aset/barang inventaris GA, kunci SECOM, serta fitur pengarsipan data riwayat.
+Diagram ini menggambarkan alur pendaftaran tamu (*Guest Logbook*) dan alur peminjaman inventaris barang GA maupun kunci SECOM.
 
 ```mermaid
 erDiagram
@@ -105,6 +98,21 @@ erDiagram
         string email
         string password
         enum role "manager | secom"
+        datetime created_at
+    }
+
+    GUESTS {
+        int id PK
+        string guest_name
+        string agency_company
+        string destination_person_dept
+        string purpose
+        string visitor_card_number
+        string sim_number
+        longtext document_photo
+        datetime entry_time
+        datetime exit_time
+        enum status "Inside | Checked Out"
         datetime created_at
     }
 
@@ -126,36 +134,30 @@ erDiagram
         datetime created_at
     }
 
-    ARCHIVES {
-        int id PK
-        string filename
-        int records_count
-        string archived_by
-        datetime created_at
-    }
-
-    USERS ||--o{ ITEM_BORROWINGS : "memproses_pengembalian_dan_edit"
-    USERS ||--o{ ARCHIVES : "menjalankan_pengarsipan_manual"
+    USERS ||--o{ GUESTS : "memproses_checkout_tamu"
+    USERS ||--o{ ITEM_BORROWINGS : "memproses_pengembalian"
 ```
 
 ---
 
 ## 3. Penjelasan Relasi Operasional Antar Entitas
 
-1. **`USERS` → `LOGISTIC_GATE_INS` / `GUESTS`**
-   - Petugas Security (`secom`) melakukan input & checkout kendaraan / tamu, sedangkan `manager` memonitor serta dapat mengedit/menghapus data.
+1. **`LOGISTIC_GATE_INS` → `LOGISTIC_GATE_OUTS` (1 to 0..1)**
+   - Ketika armada masuk dengan tujuan **EDC** atau **Kirim (Muat Barang)** di-checkout, sistem secara otomatis memasukkan data pengiriman ke tabel `LOGISTIC_GATE_OUTS` (Riwayat Keluar EDC) dan memperbarui status di `LOGISTIC_GATE_INS` menjadi `Checked Out`.
 
-2. **`LOGISTIC_GATE_INS` → `LOGISTIC_GATE_OUTS`**
-   - Ketika armada masuk dengan tujuan **EDC** atau **Kirim (Muat Barang)** di-checkout, data pengiriman dicatat di `LOGISTIC_GATE_OUTS` dan status Gate In diubah menjadi `Checked Out`.
+2. **`LOGISTIC_GATE_INS` → `LOGISTIC_EXPORT_NEX_MOPORS` (1 to 0..1)**
+   - Ketika armada masuk dengan tujuan **Export Ajinex** di-checkout, sistem mencatat detail ekspor (Nomor NOPOR, DO, Kontainer, Segel, Tonase) ke tabel `LOGISTIC_EXPORT_NEX_MOPORS` dan mengubah status gate in-nya menjadi `Checked Out`.
 
-3. **`LOGISTIC_GATE_INS` → `LOGISTIC_EXPORT_NEX_MOPORS`**
-   - Ketika armada **Export Ajinex** di-checkout, rincian NOPOR, DO, Kontainer, Segel & Tonase dicatat di `LOGISTIC_EXPORT_NEX_MOPORS` dan status Gate In diubah menjadi `Checked Out`.
+3. **`USERS` → `ARCHIVES` (1 to Many)**
+   - Setiap pengguna dengan peranan **Manager** dapat memicu proses pengarsipan data riwayat lama ke file Excel (`archives`).
 
-4. **`USERS` → `ITEM_BORROWINGS`**
-   - Memroses peminjaman & pengembalian barang GA (`category = 'GA'`) dan kunci SECOM (`category = 'SECOM'`) lengkap dengan Tanda Tangan Digital.
+4. **`GUESTS` (Buku Tamu)**
+   - Mencatat seluruh alur kunjungan tamu di Pos 4 (waktu masuk, foto dokumen KTP/SIM, nomor kartu visitor) hingga checkout (`exit_time`).
 
-5. **`USERS` → `ARCHIVES`**
-   - Pengguna berhak akses **Manager** dapat memicu pemindahan data riwayat selesai ke dalam berkas Excel (`archives`).
+5. **`ITEM_BORROWINGS` (Peminjaman Inventaris & Kunci)**
+   - Terbagi menjadi 2 kategori utama:
+     - `category = 'GA'`: Peminjaman Aset / Inventaris Barang GA (Nama barang, kode barang, qty, ttd digital).
+     - `category = 'SECOM'`: Peminjaman Kunci SECOM (Nama kunci, nomor kunci, qty, ttd digital).
 
 ---
 
