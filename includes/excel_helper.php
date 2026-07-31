@@ -450,7 +450,6 @@ function run_archive_process($pdo, $is_manual = false) {
     }
 
     $filename = $file_prefix . date('Ymd_His') . ".xls";
-    $filepath = $archives_dir . '/' . $filename;
 
     // Build Excel XML File with formatting & separate date/time
     $excel_content = get_excel_xml_header();
@@ -467,11 +466,14 @@ function run_archive_process($pdo, $is_manual = false) {
     }
     $excel_content .= '</Workbook>';
 
-    file_put_contents($filepath, $excel_content);
+    // Simpan konten Excel langsung ke database (file_content) supaya bisa diakses di Vercel/cloud
+    // (Vercel tidak punya persistent filesystem — file fisik akan hilang setelah request selesai)
+    try {
+        $pdo->exec("ALTER TABLE archives ADD COLUMN file_content LONGTEXT NULL");
+    } catch (\Throwable $t) {}
 
-    // Save archive log record into archives table
-    $stmt = $pdo->prepare("INSERT INTO archives (filename, archive_type, records_count) VALUES (?, ?, ?)");
-    $stmt->execute([$filename, $archive_type_label, $total_records]);
+    $stmt = $pdo->prepare("INSERT INTO archives (filename, archive_type, records_count, file_content) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$filename, $archive_type_label, $total_records, $excel_content]);
 
     // Clean up / Delete archived history records from active database tables
     // Manual & Otomatis: Hanya hapus data yang sudah selesai (returned/checked out), BUKAN semua data

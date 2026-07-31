@@ -50,10 +50,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Fetch Archive list
+// Fetch Archive list (tanpa kolom file_content untuk hemat memori)
 $archives = [];
 try {
-    $stmt = $pdo->query("SELECT * FROM archives ORDER BY created_at DESC");
+    try {
+        $stmt = $pdo->query("SELECT id, filename, archive_type, records_count, created_at, (file_content IS NOT NULL AND file_content != '') AS has_content FROM archives ORDER BY created_at DESC");
+    } catch (\Throwable $t) {
+        $stmt = $pdo->query("SELECT id, filename, archive_type, records_count, created_at, 0 AS has_content FROM archives ORDER BY created_at DESC");
+    }
     $archives = $stmt->fetchAll();
 } catch (Exception $e) {}
 
@@ -133,10 +137,10 @@ include __DIR__ . '/includes/header.php';
                                 <td><?= number_format($arc['records_count']) ?> data</td>
                                 <td><?= date('d/m/Y H:i', strtotime($arc['created_at'])) ?></td>
                                 <td>
-                                    <?php if (file_exists(__DIR__ . '/archives/' . $arc['filename'])): ?>
-                                        <a href="archives/<?= urlencode($arc['filename']) ?>" download class="btn btn-sm btn-outline">Download Excel (.xls)</a>
+                                    <?php if (!empty($arc['has_content'])): ?>
+                                        <a href="download_archive.php?id=<?= $arc['id'] ?>" class="btn btn-sm btn-outline">Download Excel (.xls)</a>
                                     <?php else: ?>
-                                        <span style="color: var(--danger); font-size: 0.8rem;">File Hilang</span>
+                                        <span style="color: var(--danger); font-size: 0.8rem; font-style: italic;">Tidak tersedia <small>(arsip lama)</small></span>
                                     <?php endif; ?>
                                 </td>
                             </tr>
